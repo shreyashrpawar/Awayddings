@@ -13,7 +13,7 @@
     <!-- plugin css for this page -->
     <!-- End plugin css for this page -->
     <!-- inject:css -->
-    <link rel="stylesheet" href="{{ asset('assets/css/vertical-layout-dark/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/vertical-layout-light/style.css') }}">
     <!-- endinject -->
     <link rel="shortcut icon" href="{{ asset('assets/images/favicon.png') }}" />
 </head>
@@ -31,7 +31,6 @@
        @include('includes.sidebar')
         <!-- partial -->
         @yield('contents')
-
     </div>
     <!-- page-body-wrapper ends -->
 </div>
@@ -41,9 +40,7 @@
 <script src="{{ asset('assets/js/off-canvas.js') }}"></script>
 <script src="{{ asset('assets/js/hoverable-collapse.js') }}"></script>
 <script src="{{ asset('assets/js/template.js') }}"></script>
-<script src="{{ asset('assets/js/settings.js') }}"></script>
-<script src="{{ asset('assets/js/todolist.js') }}"></script>
-
+@yield('js')
 </body>
 
 </html>

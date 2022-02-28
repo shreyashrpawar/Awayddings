@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePropertiesTable extends Migration
+class CreateRoomInclusionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,12 @@ class CreatePropertiesTable extends Migration
      */
     public function up()
     {
-        Schema::create('properties', function (Blueprint $table) {
+        Schema::create('room_inclusions', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('alias_name')->nullable();
-            $table->string('featured_image')->nullable();
-            $table->unsignedBigInteger('location_id');
-            $table->text('description')->nullable();
-            $table->text('gmap_embedded_code')->nullable();
+            $table->string('icon_class')->nullable();
             $table->boolean('status')->default(1)->comment('0 is active 1 is active');
             $table->timestamps();
-            $table->foreign('location_id')->references('id')->on('locations');
         });
     }
 
@@ -34,6 +29,6 @@ class CreatePropertiesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('properties');
+        Schema::dropIfExists('room_inclusions');
     }
 }
