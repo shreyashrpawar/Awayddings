@@ -17,7 +17,7 @@ class CreatePropertyDefaultRatesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('property_id');
             $table->unsignedBigInteger('hotel_charagable_type_id');
-            $table->date('date');
+            $table->date('date')->nullable();
             $table->double('amount');
             $table->integer('qty')->default(0);
             $table->double('chargable_percentage')->nullable();

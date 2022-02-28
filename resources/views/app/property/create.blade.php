@@ -110,7 +110,6 @@
                                 <h3>Room and Amenities</h3>
                                 <section>
                                     <h3>Room </h3>
-
                                     @foreach($hotel_chargable_type as $key => $name)
                                         <div class="col-md-12">
                                             <div class="form-group">
@@ -118,8 +117,8 @@
                                                     <label class="form-check-label">
                                                         <input type="checkbox" name="{{ Str::snake($name, '_') }}"
                                                                class="form-check-input hotel_chargable_typeId"
-                                                               data="{{ Str::slug($name) }}_section"
-                                                               value="{{ Str::slug($name) }}_section"
+                                                               data="{{ Str::snake($name,'_') }}_section"
+                                                               value="{{ $key  }}"
                                                         >
                                                         {{ $name }} Available
                                                         <i class="input-helper"></i><i class="input-helper"></i></label>
