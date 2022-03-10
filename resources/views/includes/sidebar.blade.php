@@ -7,9 +7,24 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('property.index') }}">
+            <a class="nav-link collapsed" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
                 <i class="mdi mdi-office-building menu-icon"></i>
                 <span class="menu-title">Property</span>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-basic" style="">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item"> <a class="nav-link" href="{{ route('property.index') }}">Property</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{ route('property-vendors.index') }}">Property Vendors</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{ route('property-rate.index') }}">Property Rate</a></li>
+                </ul>
+            </div>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('users.index') }}">
+                <i class="mdi mdi-account-group-outline menu-icon"></i>
+                <span class="menu-title">Users</span>
             </a>
         </li>
 

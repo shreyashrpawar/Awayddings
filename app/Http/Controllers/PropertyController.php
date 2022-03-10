@@ -25,7 +25,8 @@ class PropertyController extends Controller
      */
     public function index()
     {
-        return view('app.property.list');
+        $properties = Property::orderBy('id','DESC')->paginate(50);
+        return view('app.property.list',compact('properties'));
     }
 
     /**
@@ -84,16 +85,10 @@ class PropertyController extends Controller
         // chargable items of the property
 
         foreach($hotel_chargable_type as $id => $name){
-//            dd($request->all());
-            //dd($name);
-           // dd(Str::snake($name,'_'));
+
             if($request->has(Str::snake($name,'_')))
             {
-//                dd(Str::snake($name,'_').'_rate');
-//                dd($request->all());
-                //dd(Str::snake($name,'_'));
                 $variable = Str::snake($name,'_');
-
                 $propertyRate = [
                     'property_id' => $propertyDetails->id,
                     'hotel_charagable_type_id' => $id,
@@ -101,31 +96,23 @@ class PropertyController extends Controller
                     'qty' =>  $request[$variable.'_count'],
                     'chargable_percentage' => $request[$variable.'_occupancy']
                 ];
-
-
                 PropertyDefaultRate::create($propertyRate);
             }
         }
         // amenities items of the property
         foreach($hotel_facilities as $id => $name){
-            // dd($request->all());
-            // dd(Str::snake($name,'_').'_amenities');
             if($request->has(Str::snake($name,'_').'_amenities'))
             {
                 $amenities_data = [
                     'property_id' => $propertyDetails->id,
                     'hotel_facility_id' => $id
                 ];
-                // dd($amenities_data);
                 try {
-                    // Validate the value...
                     PropertyAmenities::create($amenities_data);
                 } catch (Throwable $e) {
 
                     return false;
                 }
-
-
             }
         }
         // room inclusion items of the property
@@ -137,18 +124,13 @@ class PropertyController extends Controller
                     'hotel_facility_id' => $id
                 ];
                 try {
-                    // Validate the value...
                     PropertyRoomInclusion::create($room_inclusion_details);
                 } catch (Throwable $e) {
                     return false;
                 }
-              //  PropertyRoomInclusion::create($room_inclusion_details);
             }
         }
         foreach($images_video_categories as $key => $val){
-           // dd($val);
-            //dd(Str::snake($val->name,'_').'_upload');
-            ;
             if ($request->hasFile(Str::snake($val->name,'_').'_upload')) {
                 try {
                 $file = $request[Str::snake($val->name,'_').'_upload'];
@@ -193,9 +175,11 @@ class PropertyController extends Controller
      * @param  \App\Models\Property  $property
      * @return \Illuminate\Http\Response
      */
-    public function show(Property $property)
+    public function show($id)
     {
-        //
+        $data = Property::find($id);
+        return view('app.property.show',compact('data'));
+
     }
 
     /**

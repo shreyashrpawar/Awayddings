@@ -7,31 +7,36 @@
                 <div class="card-body">
                     <div class="row form-group">
                         <div class="col-md-6">
-                            <h4 class="card-title">Property List</h4>
+                            <h4 class="card-title">Vendors List</h4>
                         </div>
                         <div class="col-md-6 text-right">
-                            <a href="{{ route('property.create') }}" class="btn btn-sm btn-primary">Register</a>
+                            <a href="{{ route('property-vendors.create') }}" class="btn btn-sm btn-primary">Register Vendor</a>
                         </div>
                     </div>
 
 
                     <div class="table-responsive">
-                        <table class="table">
+                        <table class="table table-sm">
                             <thead class="thead-dark">
                             <tr>
                                 <th width="5%">#</th>
                                 <th>Name</th>
-                                <th>Location</th>
+                                <th>Phone</th>
+                                <th>City</th>
+                                <th>Address</th>
                                 <th>Status</th>
                                 <th width="10%">Actions</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($properties as $key => $val)
+                            @foreach($vendors as $key => $val)
                                 <tr>
                                     <th>{{ 1+ $key }}</th>
                                     <td>{{ $val->name }}</td>
-                                    <td>{{ $val->location->name }}</td>
+                                    <td>{{ $val->phone }}</td>
+
+                                    <td>{{ $val->city }}</td>
+                                    <td>{{ $val->address }}</td>
                                     <td>
                                         @if($val->status == 0)
                                             <span class="badge badge-warning">In Active</span>
@@ -43,7 +48,6 @@
                                         <div class="btn-group">
                                             <a href="{{ route('property.show',$val->id) }}" class="btn btn-sm btn-outline-primary">View</a>
                                             <a href="{{ route('property.edit',$val->id) }}" class="btn btn-sm btn-outline-warning">Edit</a>
-                                            <a href="{{ route('property-rate.show',$val->id) }}" class="btn btn-sm btn-outline-success">Rate</a>
                                         </div>
 
                                     </td>

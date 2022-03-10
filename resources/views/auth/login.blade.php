@@ -7,17 +7,26 @@
                 <div class="col-lg-4 mx-auto">
                     <div class="auth-form-light text-left py-5 px-4 px-sm-5 border">
                         <div class="brand-logo">
-                            <img src="{{ asset('assets/images/logo.svg') }}" alt="logo">
+                            <img src="{{ asset('assets/images/logo.png') }}" alt="logo">
                         </div>
                         <h4>Hello! let's get started</h4>
                         <h6 class="font-weight-light">Sign in to continue.</h6>
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                         <form class="pt-3" method="POST" action="{{ url('login') }}">
                             @csrf
                             <div class="form-group">
-                                <input type="email" class="form-control form-control-lg" id="exampleInputEmail1" placeholder="Username" name="email">
+                                <input type="email" class="form-control form-control-lg"  placeholder="Username" name="email">
                             </div>
                             <div class="form-group">
-                                <input type="password" class="form-control form-control-lg" id="exampleInputPassword1" placeholder="Password"  name="password">
+                                <input type="password" class="form-control form-control-lg"  placeholder="Password"  name="password">
                             </div>
                             <div class="mt-3">
                                 <button class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" href="../../index.html">SIGN IN</button>

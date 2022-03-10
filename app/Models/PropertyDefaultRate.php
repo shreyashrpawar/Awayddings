@@ -17,4 +17,8 @@ class PropertyDefaultRate extends Model
         'chargable_percentage',
         'argument',
     ];
+
+    public function hotel_charagable_type(){
+        return $this->belongsTo('App\Models\HotelChargableType');
+    }
 }

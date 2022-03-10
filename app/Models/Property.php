@@ -17,4 +17,20 @@ class Property extends Model
        'gmap_embedded_code',
        'status',
     ];
+
+    public function location(){
+        return $this->belongsTo('App\Models\Location');
+    }
+
+    public function default_rates(){
+        return $this->hasMany('App\Models\PropertyDefaultRate','property_id','id');
+    }
+
+    public function amenities(){
+        return $this->hasMany('App\Models\PropertyAmenities','property_id','id');
+    }
+
+    public function room_inclusions(){
+        return $this->hasMany('App\Models\PropertyRoomInclusion','property_id','id');
+    }
 }
