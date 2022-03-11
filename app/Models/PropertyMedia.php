@@ -15,4 +15,11 @@ class PropertyMedia extends Model
         'media_url',
         'media_meta_data',
     ];
+
+    public function mediaCategory(){
+        return $this->belongsTo('App\Models\MediaCategory');
+    }
+    public function MediaSubCategory(){
+        return $this->belongsTo('App\Models\MediaSubCategory');
+    }
 }

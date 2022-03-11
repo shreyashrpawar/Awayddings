@@ -15,6 +15,7 @@ use App\Models\RoomInclusion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Throwable;
 
 class PropertyController extends Controller
 {
@@ -58,16 +59,24 @@ class PropertyController extends Controller
      */
     public function store(Request $request)
     {
-
         $images_video_categories = MediaSubCategory::where('status',1)->where('media_category_id',1)->get();
         $menu_sub_categories     = MediaSubCategory::where('status',1)->where('media_category_id',3)->get();
         $hotel_facilities        = HotelFacility::where('status',1)->pluck('name','id')->all();
         $room_inclusions         = RoomInclusion::where('status',1)
                                                 ->pluck('name','id')
                                                 ->all();
+
         $hotel_chargable_type    = HotelChargableType::where('status',1)
                                                     ->pluck('name','id')
                                                     ->all();
+
+        if($request->hasFile('featured_image')){
+            $file = $request->featured_image;
+            $name = time() . $file->getClientOriginalName();
+            $filePath = 'images/property/'. $name;
+            $file_upload = Storage::disk('s3')->put($filePath, file_get_contents($file),'public');
+            $featured_image_path = Storage::disk('s3')->url($filePath);
+        }
 
 
         $property_basic_details = [
@@ -77,7 +86,7 @@ class PropertyController extends Controller
             'alias_name' => $request->property_name,
             'location_id' => $request->property_location_id,
             'gmap_embedded_code' => $request->property_gmap_embedded_code,
-            'featured_image' => $request->cover_image_upload,
+            'featured_image' => $featured_image_path,
             'status' => 0
         ];
 
@@ -132,23 +141,25 @@ class PropertyController extends Controller
         }
         foreach($images_video_categories as $key => $val){
             if ($request->hasFile(Str::snake($val->name,'_').'_upload')) {
-                try {
-                $file = $request[Str::snake($val->name,'_').'_upload'];
-                $name = time() . $file->getClientOriginalName();
+                $files = $request[Str::snake($val->name,'_').'_upload'];
+                foreach($files as $file){
+                    try {
+                        $name = time() . $file->getClientOriginalName();
 
-                $filePath = 'images/'.$propertyDetails->id.'/'.Str::snake($val->name,'_').'/'. $name;
-                $file_upload = Storage::disk('s3')->put($filePath, file_get_contents($file));
-                $s3_location = Storage::disk('s3')->url($filePath);
-                PropertyMedia::create([
-                    'property_id' => $propertyDetails->id,
-                    'media_category_id' => $val->media_category_id,
-                    'media_sub_category_id' => $val->id,
-                    'media_url' =>$s3_location
-                ]);
-                } catch (Throwable $e) {
-                    dd($e);
-                    return false;
+                        $filePath = 'images/'.$propertyDetails->id.'/'.Str::snake($val->name,'_').'/'. $name;
+                        $file_upload = Storage::disk('s3')->put($filePath, file_get_contents($file),'public');
+                        $s3_location = Storage::disk('s3')->url($filePath);
+                        PropertyMedia::create([
+                            'property_id' => $propertyDetails->id,
+                            'media_category_id' => $val->media_category_id,
+                            'media_sub_category_id' => $val->id,
+                            'media_url' =>$s3_location
+                        ]);
+                    } catch (Throwable $e) {
+                        return false;
+                    }
                 }
+
             }
         }
         foreach($menu_sub_categories as $key => $val){
@@ -167,6 +178,10 @@ class PropertyController extends Controller
                 ]);
             }
         }
+
+        $request->session()->flash('success','Successfully Saved');
+
+       return redirect(route('property.index'));
     }
 
     /**

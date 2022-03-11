@@ -13,13 +13,12 @@
                             <a href="{{ route('property.create') }}" class="btn btn-sm btn-primary">Register</a>
                         </div>
                     </div>
-
-
                     <div class="table-responsive">
                         <table class="table">
                             <thead class="thead-dark">
                             <tr>
                                 <th width="5%">#</th>
+                                <th>Image</th>
                                 <th>Name</th>
                                 <th>Location</th>
                                 <th>Status</th>
@@ -27,9 +26,13 @@
                             </tr>
                             </thead>
                             <tbody>
+                            @if($properties->count() > 0)
                             @foreach($properties as $key => $val)
                                 <tr>
                                     <th>{{ 1+ $key }}</th>
+                                    <td>
+                                        <img src="{{ $val->featured_image }}" alt="" width="50px" height="50px">
+                                    </td>
                                     <td>{{ $val->name }}</td>
                                     <td>{{ $val->location->name }}</td>
                                     <td>
@@ -50,7 +53,12 @@
                                 </tr>
 
                             @endforeach
+                            @else
+                                <tr>
+                                    <td colspan="5" class="text-center">No Result Found</td>
 
+                                </tr>
+                            @endif
 
 
                             </tbody>

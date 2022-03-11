@@ -31,6 +31,8 @@
        @include('includes.sidebar')
         <!-- partial -->
         @yield('contents')
+
+
     </div>
     <!-- page-body-wrapper ends -->
 </div>

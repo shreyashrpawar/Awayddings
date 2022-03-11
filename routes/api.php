@@ -22,7 +22,8 @@ Route::post('register',[\App\Http\Controllers\Api\UserController::class,'registe
 Route::post('login',[\App\Http\Controllers\Api\UserController::class,'login']);
 Route::get('property/random',[\App\Http\Controllers\Api\PropertyController::class,'getRandomProperty']);
 Route::get('properties',[\App\Http\Controllers\Api\PropertyController::class,'searchProperty']);
-
+Route::get('properties/{id}',[\App\Http\Controllers\Api\PropertyController::class,'propertyDetails']);
+Route::get('locations',[\App\Http\Controllers\Api\LocationController::class,'getActiveLocation']);
 Route::group(['middleware' => ['jwt.verify']], function() {
 
 });

@@ -38,6 +38,10 @@
                                                     @endforeach
                                                 </select>
                                             </div>
+                                            <div class="col-md-6">
+                                                <label>Cover Image</label>
+                                                <input type="file" class="form-control" name="featured_image" >
+                                            </div>
 
                                             <div class="form-group">
                                                 <label>Google Embed Code </label>
@@ -69,7 +73,7 @@
                                                  </div>
                                                  <div class="col-md-6">
                                                      <label>Upload File</label>
-                                                     <input type="file" class="form-control" name="{{ Str::snake($name, '_') }}_upload">
+                                                     <input type="file" class="form-control" name="{{ Str::snake($name, '_') }}_upload[]" multiple>
                                                  </div>
 
                                              </div>

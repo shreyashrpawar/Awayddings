@@ -6,10 +6,10 @@
             <div class="row w-100 mx-0">
                 <div class="col-lg-4 mx-auto">
                     <div class="auth-form-light text-left py-5 px-4 px-sm-5 border">
-                        <div class="brand-logo">
+                        <div class="brand-logo text-center">
                             <img src="{{ asset('assets/images/logo.png') }}" alt="logo">
                         </div>
-                        <h4>Hello! let's get started</h4>
+                        <h4>Welcome Back !</h4>
                         <h6 class="font-weight-light">Sign in to continue.</h6>
                         @if ($errors->any())
                             <div class="alert alert-danger">
@@ -29,16 +29,13 @@
                                 <input type="password" class="form-control form-control-lg"  placeholder="Password"  name="password">
                             </div>
                             <div class="mt-3">
-                                <button class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" href="../../index.html">SIGN IN</button>
+                                <button class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" >SIGN IN</button>
                             </div>
                             <div class="my-2 d-flex justify-content-between align-items-center">
                                 <div class="form-check">
-                                    <label class="form-check-label text-muted">
-                                        <input type="checkbox" class="form-check-input">
-                                        Keep me signed in
-                                    </label>
+
                                 </div>
-                                <button class="auth-link text-black">Forgot password?</button>
+                                <button class="btn btn-link  text-black">Forgot password?</button>
                             </div>
 
                         </form>

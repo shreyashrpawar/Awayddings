@@ -13,6 +13,6 @@ class PropertyRoomInclusion extends Model
         'hotel_facility_id',
     ];
     public function room_inclusion(){
-        return $this->hasOne('App\Models\PropertyRoomInclusion','hotel_facility_id','id');
+        return $this->belongsTo('App\Models\RoomInclusion','hotel_facility_id','id');
     }
 }
