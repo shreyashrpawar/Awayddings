@@ -36,14 +36,15 @@
                                     <td>{{ $val->email }}</td>
                                     <td>{{ $val->phone }}</td>
                                     <td>
-                                        @foreach($val->roles as $key => $val)
-                                            <span class="badge badge-info">{{ $val->name }}</span>
+                                        @foreach($val->roles as $key => $val1)
+                                            <span class="badge badge-info">{{ $val1->name }}</span>
                                         @endforeach
                                     </td>
                                     <td>
+
                                         @if($val->status == 0)
                                             <span class="badge badge-warning">In Active</span>
-                                        @else
+                                        @elseif($val->status == 1)
                                             <span class="badge badge-success">Active</span>
                                         @endif
                                     </td>

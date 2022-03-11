@@ -19,6 +19,9 @@ class CreatePropertyRatesTable extends Migration
             $table->unsignedBigInteger('hotel_chargable_type_id');
             $table->date('date');
             $table->double('amount');
+            $table->integer('available')->default(0)->nullable();
+            $table->integer('sold')->default(0)->nullable();
+            $table->integer('block')->default(0)->nullable();
             $table->double('occupancy_percentage');
             $table->boolean('status')->default(1)->comment('0 is active 1 is active');
             $table->foreign('hotel_chargable_type_id')->references('id')->on('hotel_chargable_types');
