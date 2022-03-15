@@ -6,6 +6,7 @@ use App\Models\Property;
 use App\Models\User;
 use App\Models\UserVendorAlignment;
 use App\Models\Vendor;
+use App\Models\VendorPropertyAlignment;
 use Illuminate\Http\Request;
 
 class VendorController extends Controller
@@ -86,9 +87,10 @@ class VendorController extends Controller
      * @param  \App\Models\Vendor  $vendor
      * @return \Illuminate\Http\Response
      */
-    public function show(Vendor $vendor)
+    public function show($id)
     {
-        //
+       $data = Vendor::find($id);
+       return view('app.property.vendors.vendor_show',compact('data'));
     }
 
     /**
@@ -97,9 +99,10 @@ class VendorController extends Controller
      * @param  \App\Models\Vendor  $vendor
      * @return \Illuminate\Http\Response
      */
-    public function edit(Vendor $vendor)
+    public function edit($id)
     {
-        //
+        $data = Vendor::find($id);
+        return view('app.property.vendors.vendor_edit',compact('data'));
     }
 
     /**
@@ -124,4 +127,22 @@ class VendorController extends Controller
     {
         //
     }
+
+    public function showPropertyVendorAssociationPage(Request  $request,$vendor_id){
+        $propertyVendorAlignments = VendorPropertyAlignment::where('vendor_id',$vendor_id)->get();
+        $vendor = Vendor::where('id',$vendor_id)->firstorFail();
+        $properties = Property::pluck('name','id')->all();
+        return view('app.property.vendors.vendor_associate',compact('propertyVendorAlignments','vendor','properties'));
+    }
+
+    public function submitPropertyVendorAssociationForm(Request  $request,$vendor_id){
+        $vendor_id = $request->vendor_id;
+        $associate = VendorPropertyAlignment::create([
+                'vendor_id' => $vendor_id,
+                'property_id' => $request->property_id,
+        ]);
+        $request->session()->flash('success','Successfully Associated');
+        return redirect(url('property-vendor/'.$vendor_id.'/associate'));
+    }
+
 }

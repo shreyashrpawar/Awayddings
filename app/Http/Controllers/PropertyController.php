@@ -38,6 +38,7 @@ class PropertyController extends Controller
     public function create()
     {
         $images_video_categories = MediaSubCategory::where('status',1)->where('media_category_id',1)->pluck('name','id')->all();
+        $video_categories        = MediaSubCategory::where('status',1)->where('media_category_id',2)->pluck('name','id')->all();
         $menu_sub_categories     = MediaSubCategory::where('status',1)->where('media_category_id',3)->pluck('name','id')->all();
         $hotel_facilities        = HotelFacility::where('status',1)->pluck('name','id')->all();
         $room_inclusions         = RoomInclusion::where('status',1)
@@ -48,7 +49,7 @@ class PropertyController extends Controller
 
         $locations = Location::where('status',1)
                      ->pluck('name','id')->all();
-        return view('app.property.create',compact('locations','images_video_categories','menu_sub_categories','hotel_facilities','room_inclusions','hotel_chargable_type'));
+        return view('app.property.create',compact('video_categories','locations','images_video_categories','menu_sub_categories','hotel_facilities','room_inclusions','hotel_chargable_type'));
     }
 
     /**
@@ -205,7 +206,22 @@ class PropertyController extends Controller
      */
     public function edit(Property $property)
     {
-        //
+        $images_video_categories = MediaSubCategory::where('status',1)->where('media_category_id',1)->pluck('name','id')->all();
+        $video_categories        = MediaSubCategory::where('status',1)->where('media_category_id',2)->pluck('name','id')->all();
+        $menu_sub_categories     = MediaSubCategory::where('status',1)->where('media_category_id',3)->pluck('name','id')->all();
+        $hotel_facilities        = HotelFacility::where('status',1)->pluck('name','id')->all();
+        $room_inclusions         = RoomInclusion::where('status',1)
+            ->pluck('name','id')
+            ->all();
+        $hotel_chargable_type = HotelChargableType::where('status',1)
+            ->pluck('name','id')->all();
+
+        $locations = Location::where('status',1)
+            ->pluck('name','id')->all();
+
+        $data = $property;
+
+        return view('app.property.edit',compact('video_categories','locations','images_video_categories','menu_sub_categories','hotel_facilities','room_inclusions','hotel_chargable_type','data'));
     }
 
     /**

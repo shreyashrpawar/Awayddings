@@ -6,8 +6,8 @@
             <div class="col-12 grid-margin">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Property Registration</h4>
-                        <form id="propertyRegistrationFrom" action="{{ route('property.store') }}" method="POST" enctype="multipart/form-data">
+                        <h4 class="card-title">Property Edit</h4>
+                        <form id="propertyRegistrationFrom" action="{{ route('property.update',$data->id) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div>
                                 <h3>Basic Details</h3>
@@ -17,15 +17,15 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Name</label>
-                                                <input type="text" class="form-control"  placeholder="Enter the property name" name="property_name" required>
+                                                <input type="text" class="form-control"  placeholder="Enter the property name" name="property_name" value="{{ $data->name }}" required>
                                             </div>
                                             <div class="form-group">
                                                 <label>Description</label>
-                                                <textarea  class="form-control"  cols="30" rows="5" name="property_description"  placeholder="Enter the Property Description" required></textarea>
+                                                <textarea  class="form-control"  cols="30" rows="5" name="property_description"  placeholder="Enter the Property Description" required >{{ $data->description }}</textarea>
                                             </div>
                                             <div class="form-group">
                                                 <label>Address</label>
-                                                <input type="text" class="form-control" placeholder="Enter the Address" name="property_address" required>
+                                                <input type="text" class="form-control" placeholder="Enter the Address" name="property_address" value="{{ $data->address }}" required>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -34,18 +34,18 @@
                                                 <select class="form-control" name="property_location_id" required>
                                                     <option value="">Select Location</option>
                                                     @foreach($locations as $key => $val)
-                                                        <option value="{{ $key }}">{{ $val }}</option>
+                                                        <option value="{{ $key }}" @if($key == $data->location_id) selected @endif>{{ $val }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
                                             <div class="col-md-6">
                                                 <label>Cover Image</label>
-                                                <input type="file" class="form-control" name="featured_image" >
+                                                <input type="file" class="form-control" name="featured_image"  >
                                             </div>
 
                                             <div class="form-group">
                                                 <label>Google Embed Code </label>
-                                                <textarea  class="form-control" id="description" cols="30" rows="5" name="property_gmap_embedded_code" placeholder="Enter the Gmap Embedded URL" required></textarea>
+                                                <textarea  class="form-control" id="description" cols="30" rows="5" name="property_gmap_embedded_code" placeholder="Enter the Gmap Embedded URL" required>{{ $data->gmap_embedded_code }}</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -62,40 +62,40 @@
                                         </div>
                                     </div>
                                     <div id="imageTypeBody">
-                                         <div class="form-group">
-                                             @foreach($images_video_categories as $id => $name)
-                                             <div class="row">
-                                                 <div class="col-md-1">
-                                                     {{ 1 + $loop->index }}.
-                                                 </div>
-                                                 <div class="col-md-5">
-                                                    <h5>{{ $name }}</h5>
-                                                 </div>
-                                                 <div class="col-md-6">
-                                                     <label>Upload File</label>
-                                                     <input type="file" class="form-control" name="{{ Str::snake($name, '_') }}_upload[]" multiple>
-                                                 </div>
+                                        <div class="form-group">
+                                            @foreach($images_video_categories as $id => $name)
+                                                <div class="row">
+                                                    <div class="col-md-1">
+                                                        {{ 1 + $loop->index }}.
+                                                    </div>
+                                                    <div class="col-md-5">
+                                                        <h5>{{ $name }}</h5>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label>Upload File</label>
+                                                        <input type="file" class="form-control" name="{{ Str::snake($name, '_') }}_upload[]" multiple>
+                                                    </div>
 
-                                             </div>
-                                             @endforeach
-                                                 <h3>Video</h3>
-                                             @foreach($video_categories as $id => $name)
-                                                 <div class="row">
-                                                     <div class="col-md-1">
-                                                         {{ 1 + $loop->index }}.
-                                                     </div>
-                                                     <div class="col-md-5">
-                                                         <h5>{{ $name }}</h5>
-                                                     </div>
-                                                     <div class="col-md-6">
-                                                         <label>Upload File</label>
-                                                         <input type="file" class="form-control" name="{{ Str::snake($name, '_') }}_upload[]" multiple>
-                                                     </div>
+                                                </div>
+                                            @endforeach
+                                            <h3>Video</h3>
+                                            @foreach($video_categories as $id => $name)
+                                                <div class="row">
+                                                    <div class="col-md-1">
+                                                        {{ 1 + $loop->index }}.
+                                                    </div>
+                                                    <div class="col-md-5">
+                                                        <h5>{{ $name }}</h5>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label>Upload File</label>
+                                                        <input type="file" class="form-control" name="{{ Str::snake($name, '_') }}_upload[]" multiple>
+                                                    </div>
 
-                                                 </div>
-                                             @endforeach
-                                         </div>
-                                     </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
 
                                 </section>
                                 <h3>Menu </h3>
@@ -111,19 +111,19 @@
                                     <div id="MenuTypeBody">
                                         <div class="form-group">
                                             @foreach($menu_sub_categories as $id => $name)
-                                            <div class="row">
-                                                <div class="col-md-1">
-                                                    {{ 1 + $loop->index }}.
-                                                </div>
-                                                <div class="col-md-5">
-                                                    <h5>{{ $name }}</h5>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label>Upload File</label>
-                                                    <input type="file" class="form-control" name="{{ Str::snake($name,'_').'_menu' }}">
-                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-1">
+                                                        {{ 1 + $loop->index }}.
+                                                    </div>
+                                                    <div class="col-md-5">
+                                                        <h5>{{ $name }}</h5>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label>Upload File</label>
+                                                        <input type="file" class="form-control" name="{{ Str::snake($name,'_').'_menu' }}">
+                                                    </div>
 
-                                            </div>
+                                                </div>
                                             @endforeach
                                         </div>
                                     </div>
@@ -132,6 +132,7 @@
                                 <section>
                                     <h3>Room </h3>
                                     @foreach($hotel_chargable_type as $key => $name)
+`
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <div class="form-check">
@@ -140,32 +141,41 @@
                                                                class="form-check-input hotel_chargable_typeId"
                                                                data="{{ Str::snake($name,'_') }}_section"
                                                                value="{{ $key  }}"
+                                                               @if($data->default_rates->contains('hotel_charagable_type_id', $key)) checked @endif
                                                         >
                                                         {{ $name }} Available
                                                         <i class="input-helper"></i><i class="input-helper"></i></label>
                                                 </div>
                                             </div>
                                         </div>
-                                        <section  style="display: none" id="{{ Str::snake($name, '_') }}_section" class="row">
-                                                <div class="col-md-4">
-                                                    <div class="form-group">
-                                                        <label for="">{{ $name }} Rate</label>
-                                                        <input type="number" class="form-control"  name="{{ Str::snake($name, '_').'_rate' }}" >
-                                                    </div>
+
+                                        <section  style="@if(!($data->default_rates->contains('hotel_charagable_type_id', $key))) display: none @endif " id="{{ Str::snake($name, '_') }}_section" class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="">{{ $name }} Rate</label>
+                                                    <input type="text" class="form-control"  name="{{ Str::snake($name, '_').'_rate' }}"
+                                                           value="@if($data->default_rates->where('hotel_charagable_type_id',$key)->first()) {{  $data->default_rates->where('hotel_charagable_type_id',$key)->first()->amount }} @endif"
+                                                    >
                                                 </div>
-                                                <div class="col-md-4">
-                                                    <div class="form-group">
-                                                        <label for="">{{ $name }} Count</label>
-                                                        <input type="number" class="form-control"  name="{{ Str::snake($name, '_').'_count' }}" >
-                                                    </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="">{{ $name }} Count</label>
+                                                    <input type="text" class="form-control"  name="{{ Str::snake($name, '_').'_count' }}"
+                                                    value="@if($data->default_rates->where('hotel_charagable_type_id',$key)->first()) {{  $data->default_rates->where('hotel_charagable_type_id',$key)->first()->qty }} @endif"
+                                                    >
                                                 </div>
-                                                <div class="col-md-4">
-                                                    <div class="form-group">
-                                                        <label for="">{{ $name }} Chargable at Occupancy</label>
-                                                        <input type="number" class="form-control" name="{{ Str::snake($name, '_').'_occupancy' }}" placeholder="Occupancy in percentage">
-                                                    </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="">{{ $name }} Chargable at Occupancy</label>
+                                                    <input type="text" class="form-control" name="{{ Str::snake($name, '_').'_occupancy' }}" placeholder="Occupancy in percentage"
+                                                           value="@if($data->default_rates->where('hotel_charagable_type_id',$key)->first()) {{  $data->default_rates->where('hotel_charagable_type_id',$key)->first()->chargable_percentage }} @endif"
+                                                    >
                                                 </div>
+                                            </div>
                                         </section>
+
                                     @endforeach
 
 
@@ -177,9 +187,11 @@
                                                 @foreach($hotel_facilities as $key => $val)
                                                     <div class="form-check">
                                                         <label class="form-check-label">
-                                                        <input type="checkbox" class="form-check-input" value="{{ $key }}" name="{{ Str::snake($val, '_').'_amenities' }}">
+                                                            <input type="checkbox" class="form-check-input" value="{{ $key }}" name="{{ Str::snake($val, '_').'_amenities' }}"
+                                                                   @if($data->amenities->contains('hotel_facility_id', $key)) checked @endif
+                                                            >
                                                             {{ $val }}
-                                                        <i class="input-helper"></i></label>
+                                                            <i class="input-helper"></i></label>
                                                     </div>
                                                 @endforeach
                                             </div>
@@ -190,14 +202,15 @@
                                                 @foreach($room_inclusions as $key => $val)
                                                     <div class="form-check">
                                                         <label class="form-check-label">
-                                                            <input type="checkbox" class="form-check-input" value="{{ $key }}" name="{{ Str::snake($val, '_').'_room_inclusion'}}">
+                                                            <input type="checkbox" class="form-check-input" value="{{ $key }}" name="{{ Str::snake($val, '_').'_room_inclusion'}}"
+                                                                   @if($data->room_inclusions->contains('hotel_facility_id', $key)) checked @endif
+                                                            >
                                                             {{ $val }}
                                                             <i class="input-helper"></i></label>
                                                     </div>
                                                 @endforeach
                                             </div>
                                         </div>
-
                                     </div>
                                 </section>
                             </div>
@@ -222,7 +235,7 @@
                 <label>Type</label>
                 <select name="" id="" class="form-control">
                 @foreach($images_video_categories as $id => $name)
-                <option value="{{ $id }}">{{ $name }}</option>
+            <option value="{{ $id }}">{{ $name }}</option>
                 @endforeach
             </select>
         </div>
@@ -239,27 +252,27 @@
 </div>`)
         });
         $('#addMoreMenuType').click(function(){
-          $('#MenuTypeBody').append(` <div class="form-group">
+            $('#MenuTypeBody').append(` <div class="form-group">
                                                     <div class="row">
                                                         <div class="col-md-5">
                                                             <label>Type</label>
                                                             <select name="" id="" class="form-control">
                  @foreach($menu_sub_categories as $id => $name)
-                  <option value="{{ $id }}">{{ $name }}</option>
+            <option value="{{ $id }}">{{ $name }}</option>
                  @endforeach
-                  </select>
-              </div>
-              <div class="col-md-6">
-                  <label>Upload File</label>
-                  <input type="file" class="form-control" name="">
-              </div>
-              <div class="col-md-1">
-                  <button type="button" class="btn btn-danger btn-lg mt-3 deleteMenuType">
-                      <i class="mdi mdi-trash-can"></i>
-                  </button>
-              </div>
-          </div>
-        </div>`);
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label>Upload File</label>
+            <input type="file" class="form-control" name="">
+        </div>
+        <div class="col-md-1">
+            <button type="button" class="btn btn-danger btn-lg mt-3 deleteMenuType">
+                <i class="mdi mdi-trash-can"></i>
+            </button>
+        </div>
+    </div>
+  </div>`);
         });
 
         // $(document).on("click",".deleteImageType",function() {
@@ -275,8 +288,8 @@
 
 
         $('.hotel_chargable_typeId').change(function() {
-                let sectionDiv = $(this).attr("data");
-                $('#'+sectionDiv).toggle();
+            let sectionDiv = $(this).attr("data");
+            $('#'+sectionDiv).toggle();
         });
     </script>
 @endsection

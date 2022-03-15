@@ -14,6 +14,7 @@ class Property extends Model
        'featured_image',
        'location_id',
        'description',
+        'address',
        'gmap_embedded_code',
        'status',
     ];
@@ -32,5 +33,12 @@ class Property extends Model
 
     public function room_inclusions(){
         return $this->hasMany('App\Models\PropertyRoomInclusion','property_id','id');
+    }
+
+    public function images(){
+        return  $this->hasMany('App\Models\PropertyMedia','property_id','id')->where('media_category_id',1);
+    }
+    public function pdfs(){
+        return  $this->hasMany('App\Models\PropertyMedia','property_id','id')->where('media_category_id',3);
     }
 }

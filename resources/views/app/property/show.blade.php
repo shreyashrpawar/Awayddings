@@ -6,6 +6,25 @@
 
        <div class="card">
            <div class="card-body">
+               <h5 class="text-uppercase mb-2">{{ $data->name }}</h5>
+               <div class="row">
+                   <div class="col-md-4 mt">
+                       <img src="{{ $data->featured_image }}" alt="" class="img-fluid img-thumbnail" width="400px" height="400px">
+                       <p class="font-weight-bold text-center">Cover Image</p>
+                   </div>
+                   <div class="col-md-8">
+                       <iframe src="{{ $data->gmap_embedded_code }}" width="700" height="240" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                       <p class="font-weight-bold text-center">Google Map</p>
+                   </div>
+                   <div class="row mt-3 mb-3">
+                       @foreach($data->images as $key => $image)
+                           <div class="col-md-2">
+                               <img src="{{ $image->media_url }}" alt="" class="img-fluid img-thumbnail" width="200px" height="200px">
+                               <p class="font-weight-bold">{{ $image->MediaSubCategory->name }}</p>
+                           </div>
+                       @endforeach
+                   </div>
+               </div>
                <table class="table">
                    <tr>
                        <th>Name</th>
@@ -15,9 +34,9 @@
                    </tr>
                    <tr>
                        <th>Description</th>
-                       <td>{{ $data->featured_image }}</td>
-                       <th>GMAP</th>
-                       <td>{{ $data->gmap_embedded_code }}</td>
+                       <td title="{{ $data->description }}">{{ Str::limit($data->description,50,'....') }}</td>
+                       <th>Address</th>
+                       <td>{{ $data->address }}</td>
                    </tr>
 
                </table>
@@ -80,10 +99,25 @@
                            @foreach($data->room_inclusions as $key => $val)
                                <tr class="text-center">
                                    <td>{{ 1 + $loop->index }}</td>
-                                   <td>{{ $val }}</td>
+                                   <td>{{ $val->room_inclusion->name }}</td>
                                </tr>
                            @endforeach
                            </tbody>
+                       </table>
+                   </div>
+                   <div class="col-md-6">
+                       <h5>Menus </h5>
+                       <table class="table table-sm">
+                           <tr class="thead-dark">
+                               <th>#</th>
+                               <th>Details</th>
+                           </tr>
+                           @foreach($data->pdfs as $key => $pdf)
+                               <tr>
+                                   <th>{{ $loop->index  + 1 }}</th>
+                                   <th>  <a href="{{$pdf->media_url}}" download="">{{ $pdf->MediaSubCategory->name }}</a></th>
+                               </tr>
+                           @endforeach
                        </table>
                    </div>
                </div>
@@ -93,12 +127,7 @@
 
     </div>
 
-    <footer class="footer">
-        <div class="d-sm-flex justify-content-center justify-content-sm-between">
-            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2018 <a href="https://www.bootstrapdash.com/" target="_blank" class="text-muted">Bootstrapdash</a>. All rights reserved.</span>
-            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="mdi mdi-heart-outline text-primary"></i></span>
-        </div>
-    </footer>
+   @include('includes/footer')
     <!-- partial -->
 </div>
 @endsection

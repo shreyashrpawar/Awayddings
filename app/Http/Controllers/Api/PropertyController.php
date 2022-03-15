@@ -11,6 +11,7 @@ use App\Models\PropertyMedia;
 use App\Models\PropertyRate;
 use App\Models\PropertyRoomInclusion;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 
 class PropertyController extends Controller
@@ -95,7 +96,7 @@ class PropertyController extends Controller
             'data' => $properties
         ]);
     }
-    public function propertyDetails(Request  $request,$id)
+  public function propertyDetails(Request  $request,$id)
     {
         $properties = Property::join('locations','locations.id','=','properties.location_id')
                                 ->join('property_default_rates','property_default_rates.property_id','=','properties.id')
@@ -212,4 +213,164 @@ class PropertyController extends Controller
         ]);
 
     }
+  public function getPropertyBudget(Request  $request,$id){
+    $property_id = $id;
+    $adult = $request->adult;
+    $start_date = Carbon::parse($request->start_date);
+    $end_date =  Carbon::parse($request->end_date);
+
+    $nights = $start_date->diffInDays($end_date);
+    $days = $nights +1;
+    $max_rooms  = ceil( $adult/2);
+    $min_rooms = ceil($adult/3);
+
+    // get the property room available
+
+  $properties = Property::join('locations','locations.id','=','properties.location_id')
+                        ->join('property_default_rates','property_default_rates.property_id','=','properties.id')
+                        ->where('properties.id', $property_id)
+                        ->where('properties.status',1)
+                        ->select('properties.id','properties.name','properties.featured_image','properties.description','locations.name as location')
+                        ->first();
+    // get date range
+    $dateRange              = CarbonPeriod::create($start_date, $end_date);
+    $property_default_rates = PropertyDefaultRate::where('property_id',$property_id)->get();
+    $property_chargable = $property_default_rates->unique('hotel_charagable_type_id')->all();
+    $property_rates = [];
+    foreach($dateRange as $date) {
+        foreach($property_chargable as $chargable_entity)
+        {
+            $propertyRate =  PropertyRate::where('property_id',$property_id)->where('hotel_chargable_type_id',$chargable_entity->hotel_charagable_type_id)->first();
+            if($propertyRate){
+                $temp_data = [
+                    'date' => $date,
+                    'chargable_type_id' => $chargable_entity->hotel_charagable_type_id,
+                    'chargable_type_details' => $chargable_entity->hotel_charagable_type,
+                    'amount' => $propertyRate->amount,
+                    'qty' => $propertyRate->available,
+                    'percentage_occupancy' => $propertyRate->occupancy_percentage
+                ];
+            }else{
+                $temp_data = [
+                    'date' => $date,
+                    'chargable_type_id' => $chargable_entity->hotel_charagable_type_id,
+                    'chargable_type_details' => $chargable_entity->hotel_charagable_type,
+                    'amount' => $chargable_entity->amount,
+                    'qty' => $chargable_entity->qty,
+                    'percentage_occupancy' => $chargable_entity->chargable_percentage
+                ];
+            }
+            array_push($property_rates,$temp_data);
+        }
+    }
+    // min room count for double and triple
+    $min_dbl_room = collect($property_rates)->where('chargable_type_id',1)->min('qty');
+    $min_triple_room = collect($property_rates)->where('chargable_type_id',2)->min('qty');
+
+
+
+    $double_room_rate_avg =  collect($property_rates)->where('chargable_type_id',1)->avg('amount');
+    $triple_room_rate_avg =   collect($property_rates)->where('chargable_type_id',2)->avg('amount');
+
+
+      if($min_dbl_room < $min_rooms ){
+          return response()->json([
+              'success'=> false,
+              'message' => 'No Room Available'
+          ]);
+      }
+
+      $best_budget  = $min_rooms * $triple_room_rate_avg * $nights;
+      $best_budget_in_words  = $this->formatNumberToLakhs($best_budget);
+
+      $best_budget_plan = [
+          'triple_occupancy_room_count' =>  $min_rooms,
+          'double_occupancy_room_count' => 0,
+          'budget' => $best_budget,
+          'budget_display'  => $best_budget_in_words
+      ];
+
+
+    $comfortable_budget_plan = [];
+    $mid_budget_plan =  [];
+
+  // calculate the comfortable_budget_plan if the double occupancy rooms are available
+  if($min_dbl_room >=  $max_rooms) {
+      $comfortable_budget  = $max_rooms * $double_room_rate_avg * $nights;
+      $comfortable_budget_in_words  = $this->formatNumberToLakhs($comfortable_budget);
+      $comfortable_budget_plan = [
+          'triple_occupancy_room_count' =>  0,
+          'double_occupancy_room_count'=>  $max_rooms,
+          'budget'=> $comfortable_budget,
+          'budget_display'=> $comfortable_budget_in_words
+     ];
+  }
+
+      $mid_budget_total_adult = $adult;
+  $mid_budget_half_adult = $mid_budget_total_adult / 2;
+  $mid_budget_double_room_count =  ceil($mid_budget_half_adult/2);
+  $mid_budget_triple_room_count =  ceil($mid_budget_half_adult/3);
+   // calculate the mid_budget_plan if the double occupancy rooms are available and triple occupancy room available
+  if($min_dbl_room >= $mid_budget_double_room_count && $min_triple_room >= $mid_budget_triple_room_count  ) {
+      $mid_budget  = $nights * ($mid_budget_double_room_count * $double_room_rate_avg + $mid_budget_triple_room_count * $triple_room_rate_avg );
+      $mid_budget_in_words =$this->formatNumberToLakhs($mid_budget);
+    $mid_budget_plan = [
+          'double_occupancy_room_count' => $mid_budget_double_room_count,
+      'triple_occupancy_room_count' => $mid_budget_triple_room_count,
+      'budget' => $mid_budget,
+      'budget_display' => $mid_budget_in_words
+    ];
+  }
+
+
+
+
+    return response()->json([
+        'success' => true,
+        'message' => 'SUCCESS',
+        'data' =>  [
+                'best_budget_plan' => $best_budget_plan,
+                'mid_budget_plan' => $mid_budget_plan,
+                'comfortable_budget_plan' => $comfortable_budget_plan,
+                'double_occupancy_rate' =>  $double_room_rate_avg,
+                'triple_occupancy_rate' => $triple_room_rate_avg,
+                'nights' => $nights
+            ]
+    ]);
+
+  }
+
+  private function formatNumberToLakhs($n,$precision = 2){
+
+	if ($n < 900) {
+        $n_format = number_format($n, $precision);
+        $suffix = '';
+    } else if ($n < 900000) {
+        // 0.9k-850k
+        $n_format = number_format($n / 100000, $precision);
+        $suffix = 'L';
+    } else if ($n < 900000000) {
+        // 0.9m-850m
+        $n_format = number_format($n / 10000000, $precision);
+        $suffix = 'Cr';
+    } else if ($n < 900000000000) {
+        // 0.9b-850b
+        $n_format = number_format($n / 1000000000, $precision);
+        $suffix = 'B';
+    } else {
+        // 0.9t+
+        $n_format = number_format($n / 1000000000000, $precision);
+        $suffix = 'T';
+    }
+
+  // Remove unecessary zeroes after decimal. "1.0" -> "1"; "1.00" -> "1"
+  // Intentionally does not affect partials, eg "1.50" -> "1.50"
+	if ( $precision > 0 ) {
+        $dotzero = '.' . str_repeat( '0', $precision );
+        $n_format = str_replace( $dotzero, '', $n_format );
+    }
+
+	    return $n_format . $suffix;
+    }
+
 }
