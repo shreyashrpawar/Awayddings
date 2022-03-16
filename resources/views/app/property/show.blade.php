@@ -12,9 +12,19 @@
                        <img src="{{ $data->featured_image }}" alt="" class="img-fluid img-thumbnail" width="400px" height="400px">
                        <p class="font-weight-bold text-center">Cover Image</p>
                    </div>
-                   <div class="col-md-8">
-                       <iframe src="{{ $data->gmap_embedded_code }}" width="700" height="240" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                   <div class="col-md-4">
+                       <iframe src="{{ $data->gmap_embedded_code }}" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                        <p class="font-weight-bold text-center">Google Map</p>
+                   </div>
+
+                   <div class="col-md-4">
+
+                       <iframe src="{{ $data->videos->media_url }}"
+                               title="YouTube video player"
+                               allow="accelerometer; autoplay; clipboard-write; encrypted-media;
+                               gyroscope; picture-in-picture"
+                               ></iframe>
+
                    </div>
                    <div class="row mt-3 mb-3">
                        @foreach($data->images as $key => $image)

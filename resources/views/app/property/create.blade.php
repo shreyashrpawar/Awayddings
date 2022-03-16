@@ -89,7 +89,7 @@
                                                      </div>
                                                      <div class="col-md-6">
                                                          <label>Upload File</label>
-                                                         <input type="file" class="form-control" name="{{ Str::snake($name, '_') }}_upload[]" multiple>
+                                                         <input type="text" class="form-control" name="{{ Str::snake($name, '_') }}_video" >
                                                      </div>
 
                                                  </div>

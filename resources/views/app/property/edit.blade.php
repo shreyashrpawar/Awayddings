@@ -9,6 +9,7 @@
                         <h4 class="card-title">Property Edit</h4>
                         <form id="propertyRegistrationFrom" action="{{ route('property.update',$data->id) }}" method="POST" enctype="multipart/form-data">
                             @csrf
+                            @method('put')
                             <div>
                                 <h3>Basic Details</h3>
                                 <section>
@@ -41,6 +42,7 @@
                                             <div class="col-md-6">
                                                 <label>Cover Image</label>
                                                 <input type="file" class="form-control" name="featured_image"  >
+                                                <img src="{{ $data->featured_image }}" alt="" width="100px" height="100px">
                                             </div>
 
                                             <div class="form-group">
@@ -74,6 +76,16 @@
                                                     <div class="col-md-6">
                                                         <label>Upload File</label>
                                                         <input type="file" class="form-control" name="{{ Str::snake($name, '_') }}_upload[]" multiple>
+                                                        @foreach($data->images->where('media_sub_category_id',$id) as $key => $val)
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <div class="form-group">
+                                                                        <img src="{{ $val->media_url }}" alt="" height="100" width="100">
+                                                                        <button class="btn btn-danger btn-sm deleteImage"  type="button" value="{{ $val->id }}">Delete</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        @endforeach
                                                     </div>
 
                                                 </div>
@@ -88,8 +100,20 @@
                                                         <h5>{{ $name }}</h5>
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <label>Upload File</label>
-                                                        <input type="file" class="form-control" name="{{ Str::snake($name, '_') }}_upload[]" multiple>
+
+                                                        <input type="text" class="form-control" name="{{ Str::snake($name, '_') }}_video" >
+                                                        @foreach($data->videos->where('media_sub_category_id',$id) as $key => $val)
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <div class="form-group">
+                                                                        <iframe width="1898" height="772" src="{{ $val->media_url }}" title="YouTube video player"
+                                                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+                                                                        <button class="btn btn-danger btn-sm deleteImage"  type="button" value="{{ $val->id }}">Delete</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        @endforeach
                                                     </div>
 
                                                 </div>
@@ -121,6 +145,16 @@
                                                     <div class="col-md-6">
                                                         <label>Upload File</label>
                                                         <input type="file" class="form-control" name="{{ Str::snake($name,'_').'_menu' }}">
+                                                        @foreach($data->pdfs->where('media_sub_category_id',$id) as $key => $val)
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <div class="form-group">
+                                                                        <a href="{{ $val->media_url }}" download="">Download</a>
+                                                                        <button class="btn btn-danger btn-sm deleteImage"  type="button" value="{{ $val->id }}">Delete</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        @endforeach
                                                     </div>
 
                                                 </div>
@@ -291,5 +325,25 @@
             let sectionDiv = $(this).attr("data");
             $('#'+sectionDiv).toggle();
         });
+        $('.deleteImage').click(function(){
+            let val = $(this).val();
+            console.log(val);
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '/property-media',
+                data: {
+                    id: val
+                },
+                type:'DELETE',
+                success:function(resp){
+                    console.log(resp);
+                }
+            })
+        });
+        $()
+
     </script>
 @endsection
