@@ -112,9 +112,26 @@ class VendorController extends Controller
      * @param  \App\Models\Vendor  $vendor
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Vendor $vendor)
+    public function update(Request $request, $id)
     {
-        //
+
+        $vendor = Vendor::find($id);
+        $vendor_data =[
+            'name' => $request->name,
+            'address' => $request->address,
+            'city' => $request->city,
+            'state' => $request->state,
+            'pin_code' => $request->pin_code,
+            'gst' => $request->gst,
+            'first_name'=> $request->first_name,
+            'last_name'=> $request->last_name,
+            'email'=> $request->email,
+            'phone'=> $request->phone,
+
+        ];
+        $vendor->update($vendor_data);
+        $request->session()->flash('success','Successfully Updated');
+        return redirect(route('property-vendors.index'));
     }
 
     /**

@@ -28,6 +28,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('property-vendor/{vendor_id}/associate',[App\Http\Controllers\VendorController::class,'submitPropertyVendorAssociationForm']);
     Route::resource('property-vendors',App\Http\Controllers\VendorController::class);
     Route::resource('property-rate',App\Http\Controllers\PropertyRateController::class);
-
+});
+Route::prefix('settings')->middleware(['auth'])->group(function () {
+    Route::resource('locations',App\Http\Controllers\Settings\LocationController::class);
 });
 

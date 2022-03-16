@@ -27,6 +27,20 @@
                 <span class="menu-title">Users</span>
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+                <i class="mdi mdi-settings menu-icon"></i>
+                <span class="menu-title">Settings</span>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-basic" style="">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item"> <a class="nav-link" href="{{ route('locations.index') }}">Locations</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{ route('property-vendors.index') }}">Hotel Facilities</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{ route('property-rate.index') }}">Room Inclusion</a></li>
+                </ul>
+            </div>
+        </li>
 
     </ul>
 </nav>
