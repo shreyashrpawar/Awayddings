@@ -38,8 +38,8 @@
                                 </td>
                                 <td>
                                     <div class="btn-group">
-                                        <a href="{{ route('locations.show',$val->id) }}" class="btn btn-sm btn-outline-primary">View</a>
-                                        <a href="{{ route('locations.edit',$val->id) }}" class="btn btn-sm btn-outline-warning">Edit</a>
+                                        <a href="{{ route('property-room-inclusion.show',$val->id) }}" class="btn btn-sm btn-outline-primary">View</a>
+                                        <a href="{{ route('property-room-inclusion.edit',$val->id) }}" class="btn btn-sm btn-outline-warning">Edit</a>
                                     </div>
 
                                 </td>

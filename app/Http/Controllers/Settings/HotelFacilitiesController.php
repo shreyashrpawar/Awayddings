@@ -13,27 +13,42 @@ class HotelFacilitiesController extends Controller
         $locations = RoomInclusion::paginate(50);
         return view('app.settings.room_inclusion.list',compact('locations'));
     }
-    public function show(){
-        return view('app.settings.locations.index');
+
+    public function show($id){
+        $data = RoomInclusion::find($id);
+        return view('app.settings.room_inclusion.show',compact('data'));
     }
     public function edit(Request  $request,$id){
-        $location = Location::find($id);
-        return view('app.settings.locations.index',compact('location'));
+        $data = RoomInclusion::find($id);
+        return view('app.settings.room_inclusion.edit',compact('data'));
     }
     public function store(Request  $request){
+        $request->validate([
+            'name' => ['required','unique:room_inclusions','max:100']
+        ]);
         $name = $request->name;
-        $location = Location::create([
+        $location = RoomInclusion::create([
             'name' => $name
         ]);
         $request->session()->flash('success','Successfully Saved');
-        return redirect(route('locations.index'));
+        return redirect(route('property-room-inclusion.index'));
     }
     public function create(Request  $request){
-        return view('app.settings.locations.create');
+        return view('app.settings.room_inclusion.create');
     }
     public function update(Request  $request,$id){
-        $location = Location::find($id);
+        $hotel_facility = RoomInclusion::find($id);
+        $request->validate([
+            'name' => 'required|unique:room_inclusions,name,'.$id,
+            'status' => 'required|integer'
+        ]);
 
-        return view('app.settings.locations.index');
+        $name = $request->name;
+        $location = $hotel_facility->update([
+            'name' => $name,
+            'status' => $request->status,
+        ]);
+        $request->session()->flash('success','Successfully Updated');
+        return redirect(route('property-room-inclusion.index'));
     }
 }
