@@ -16,7 +16,7 @@
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item"> <a class="nav-link" href="{{ route('property.index') }}">Property</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{ route('property-vendors.index') }}">Property Vendors</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="{{ route('property-rate.index') }}">Property Rate</a></li>
+
                 </ul>
             </div>
         </li>
@@ -28,19 +28,18 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link collapsed" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+            <a class="nav-link collapsed" data-toggle="collapse" href="#ui-basic1" aria-expanded="false" aria-controls="ui-basic">
                 <i class="mdi mdi-settings menu-icon"></i>
                 <span class="menu-title">Settings</span>
                 <i class="menu-arrow"></i>
             </a>
-            <div class="collapse" id="ui-basic" style="">
+            <div class="collapse" id="ui-basic1" style="">
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item"> <a class="nav-link" href="{{ route('locations.index') }}">Locations</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="{{ route('property-vendors.index') }}">Hotel Facilities</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="{{ route('property-rate.index') }}">Room Inclusion</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{ route('property-amenities.index') }}">Property Amenities</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{ route('property-room-inclusion.index') }}">Room Inclusion</a></li>
                 </ul>
             </div>
         </li>
-
     </ul>
 </nav>

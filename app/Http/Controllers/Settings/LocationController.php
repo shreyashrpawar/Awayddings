@@ -20,10 +20,19 @@ class LocationController extends Controller
         return view('app.settings.locations.index',compact('location'));
     }
     public function store(Request  $request){
+       $request->validate([
+           'name' => ['required','unique:locations','max:100'],
+           'description' => ['required']
+       ]);
+
         $name = $request->name;
+        $description = $request->description;
         $location = Location::create([
-            'name' => $name
+            'name' => $name,
+            'description' => $description
         ]);
+
+
         $request->session()->flash('success','Successfully Saved');
         return redirect(route('locations.index'));
     }
@@ -32,7 +41,6 @@ class LocationController extends Controller
     }
     public function update(Request  $request,$id){
         $location = Location::find($id);
-
         return view('app.settings.locations.index');
     }
 }

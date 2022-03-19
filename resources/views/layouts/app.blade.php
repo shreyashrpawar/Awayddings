@@ -20,22 +20,25 @@
 </head>
 
 <body>
+
 <div class="container-scroller">
     <!-- partial:../../partials/_navbar.html -->
+
     @include('includes.navbar')
     <!-- partial -->
     <div class="container-fluid page-body-wrapper">
-        <!-- partial:../../partials/_settings-panel.html -->
         @include('includes.right_sidebar')
-        <!-- partial -->
-        <!-- partial:../../partials/_sidebar.html -->
-       @include('includes.sidebar')
-        <!-- partial -->
-        @yield('contents')
-
+        @include('includes.sidebar')
+        <div class="main-panel">
+            <div class="content-wrapper">
+                 @include('includes.notification')
+                 @yield('contents')
+                 @include('includes/footer')
+            </div>
+        </div>
 
     </div>
-    <!-- page-body-wrapper ends -->
+
 </div>
 
 <script src="{{ asset('assets/vendors/js/vendor.bundle.base.js') }}"></script>

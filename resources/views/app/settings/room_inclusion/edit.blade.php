@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('title','Home Page')
 @section('contents')
+    <div class="content-wrapper">
         <div class="row">
             <div class="col-12 grid-margin">
                 <div class="card">
@@ -23,6 +24,7 @@
                 </div>
             </div>
         </div>
+    </div>
 @endsection
 @section('js')
     <script src="{{ asset('/assets/vendors/js/vendor.bundle.base.js') }}"></script>

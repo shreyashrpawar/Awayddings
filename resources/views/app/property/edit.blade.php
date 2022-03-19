@@ -101,15 +101,14 @@
                                                     </div>
                                                     <div class="col-md-6">
 
-                                                        <input type="text" class="form-control" name="{{ Str::snake($name, '_') }}_video" >
+
                                                         @foreach($data->videos->where('media_sub_category_id',$id) as $key => $val)
                                                             <div class="row">
                                                                 <div class="col-md-12">
                                                                     <div class="form-group">
-                                                                        <iframe width="1898" height="772" src="{{ $val->media_url }}" title="YouTube video player"
+                                                                        <iframe width="100" height="100" src="{{ $val->media_url }}" title="YouTube video player"
                                                                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-                                                                        <button class="btn btn-danger btn-sm deleteImage"  type="button" value="{{ $val->id }}">Delete</button>
+                                                                        <input type="text" class="form-control" name="{{ Str::snake($name, '_') }}_video" value="{{ $val->media_url }}" >
                                                                     </div>
                                                                 </div>
                                                             </div>

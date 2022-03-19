@@ -1,7 +1,10 @@
 @extends('layouts.app')
 @section('title','Home Page')
 @section('contents')
-   <div class="card">
+<div class="main-panel">
+    <div class="content-wrapper">
+
+       <div class="card">
            <div class="card-body">
                <h5 class="text-uppercase mb-2">{{ $data->name }}</h5>
                <div class="row">
@@ -131,4 +134,10 @@
 
            </div>
        </div>
+
+    </div>
+
+   @include('includes/footer')
+    <!-- partial -->
+</div>
 @endsection

@@ -295,35 +295,32 @@ class PropertyController extends Controller
     $mid_budget_plan =  [];
 
   // calculate the comfortable_budget_plan if the double occupancy rooms are available
-  if($min_dbl_room >=  $max_rooms) {
-      $comfortable_budget  = $max_rooms * $double_room_rate_avg * $nights;
-      $comfortable_budget_in_words  = $this->formatNumberToLakhs($comfortable_budget);
-      $comfortable_budget_plan = [
-          'triple_occupancy_room_count' =>  0,
-          'double_occupancy_room_count'=>  $max_rooms,
-          'budget'=> $comfortable_budget,
-          'budget_display'=> $comfortable_budget_in_words
-     ];
-  }
+      if($min_dbl_room >=  $max_rooms) {
+          $comfortable_budget  = $max_rooms * $double_room_rate_avg * $nights;
+          $comfortable_budget_in_words  = $this->formatNumberToLakhs($comfortable_budget);
+          $comfortable_budget_plan = [
+              'triple_occupancy_room_count' =>  0,
+              'double_occupancy_room_count'=>  $max_rooms,
+              'budget'=> $comfortable_budget,
+              'budget_display'=> $comfortable_budget_in_words
+         ];
+      }
 
       $mid_budget_total_adult = $adult;
-  $mid_budget_half_adult = $mid_budget_total_adult / 2;
-  $mid_budget_double_room_count =  ceil($mid_budget_half_adult/2);
-  $mid_budget_triple_room_count =  ceil($mid_budget_half_adult/3);
-   // calculate the mid_budget_plan if the double occupancy rooms are available and triple occupancy room available
-  if($min_dbl_room >= $mid_budget_double_room_count && $min_triple_room >= $mid_budget_triple_room_count  ) {
-      $mid_budget  = $nights * ($mid_budget_double_room_count * $double_room_rate_avg + $mid_budget_triple_room_count * $triple_room_rate_avg );
-      $mid_budget_in_words =$this->formatNumberToLakhs($mid_budget);
-    $mid_budget_plan = [
-          'double_occupancy_room_count' => $mid_budget_double_room_count,
-      'triple_occupancy_room_count' => $mid_budget_triple_room_count,
-      'budget' => $mid_budget,
-      'budget_display' => $mid_budget_in_words
-    ];
-  }
-
-
-
+      $mid_budget_half_adult = $mid_budget_total_adult / 2;
+      $mid_budget_double_room_count =  ceil($mid_budget_half_adult/2);
+      $mid_budget_triple_room_count =  ceil($mid_budget_half_adult/3);
+       // calculate the mid_budget_plan if the double occupancy rooms are available and triple occupancy room available
+      if($min_dbl_room >= $mid_budget_double_room_count && $min_triple_room >= $mid_budget_triple_room_count  ) {
+          $mid_budget  = $nights * ($mid_budget_double_room_count * $double_room_rate_avg + $mid_budget_triple_room_count * $triple_room_rate_avg );
+          $mid_budget_in_words =$this->formatNumberToLakhs($mid_budget);
+        $mid_budget_plan = [
+              'double_occupancy_room_count' => $mid_budget_double_room_count,
+          'triple_occupancy_room_count' => $mid_budget_triple_room_count,
+          'budget' => $mid_budget,
+          'budget_display' => $mid_budget_in_words
+        ];
+      }
 
     return response()->json([
         'success' => true,

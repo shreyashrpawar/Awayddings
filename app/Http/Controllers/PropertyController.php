@@ -423,7 +423,8 @@ class PropertyController extends Controller
 
             }
         }
-        foreach($menu_sub_categories as $key => $val){
+        foreach($menu_sub_categories as $key => $val)
+        {
             if ($request->hasFile(Str::snake($val->name,'_').'_menu')) {
                 $file = $request->file(Str::snake($val->name,'_').'_menu');
                 $name = time() . $file->getClientOriginalName();
@@ -439,29 +440,40 @@ class PropertyController extends Controller
             }
         }
         foreach($video_categories as $key => $val){
+            $data = PropertyMedia::where('property_id',$property->id)
+                        ->where('media_category_id',$val->media_category_id)
+                        ->where('media_sub_category_id',$val->id)
+                        ->first();
 
             if ($request->has(Str::snake($val->name,'_').'_video'))
             {
-                try {
-                    PropertyMedia::create([
-                        'property_id' => $property->id,
-                        'media_category_id' => $val->media_category_id,
-                        'media_sub_category_id' => $val->id,
-                        'media_url' => $request[Str::snake($val->name,'_').'_video']
+                if($data){
+                    // update
+                    $data->update([
+                        'media_url' =>$request[Str::snake($val->name,'_').'_video']
                     ]);
-                } catch (Throwable $e) {
-                    report($e);
-                    return false;
+                }else{
+                    // create
+                    try {
+                        PropertyMedia::create([
+                            'property_id' => $property->id,
+                            'media_category_id' => $val->media_category_id,
+                            'media_sub_category_id' => $val->id,
+                            'media_url' => $request[Str::snake($val->name,'_').'_video']
+                        ]);
+                    } catch (Throwable $e) {
+                        report($e);
+                        return false;
+                    }
                 }
+            }else{
+              if($data){
+                  $data->delete();
+              }
             }
         }
-        //
         $request->session()->flash('success','Successfully Updated');
         return redirect(route('property.index'));
-
-
-
-
 
     }
 

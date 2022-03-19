@@ -43,7 +43,7 @@ class Property extends Model
     }
 
     public function videos(){
-        return  $this->hasOne('App\Models\PropertyMedia','property_id','id')
+        return  $this->hasMany('App\Models\PropertyMedia','property_id','id')
                                 ->where('media_category_id',2);
     }
 }
