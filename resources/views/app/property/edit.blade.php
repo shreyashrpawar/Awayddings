@@ -100,19 +100,31 @@
                                                         <h5>{{ $name }}</h5>
                                                     </div>
                                                     <div class="col-md-6">
+                                                        @if($data->videos->where('media_sub_category_id',$id)->count() > 0)
+                                                            @foreach($data->videos->where('media_sub_category_id',$id) as $key => $val)
 
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <div class="form-group">
+                                                                            <iframe width="100" height="100" src="{{ $val->media_url }}" title="YouTube video player"
+                                                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                                                            <input type="text" class="form-control" name="{{ Str::snake($name, '_') }}_video" value="{{ $val->media_url }}" placeholder="Enter the youtube url" >
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
 
-                                                        @foreach($data->videos->where('media_sub_category_id',$id) as $key => $val)
+                                                            @endforeach
+                                                        @else
                                                             <div class="row">
                                                                 <div class="col-md-12">
                                                                     <div class="form-group">
-                                                                        <iframe width="100" height="100" src="{{ $val->media_url }}" title="YouTube video player"
-                                                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                                                                        <input type="text" class="form-control" name="{{ Str::snake($name, '_') }}_video" value="{{ $val->media_url }}" >
+
+                                                                        <input type="text" class="form-control" name="{{ Str::snake($name, '_') }}_video" placeholder="Enter the youtube url" >
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        @endforeach
+                                                        @endif
+
                                                     </div>
 
                                                 </div>
@@ -332,7 +344,7 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: '/property-media',
+                url: '/property/media',
                 data: {
                     id: val
                 },

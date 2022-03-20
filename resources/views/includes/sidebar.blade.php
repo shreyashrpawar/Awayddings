@@ -15,7 +15,7 @@
             <div class="collapse" id="ui-basic" style="">
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item"> <a class="nav-link" href="{{ route('property.index') }}">Property</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="{{ route('property-vendors.index') }}">Property Vendors</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{ route('vendors.index') }}">Property Vendors</a></li>
                 </ul>
             </div>
         </li>

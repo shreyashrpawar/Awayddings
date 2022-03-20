@@ -44,7 +44,7 @@
                                     <div class="btn-group">
                                         <a href="{{ route('property.show',$val->id) }}" class="btn btn-sm btn-outline-primary">View</a>
                                         <a href="{{ route('property.edit',$val->id) }}" class="btn btn-sm btn-outline-warning">Edit</a>
-                                        <a href="{{ route('property-rate.index') }}" class="btn btn-sm btn-outline-info">Rates</a>
+                                        <a href="{{ route('rate.show',$val->id) }}" class="btn btn-sm btn-outline-info">Rates</a>
                                     </div>
 
                                 </td>

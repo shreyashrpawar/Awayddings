@@ -2,8 +2,6 @@
 @section('title','Home Page')
 @section('contents')
 
-
-
        <div class="card">
            <div class="card-body">
                <h5 class="text-uppercase mb-2">{{ $data->name }}</h5>
@@ -18,13 +16,13 @@
                    </div>
 
                    <div class="col-md-4">
-
+                       @if($data->videos->media_url)
                        <iframe src="{{ $data->videos->media_url }}"
                                title="YouTube video player"
                                allow="accelerometer; autoplay; clipboard-write; encrypted-media;
                                gyroscope; picture-in-picture"
                                ></iframe>
-
+                       @endif
                    </div>
                    <div class="row mt-3 mb-3">
                        @foreach($data->images as $key => $image)

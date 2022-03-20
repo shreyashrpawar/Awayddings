@@ -8,6 +8,7 @@ use App\Models\PropertyRate;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class PropertyRateController extends Controller
 {
@@ -40,7 +41,93 @@ class PropertyRateController extends Controller
      */
     public function store(Request $request)
     {
-        //
+            $property_id = $request->property_id;
+
+            $hotel_chargable_type_id = $request->hotel_chargable_type_id;
+            $amount = $request->amount;
+            $date = $request->date;
+            $available =  $request->available;
+            $occupancy = $request->occupancy;
+
+            $type= $request->type;
+
+        $propertyDefaultRate = PropertyDefaultRate::where('property_id', $request->property_id)
+                                                  ->where('hotel_charagable_type_id',$hotel_chargable_type_id)
+                                                 ->first();
+
+
+        if($type == 'amount')
+            {
+                if($request->id){
+                    $oldPurchaseEntry = PropertyRate::find($request->id);
+
+                    $data =  $oldPurchaseEntry->update([
+                        'amount' => $amount,
+                        'date' => $oldPurchaseEntry->date,
+                        'available' => $oldPurchaseEntry->qty,
+                        'occupancy_percentage' => $oldPurchaseEntry->chargable_percentage
+                    ]);
+                }else{
+                    $data = PropertyRate::create([
+                        'property_id' => $property_id,
+                        'hotel_chargable_type_id' => $propertyDefaultRate->hotel_charagable_type_id,
+                        'amount' => $amount,
+                        'date' => $date,
+                        'available' => $propertyDefaultRate->qty,
+                        'occupancy_percentage' =>$propertyDefaultRate->chargable_percentage
+                    ]);
+                }
+            }
+
+        if($type == 'available'){
+            if($request->id){
+                $oldPurchaseEntry = PropertyRate::find($request->id);
+                $data =  $oldPurchaseEntry->update([
+                    'amount' =>$oldPurchaseEntry->amount,
+                    'date' => $oldPurchaseEntry->date,
+                    'available' => $available,
+                    'occupancy_percentage' => $oldPurchaseEntry->chargable_percentage
+                ]);
+            }else{
+                $data = PropertyRate::create([
+                    'property_id' => $property_id,
+                    'hotel_chargable_type_id' => $propertyDefaultRate->hotel_charagable_type_id,
+                    'amount' => $propertyDefaultRate->amount,
+                    'date' => $date,
+                    'available' => $available,
+                    'occupancy_percentage' =>$propertyDefaultRate->chargable_percentage
+                ]);
+            }
+        }
+
+        if($type == 'occupancy'){
+            if($request->id){
+                $oldPurchaseEntry = PropertyRate::find($request->id);
+                $data =  $oldPurchaseEntry->update([
+                    'amount' =>$oldPurchaseEntry->amount,
+                    'date' => $oldPurchaseEntry->date,
+                    'available' =>  $oldPurchaseEntry->available,
+                    'occupancy_percentage' => $occupancy
+                ]);
+            }else{
+                $data = PropertyRate::create([
+                    'property_id' => $property_id,
+                    'hotel_chargable_type_id' => $propertyDefaultRate->hotel_charagable_type_id,
+                    'amount' => $propertyDefaultRate->amount,
+                    'date' => $date,
+                    'available' => $propertyDefaultRate->qty,
+                    'occupancy_percentage' =>$occupancy
+                ]);
+            }
+        }
+
+
+        return response()->json([
+            'success' =>  true,
+            'message' => 'successfully saved',
+            'data' => $data
+        ]);
+
     }
 
     /**
@@ -71,34 +158,41 @@ class PropertyRateController extends Controller
         {
             foreach($property_default_rates as $key => $default_rate)
             {
-
                 $property_rate = PropertyRate::where('property_id',$id)
                         ->where('hotel_chargable_type_id',$default_rate->hotel_charagable_type_id)
-                        ->whereDate('date',$date)->first();
+                        ->whereDate('date',$date)
+                        ->first();
 
-                if($property_rate){
+                if($property_rate)
+                {
                     // push to the result array
-                    $temp_date = [
-                        'hotel_chargable_type_id' => $property_rate->hotel_chargable_type_id,
+                    $temp_data = collect([
+                        'id' => $property_rate->id,
+                        'property_id' =>$id,
+                        'hotel_chargable_type_id' => $property_rate->hotel_chargable_type,
                         'amount' => $property_rate->amount,
+                        'available' => $property_rate->available,
                         'date' => $property_rate->date,
-                        'occupancy' => $property_rate->occupancy_percentage_
-                    ];
-                    array_push($property_rates,$temp_date);
+                        'occupancy' => $property_rate->occupancy_percentage
+                    ]);
+                    array_push($property_rates,$temp_data);
                 }else{
                     // take default price and push to the array.
 
-                    $temp_date = [
-                        'hotel_chargable_type_id' => $default_rate->hotel_charagable_type_id,
+                    $temp_data = collect([
+                        'id' => null,
+                        'property_id' =>$id,
+                        'hotel_chargable_type_id' => $default_rate->hotel_charagable_type,
                         'amount' => $default_rate->amount,
                         'date' => $date,
+                        'available' => $default_rate->qty,
                         'occupancy' => $default_rate->chargable_percentage
-                    ];
-                    array_push($property_rates,$temp_date);
+                    ]);
+                    array_push($property_rates,$temp_data);
                 }
             }
-
         }
+
         return view('app.property-rate.property-rate-show',compact('property_rates'));
     }
 
