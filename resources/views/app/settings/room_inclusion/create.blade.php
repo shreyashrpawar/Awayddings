@@ -7,7 +7,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Property Room Inclusion Registration</h4>
-                        <form  action="{{ route('property-room-inclusion.store') }}" method="POST" >
+                        <form  action="{{ route('room-inclusion.store') }}" method="POST" >
                             @csrf
                             <div>
                                 <div class="form-group">

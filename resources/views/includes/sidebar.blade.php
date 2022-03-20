@@ -7,7 +7,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link collapsed" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+            <a class="nav-link collapsed" data-toggle="collapse" href="#ui-basic">
                 <i class="mdi mdi-office-building menu-icon"></i>
                 <span class="menu-title">Property</span>
                 <i class="menu-arrow"></i>
@@ -16,11 +16,9 @@
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item"> <a class="nav-link" href="{{ route('property.index') }}">Property</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{ route('property-vendors.index') }}">Property Vendors</a></li>
-
                 </ul>
             </div>
         </li>
-
         <li class="nav-item">
             <a class="nav-link" href="{{ route('users.index') }}">
                 <i class="mdi mdi-account-group-outline menu-icon"></i>
@@ -28,16 +26,16 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link collapsed" data-toggle="collapse" href="#ui-basic1" aria-expanded="false" aria-controls="ui-basic">
+            <a class="nav-link collapsed" data-toggle="collapse" href="#ui-basic1" aria-expanded="false" aria-controls="ui-basic1">
                 <i class="mdi mdi-settings menu-icon"></i>
                 <span class="menu-title">Settings</span>
                 <i class="menu-arrow"></i>
             </a>
-            <div class="collapse" id="ui-basic1" style="">
+            <div class="collapse" id="ui-basic1">
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item"> <a class="nav-link" href="{{ route('locations.index') }}">Locations</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="{{ route('property-amenities.index') }}">Property Amenities</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="{{ route('property-room-inclusion.index') }}">Room Inclusion</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{ route('amenities.index') }}">Amenities</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{ route('room-inclusion.index') }}">Room Inclusion</a></li>
                 </ul>
             </div>
         </li>

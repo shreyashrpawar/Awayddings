@@ -31,7 +31,7 @@ Route::middleware(['auth'])->group(function () {
 });
 Route::prefix('settings')->middleware(['auth'])->group(function () {
     Route::resource('locations',App\Http\Controllers\Settings\LocationController::class);
-    Route::resource('property-amenities',App\Http\Controllers\Settings\HotelAmenitiesController::class);
-    Route::resource('property-room-inclusion',App\Http\Controllers\Settings\HotelFacilitiesController::class);
+    Route::resource('amenities',App\Http\Controllers\Settings\HotelAmenitiesController::class);
+    Route::resource('room-inclusion',App\Http\Controllers\Settings\HotelFacilitiesController::class);
 });
 

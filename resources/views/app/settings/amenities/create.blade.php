@@ -7,7 +7,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Amenities Registration</h4>
-                        <form  action="{{ route('property-amenities.store') }}" method="POST" >
+                        <form  action="{{ route('amenities.store') }}" method="POST" >
                             @csrf
                             <div>
                                 <div class="form-group">

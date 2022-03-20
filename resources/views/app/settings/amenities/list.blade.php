@@ -8,7 +8,7 @@
                     <h4 class="card-title">Amenities List</h4>
                 </div>
                 <div class="col-md-6 text-right">
-                    <a href="{{ route('property-amenities.create') }}" class="btn btn-sm btn-primary">Register</a>
+                    <a href="{{ route('amenities.create') }}" class="btn btn-sm btn-primary">Register</a>
                 </div>
             </div>
             <div class="table-responsive">
@@ -28,7 +28,6 @@
                             <tr>
                                 <th>{{ 1+ $key }}</th>
                                 <td>{{ $val->name }}</td>
-
                                 <td>
                                     @if($val->status == 0)
                                         <span class="badge badge-warning">In Active</span>
@@ -38,8 +37,8 @@
                                 </td>
                                 <td>
                                     <div class="btn-group">
-                                        <a href="{{ route('property-amenities.show',$val->id) }}" class="btn btn-sm btn-outline-primary">View</a>
-                                        <a href="{{ route('property-amenities.edit',$val->id) }}" class="btn btn-sm btn-outline-warning">Edit</a>
+                                        <a href="{{ route('amenities.show',$val->id) }}" class="btn btn-sm btn-outline-primary">View</a>
+                                        <a href="{{ route('amenities.edit',$val->id) }}" class="btn btn-sm btn-outline-warning">Edit</a>
                                     </div>
 
                                 </td>

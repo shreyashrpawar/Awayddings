@@ -8,7 +8,7 @@
                     <h4 class="card-title">Room Inclusion List</h4>
                 </div>
                 <div class="col-md-6 text-right">
-                    <a href="{{ route('property-room-inclusion.create') }}" class="btn btn-sm btn-primary">Register</a>
+                    <a href="{{ route('room-inclusion.create') }}" class="btn btn-sm btn-primary">Register</a>
                 </div>
             </div>
             <div class="table-responsive">
@@ -38,8 +38,8 @@
                                 </td>
                                 <td>
                                     <div class="btn-group">
-                                        <a href="{{ route('property-room-inclusion.show',$val->id) }}" class="btn btn-sm btn-outline-primary">View</a>
-                                        <a href="{{ route('property-room-inclusion.edit',$val->id) }}" class="btn btn-sm btn-outline-warning">Edit</a>
+                                        <a href="{{ route('room-inclusion.show',$val->id) }}" class="btn btn-sm btn-outline-primary">View</a>
+                                        <a href="{{ route('room-inclusion.edit',$val->id) }}" class="btn btn-sm btn-outline-warning">Edit</a>
                                     </div>
 
                                 </td>

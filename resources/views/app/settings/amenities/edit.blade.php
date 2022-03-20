@@ -6,7 +6,7 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">Location Edit</h4>
-                    <form  action="{{ route('property-amenities.update',$data->id) }}" method="POST" >
+                    <form  action="{{ route('amenities.update',$data->id) }}" method="POST" >
                         @csrf
                         @method('put')
                         <div>

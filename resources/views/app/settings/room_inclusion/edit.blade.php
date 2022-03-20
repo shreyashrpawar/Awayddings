@@ -7,7 +7,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Property Room Inclusion Registration</h4>
-                        <form  action="{{ route('property-room-inclusion.update',$data->id) }}" method="POST" >
+                        <form  action="{{ route('room-inclusion.update',$data->id) }}" method="POST" >
                             @csrf
                             @method('put')
                             <div>
