@@ -82,4 +82,16 @@ class HotelChargableTypeController extends Controller
     {
         //
     }
+
+    public function getAllPropertyChargableCategory(){
+        $data = HotelChargableType::where('status',1)
+
+                ->get();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Success',
+            'data' => $data
+        ]);
+    }
 }

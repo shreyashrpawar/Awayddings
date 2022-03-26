@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\HotelFacility;
 use App\Models\Location;
 use App\Models\PropertyAmenities;
+use App\Models\RoomInclusion;
 use Illuminate\Http\Request;
 
 class HotelAmenitiesController extends Controller
@@ -56,5 +57,18 @@ class HotelAmenitiesController extends Controller
 
 
         return view('app.settings.locations.index');
+    }
+
+    public function getAllAmenitiesRoomInclusion(){
+        $hotel_facility = HotelFacility::where('status',1)->get();
+        $room_inclusions = RoomInclusion::where('status',1)->get();
+
+        return response()->json([
+             "success" => true,
+             "data" => [
+                         'amenities' => $hotel_facility,
+                         'room_inclusions' => $room_inclusions
+                        ],
+        ]);
     }
 }

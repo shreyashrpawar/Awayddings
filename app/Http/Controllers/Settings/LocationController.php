@@ -40,6 +40,8 @@ class LocationController extends Controller
     public function create(Request  $request){
         return view('app.settings.locations.create');
     }
+
+
     public function update(Request  $request,$id){
 
         $location = Location::find($id);
@@ -61,5 +63,16 @@ class LocationController extends Controller
 
         $request->session()->flash('success','Successfully Saved');
         return redirect(route('locations.index'));
+    }
+
+
+    public function getAllActiveLocation(Request  $request){
+        $locations = Location::where('status',1)->get();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Successfully Saved',
+            'data' => $locations
+        ]);
     }
 }

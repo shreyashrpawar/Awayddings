@@ -4,10 +4,14 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
+import BlockUI from 'vue-blockui'
+
+
+
 require('./bootstrap');
 
 window.Vue = require('vue').default;
-
+Vue.use(BlockUI)
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -21,6 +25,8 @@ window.Vue = require('vue').default;
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
+Vue.component('property-create', require('./components/PropertyCreate').default);
+Vue.component('property-edit', require('./components/PropertyEdit').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

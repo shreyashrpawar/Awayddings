@@ -82,4 +82,32 @@ class MediaSubCategoryController extends Controller
     {
         //
     }
+
+    public function getAllImageCategory(Request  $request){
+                $image_categories = MediaSubCategory::where('media_category_id',1)->where('status',1)->get();
+
+                return response()->json([
+                   'success' => true,
+                   'message' => 'Success',
+                   'data' => $image_categories
+                ]);
+    }
+    public function getAllVideoCategory(Request  $request){
+        $video_categories = MediaSubCategory::where('media_category_id',2)->where('status',1)->get();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Success',
+            'data' => $video_categories
+        ]);
+    }
+    public function getAllMenuCategory(Request  $request){
+        $menu_categories = MediaSubCategory::where('media_category_id',3)->where('status',1)->get();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Success',
+            'data' => $menu_categories
+        ]);
+    }
 }

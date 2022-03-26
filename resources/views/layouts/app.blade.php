@@ -12,15 +12,17 @@
     @yield('css')
     <link rel="stylesheet" href="{{ asset('assets/css/vertical-layout-light/style.css') }}">
     <link rel="shortcut icon" href="{{ asset('assets/images/favicon.png') }}" />
+
 </head>
 <body>
+
     <div class="container-scroller">
         @include('includes.navbar')
         <div class="container-fluid page-body-wrapper">
             @include('includes.right_sidebar')
             @include('includes.sidebar')
             <div class="main-panel">
-                <div class="content-wrapper">
+                <div class="content-wrapper" id="app">
                      @include('includes.notification')
                      @yield('contents')
                 </div>
@@ -32,7 +34,9 @@
     <script src="{{ asset('assets/js/off-canvas.js') }}"></script>
     <script src="{{ asset('assets/js/hoverable-collapse.js') }}"></script>
     <script src="{{ asset('assets/js/template.js') }}"></script>
+
     @yield('js')
+
 </body>
 
 </html>
