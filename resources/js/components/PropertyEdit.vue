@@ -128,7 +128,7 @@
                                                 <div class="col-md-6">
                                                     <input type="text"
                                                            class="form-control"
-                                                           placeholder="youtube url"
+                                                           placeholder="https://www.youtube.com/embed/{youtube video id}"
                                                            v-model="video.url"
                                                     >
                                                 </div>
