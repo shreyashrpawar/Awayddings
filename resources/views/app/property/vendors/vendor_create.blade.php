@@ -5,7 +5,7 @@
         <div class="card-body">
             <h4 class="card-title">Vendor Registration</h4>
             <hr>
-            <form id="propertyRegistrationFrom" action="{{ route('property-vendors.store') }}" method="POST" >
+            <form id="propertyRegistrationFrom" action="{{ route('vendors.store') }}" method="POST" >
                 @csrf
                 <div class="row">
 

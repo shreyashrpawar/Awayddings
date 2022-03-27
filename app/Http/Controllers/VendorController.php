@@ -78,7 +78,7 @@ class VendorController extends Controller
 
         $request->session()->flash('success','Successfully Saved');
 
-        return redirect(route('property-vendors.index'));
+        return redirect(route('vendors.index'));
     }
 
     /**
@@ -131,7 +131,7 @@ class VendorController extends Controller
         ];
         $vendor->update($vendor_data);
         $request->session()->flash('success','Successfully Updated');
-        return redirect(route('property-vendors.index'));
+        return redirect(route('vendors.index'));
     }
 
     /**
@@ -154,12 +154,19 @@ class VendorController extends Controller
 
     public function submitPropertyVendorAssociationForm(Request  $request,$vendor_id){
         $vendor_id = $request->vendor_id;
-        $associate = VendorPropertyAlignment::create([
+        $exist = VendorPropertyAlignment::where('vendor_id',$vendor_id)->where('property_id',$request->property_id)->first();
+        if(!$exist){
+            $associate = VendorPropertyAlignment::create([
                 'vendor_id' => $vendor_id,
                 'property_id' => $request->property_id,
-        ]);
-        $request->session()->flash('success','Successfully Associated');
-        return redirect(url('property-vendor/'.$vendor_id.'/associate'));
+            ]);
+            $request->session()->flash('success','Successfully Associated');
+            return redirect(url('property/vendor/'.$vendor_id.'/associate'));
+        }else{
+            $request->session()->flash('error',$exist->property->name. ' - Property Already Associated');
+            return redirect(url('property/vendor/'.$vendor_id.'/associate'));
+        }
+
     }
 
 }

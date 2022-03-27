@@ -8,7 +8,7 @@
                     <h4 class="card-title">Vendors List</h4>
                 </div>
                 <div class="col-md-6 text-right">
-                    <a href="{{ route('property-vendors.create') }}" class="btn btn-sm btn-primary">Register Vendor</a>
+                    <a href="{{ route('vendors.create') }}" class="btn btn-sm btn-primary">Register Vendor</a>
                 </div>
             </div>
 
@@ -44,9 +44,9 @@
                             </td>
                             <td>
                                 <div class="btn-group">
-                                    <a href="{{ route('property-vendors.show',$val->id) }}" class="btn btn-sm btn-outline-primary">View</a>
-                                    <a href="{{ route('property-vendors.edit',$val->id) }}" class="btn btn-sm btn-outline-success">Edit</a>
-                                    <a href="{{ url('property-vendor/'.$val->id.'/associate') }}" class="btn btn-sm btn-outline-warning">Associate</a>
+                                    <a href="{{ route('vendors.show',$val->id) }}" class="btn btn-sm btn-outline-primary">View</a>
+                                    <a href="{{ route('vendors.edit',$val->id) }}" class="btn btn-sm btn-outline-success">Edit</a>
+                                    <a href="{{ url('property/vendor/'.$val->id.'/associate') }}" class="btn btn-sm btn-outline-warning">Associate</a>
                                 </div>
 
                             </td>

@@ -55,7 +55,7 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form action="{{ url('property-vendor/'.$vendor->id.'/associate') }}" method="POST">
+                            <form action="{{ url('property/vendor/'.$vendor->id.'/associate') }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="vendor_id" value="{{ $vendor->id }}">
                                 <div class="form-group">

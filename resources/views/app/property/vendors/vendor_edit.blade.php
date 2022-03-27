@@ -5,7 +5,7 @@
         <div class="card-body">
             <h4 class="card-title">Vendor Details Edit</h4>
             <hr>
-            <form id="propertyRegistrationFrom" action="{{ route('property-vendors.update',$data->id) }}" method="POST" >
+            <form id="propertyRegistrationFrom" action="{{ route('vendors.update',$data->id) }}" method="POST" >
                 @csrf
                 @method('put')
                 <div class="row">
@@ -69,7 +69,7 @@
                 </div>
             </form>
         </div>
-    </div>
+
     </div>
 @endsection
 @section('js')
