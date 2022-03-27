@@ -15,15 +15,20 @@
                        <p class="font-weight-bold text-center">Google Map</p>
                    </div>
 
-                   <div class="col-md-4">
-                       @if($data->videos->media_url)
-                       <iframe src="{{ $data->videos->media_url }}"
-                               title="YouTube video player"
-                               allow="accelerometer; autoplay; clipboard-write; encrypted-media;
-                               gyroscope; picture-in-picture"
-                               ></iframe>
-                       @endif
-                   </div>
+
+
+                       <div class="col-md-4">
+                           @foreach($data->videos  as $key => $video)
+
+                               <iframe src="{{ $video->media_url }}"
+                                       title="YouTube video player"
+                                       allow="accelerometer; autoplay; clipboard-write; encrypted-media;
+                                       gyroscope; picture-in-picture"
+                                       ></iframe>
+
+
+                           @endforeach
+                       </div>
                    <div class="row mt-3 mb-3">
                        @foreach($data->images as $key => $image)
                            <div class="col-md-2">
@@ -39,15 +44,19 @@
                        <td>{{ $data->name }}</td>
                        <th>Location</th>
                        <td>{{ $data->location->name }}</td>
-                   </tr>
-                   <tr>
-                       <th>Description</th>
-                       <td title="{{ $data->description }}">{{ Str::limit($data->description,50,'....') }}</td>
                        <th>Address</th>
                        <td>{{ $data->address }}</td>
                    </tr>
 
+
                </table>
+               <div class="col-md-12 mr-1">
+
+                   <label for="" class="font-weight-bold">Description</label>
+                    <p>{{ $data->description}}</p>
+
+
+               </div>
                <hr>
                <h5>Property Rates</h5>
                <table class="table table-sm">
@@ -85,12 +94,18 @@
 
                            </thead>
                            <tbody>
-                           @foreach($data->amenities as $key => $val)
-                               <tr class="text-center">
-                                   <td>{{ 1 + $loop->index }}</td>
-                                   <td>{{ $val->hotel_facility->name}}</td>
+                           @if($data->amenities->count() > 0)
+                               @foreach($data->amenities as $key => $val)
+                                   <tr class="text-center">
+                                       <td>{{ 1 + $loop->index }}</td>
+                                       <td>{{ $val->hotel_facility->name}}</td>
+                                   </tr>
+                               @endforeach
+                           @else
+                               <tr>
+                                   <th colspan="2" class="text-center">No Result Found</th>
                                </tr>
-                           @endforeach
+                           @endif
                            </tbody>
                        </table>
                    </div>
@@ -104,12 +119,18 @@
                                </tr>
                            </thead>
                            <tbody>
+                           @if($data->room_inclusions->count() > 0)
                            @foreach($data->room_inclusions as $key => $val)
                                <tr class="text-center">
                                    <td>{{ 1 + $loop->index }}</td>
                                    <td>{{ $val->room_inclusion->name }}</td>
                                </tr>
                            @endforeach
+                           @else
+                               <tr>
+                                   <th colspan="2" class="text-center">No Result Found</th>
+                               </tr>
+                           @endif
                            </tbody>
                        </table>
                    </div>
@@ -120,12 +141,18 @@
                                <th>#</th>
                                <th>Details</th>
                            </tr>
-                           @foreach($data->pdfs as $key => $pdf)
+                           @if($data->pdfs->count() > 0)
+                               @foreach($data->pdfs as $key => $pdf)
+                                   <tr>
+                                       <th>{{ $loop->index  + 1 }}</th>
+                                       <th>  <a href="{{$pdf->media_url}}" download="">{{ $pdf->MediaSubCategory->name }}</a></th>
+                                   </tr>
+                               @endforeach
+                           @else
                                <tr>
-                                   <th>{{ $loop->index  + 1 }}</th>
-                                   <th>  <a href="{{$pdf->media_url}}" download="">{{ $pdf->MediaSubCategory->name }}</a></th>
+                                   <th colspan="2" class="text-center">No Result Found</th>
                                </tr>
-                           @endforeach
+                           @endif
                        </table>
                    </div>
                </div>

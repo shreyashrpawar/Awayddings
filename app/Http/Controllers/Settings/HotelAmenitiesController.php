@@ -25,15 +25,15 @@ class HotelAmenitiesController extends Controller
     }
     public function store(Request  $request){
         $request->validate([
-            'name' => ['required','unique:hotel_facilities','max:100'],
-            'description' => ['required']
+            'name' => ['required','unique:hotel_facilities','max:100']
+
         ]);
         $name    = $request->name;
        HotelFacility::create([
             'name' => $name
         ]);
         $request->session()->flash('success','Successfully Saved');
-        return redirect(route('property-amenities.index'));
+        return redirect(route('amenities.index'));
     }
     public function create(Request  $request){
         return view('app.settings.amenities.create');
@@ -53,7 +53,7 @@ class HotelAmenitiesController extends Controller
 
 
         $request->session()->flash('success','Successfully Saved');
-        return redirect(route('property-amenities.index'));
+        return redirect(route('amenities.index'));
 
 
         return view('app.settings.locations.index');

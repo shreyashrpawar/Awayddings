@@ -31,7 +31,7 @@ class HotelFacilitiesController extends Controller
             'name' => $name
         ]);
         $request->session()->flash('success','Successfully Saved');
-        return redirect(route('property-room-inclusion.index'));
+        return redirect(route('room-inclusion.index'));
     }
     public function create(Request  $request){
         return view('app.settings.room_inclusion.create');
@@ -49,6 +49,6 @@ class HotelFacilitiesController extends Controller
             'status' => $request->status,
         ]);
         $request->session()->flash('success','Successfully Updated');
-        return redirect(route('property-room-inclusion.index'));
+        return redirect(route('room-inclusion.index'));
     }
 }

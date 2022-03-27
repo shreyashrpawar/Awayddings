@@ -151,7 +151,7 @@ class PropertyRateController extends Controller
         // get range of the dates.
         $dateRange = CarbonPeriod::create($start_date, $end_date);
 
-        $property_default_rates = PropertyDefaultRate::where('property_id',$id)->get();
+        $property_default_rates = PropertyDefaultRate::where('property_id',$id)->whereIn('id',[1,2])->get();
 
         $property_rates = [];
         foreach($dateRange as $key => $date)

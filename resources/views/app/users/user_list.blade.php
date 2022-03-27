@@ -23,7 +23,7 @@
                         <th>Phone</th>
                         <th>Roles</th>
                         <th>Status</th>
-                        <th width="10%">Actions</th>
+{{--                        <th width="10%">Actions</th>--}}
                     </tr>
                     </thead>
                     <tbody>
@@ -46,13 +46,13 @@
                                     <span class="badge badge-success">Active</span>
                                 @endif
                             </td>
-                            <td>
-                                <div class="btn-group">
-                                    <a href="{{ route('property.show',$val->id) }}" class="btn btn-sm btn-outline-primary">View</a>
-                                    <a href="{{ route('property.edit',$val->id) }}" class="btn btn-sm btn-outline-warning">Edit</a>
-                                </div>
+{{--                            <td>--}}
+{{--                                <div class="btn-group">--}}
+{{--                                    <a href="{{ route('property.show',$val->id) }}" class="btn btn-sm btn-outline-primary">View</a>--}}
+{{--                                    <a href="{{ route('property.edit',$val->id) }}" class="btn btn-sm btn-outline-warning">Edit</a>--}}
+{{--                                </div>--}}
 
-                            </td>
+{{--                            </td>--}}
                         </tr>
 
                     @endforeach

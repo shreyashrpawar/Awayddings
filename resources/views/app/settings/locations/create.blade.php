@@ -15,8 +15,8 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Description</label>
-                                    <textarea name="description" id="" cols="30" rows="5" class="form-control">
-                                    </textarea>
+                                    <textarea name="description" id="" cols="30" rows="5" class="form-control"></textarea>
+
                                 </div>
                             <button class="btn btn-sm btn-primary">Save</button>
                             </div>

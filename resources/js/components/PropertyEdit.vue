@@ -7,8 +7,8 @@
             <div class="col-12 grid-margin">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Property Registration </h4>
-                        <form id="propertyRegistrationFrom" method="POST" enctype="multipart/form-data">
+                        <h4 class="card-title">Property Edit </h4>
+                        <form id="propertyRegistrationFrom" method="POST" enctype="multipart/form-data" @submit.prevent="formSubmit">
 
                             <div>
 
@@ -17,27 +17,34 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Name</label>
+                                                <label>Name <span style="color:red">*</span> </label>
                                                 <input type="text" class="form-control"
                                                        placeholder="Enter the property name" v-model="form.name"
                                                        required>
                                             </div>
                                             <div class="form-group">
-                                                <label>Description</label>
+                                                <label>Description <span style="color:red">*</span> </label>
                                                 <textarea class="form-control" cols="30" rows="5"
                                                           v-model="form.description"
                                                           placeholder="Enter the Property Description"
                                                           required></textarea>
                                             </div>
                                             <div class="form-group">
-                                                <label>Address</label>
+                                                <label>Address <span style="color:red">*</span></label>
                                                 <input type="text" class="form-control" placeholder="Enter the Address"
                                                        v-model="form.address" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Google Embed URL <span style="color:red">*</span></label>
+                                                <textarea class="form-control" id="description" cols="30" rows="5"
+                                                          name="property_gmap_embedded_code"
+                                                          placeholder="Enter the Gmap Embedded URL" required
+                                                          v-model="form.google_embedded_url"></textarea>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Location</label>
+                                                <label>Location <span style="color:red">*</span></label>
 
                                                 <select class="form-control" name="property_location_id"
                                                         v-model="form.location_id" required>
@@ -49,20 +56,14 @@
                                                 </select>
                                             </div>
                                             <div class="col-md-6">
-                                                <label>Cover Image</label>
+                                                <label>Cover Image <span style="color:red">*</span></label>
                                                 <input type="file" class="form-control"
                                                        @change="handleFileUpload( $event,'cover_image','cover_image' )"
                                                        accept=".png,.jpg,.jpeg">
                                                 <img :src="form.cover_image" class="img img-fluid">
                                             </div>
 
-                                            <div class="form-group">
-                                                <label>Google Embed URL</label>
-                                                <textarea class="form-control" id="description" cols="30" rows="5"
-                                                          name="property_gmap_embedded_code"
-                                                          placeholder="Enter the Gmap Embedded URL" required
-                                                          v-model="form.google_embedded_url"></textarea>
-                                            </div>
+
                                         </div>
                                     </div>
 
@@ -119,7 +120,7 @@
 
                                             <h3>Video</h3>
 
-                                            <div class="row mb-3" v-for="(video,i) in video_categories " :key="i">
+                                            <div class="row mb-3" v-for="(video,i) in form.videos " :key="i">
 
                                                 <div class="col-md-5 font-weight-bold">
                                                     {{ video.name }}
@@ -128,7 +129,7 @@
                                                     <input type="text"
                                                            class="form-control"
                                                            placeholder="youtube url"
-                                                           @change="videoFieldChange(video,$event)"
+                                                           v-model="video.url"
                                                     >
                                                 </div>
 
@@ -206,20 +207,23 @@
 
                                     </div>
                                     <h3> Property Charges</h3>
+
                                         <div class="row misc" v-for="(mis,i) in form.property_charges" :key="i">
 
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>{{ mis.name }} Rates</label>
                                                 <span ></span>
-                                                <input type="number" class="form-control" :value="form.property_charges[i].price"  @change="PropertyChargableFieldChange(mis,'rate',$event)"
+                                                <input type="number" class="form-control"
+                                                       v-model="mis.price"
                                                 >
                                             </div>
                                         </div>
                                         <div class="col-md-4" v-if="mis.category_id != 1  && mis.category_id != 2 " >
                                             <div class="form-group">
                                                 <label>Charge applicable when room less than</label>
-                                                <input type="number" class="form-control"  :value="form.property_charges[i].occupancy_threshold"  @change="PropertyChargableFieldChange(mis,'occupancy_threshold',$event)"
+                                                <input type="number" class="form-control"
+                                                       v-model="mis.occupancy_threshold"
                                                 >
                                             </div>
                                         </div>
@@ -261,6 +265,7 @@
 
                                     </div>
                                 </section>
+                                <button class="btn btn-primary">Update</button>
                             </div>
                         </form>
                     </div>
@@ -304,7 +309,8 @@ export default {
             image_categories: [],
             video_categories: [],
             menu_categories: [],
-            property_chargable_categories: []
+            property_chargable_categories: [],
+            property_id :''
         }
     },
     mounted() {
@@ -320,9 +326,9 @@ export default {
         getData(){
             let url =   window.location.href.split('/');
 
-            let id = url[4];
+            this.property_id = url[4];
 
-            axios.get('/api/property/'+id)
+            axios.get('/api/property/'+this.property_id)
                 .then(resp => {
                     console.log(resp.data.data);
                     this.form = resp.data;
@@ -335,12 +341,7 @@ export default {
                     console.log(resp.data.data);
                     this.property_chargable_categories = resp.data.data;
                     this.property_chargable_categories.forEach( pcc => {
-                        // this.form.property_charges.push({
-                        //     'category_id' : pcc.id,
-                        //     'price': 0,
-                        //     'name' : pcc.name,
-                        //     'occupancy_threshold' :0
-                        // })
+
                     })
                 })
         },
@@ -356,6 +357,19 @@ export default {
                 .then(resp => {
                     console.log(resp.data.data);
                     this.video_categories = resp.data.data;
+                    this.video_categories.forEach( video => {
+                        let exist = this.form.videos.find(v => v.category_id == video.id);
+                        console.log(exist);
+                        console.log("exist");
+                        if(!exist){
+                            this.form.videos.push({
+                                name: video.name,
+                                category_id: video.id,
+                                url: ''
+                            });
+                        }
+
+                    })
                 })
         },
         getImageCategories() {
@@ -439,25 +453,75 @@ export default {
             for (let i = 0; i < this.files.length; i++) {
                 let formData = new FormData();
                 formData.append('file', this.files[i]);
-                let resp = await axios.post('/media',
-                    formData,
-                    {
-                        headers: {
-                            'Content-Type': 'multipart/form-data'
+                try {
+                    let resp = await axios.post('/media',
+                        formData,
+                        {
+                            headers: {
+                                'Content-Type': 'multipart/form-data'
+                            }
+                        }
+                    )
+                    if (resp.data.success) {
+                        if (data == 'cover_image') {
+                            this.form.cover_image = resp.data.url
+                        } else {
+                            this.form.images.push({
+                                category: category,
+                                category_id: data.id,
+                                url: resp.data.url
+                            })
                         }
                     }
-                )
-                if (resp.data.success) {
-                    this.form.images.push({
-                        category: category,
-                        category_id: data.id,
-                        url: resp.data.url
-                    })
                 }
-
+            catch (err) {
+                    console.log(err);
+                    this.loading = false;
+                }
             }
             this.loading = false;
+        },
+        formSubmit(){
+            let formData= this.form;
+            axios.put('/property/'+this.property_id,formData)
+                .then(resp => {
+
+                    if (resp.data.success) {
+
+
+                        this.$swal.fire({
+                            text: resp.data.message,
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                               window.location.href = '/property'
+                            }
+                        })
+
+                    }else{
+                        this.$swal.fire({
+                            text: resp.data.message,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = '/property'
+                            }
+                        })
+
+                    }
+
+                })
+            .catch((err) => {
+                this.$swal({
+                    text: 'Oops something went wrong !',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            })
         }
+
     }
 }
 </script>

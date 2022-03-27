@@ -5,13 +5,19 @@
  */
 
 import BlockUI from 'vue-blockui'
+import VueSweetalert2 from 'vue-sweetalert2';
+
+
 
 
 
 require('./bootstrap');
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 window.Vue = require('vue').default;
 Vue.use(BlockUI)
+Vue.use(VueSweetalert2);
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
