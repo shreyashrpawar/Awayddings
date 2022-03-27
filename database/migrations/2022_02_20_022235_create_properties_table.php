@@ -18,6 +18,8 @@ class CreatePropertiesTable extends Migration
             $table->string('name');
             $table->string('alias_name')->nullable();
             $table->string('featured_image')->nullable();
+            $table->string('address')->nullable();
+
             $table->unsignedBigInteger('location_id');
             $table->text('description')->nullable();
             $table->text('gmap_embedded_code')->nullable();
