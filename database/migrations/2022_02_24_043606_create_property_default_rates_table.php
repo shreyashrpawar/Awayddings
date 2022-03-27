@@ -22,7 +22,8 @@ class CreatePropertyDefaultRatesTable extends Migration
             $table->integer('qty')->default(0);
             $table->double('chargable_percentage')->nullable();
             $table->string('argument')->nullable();
-            $table->timestamps();
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+$table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
             $table->foreign('property_id')->references('id')->on('properties');
             $table->foreign('hotel_charagable_type_id')->references('id')->on('hotel_chargable_types');
         });

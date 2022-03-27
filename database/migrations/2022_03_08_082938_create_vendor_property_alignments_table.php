@@ -19,7 +19,8 @@ class CreateVendorPropertyAlignmentsTable extends Migration
             $table->unsignedBigInteger('property_id');
             $table->foreign('vendor_id')->references('id')->on('vendors');
             $table->foreign('property_id')->references('id')->on('properties');
-            $table->timestamps();
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+$table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
         });
     }
 

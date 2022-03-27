@@ -19,7 +19,8 @@ class CreateLocationsTable extends Migration
             $table->text('description')->nullable();
             $table->string('images')->nullable();
             $table->boolean('status')->default(1)->comment('0 is active 1 is active');
-            $table->timestamps();
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+$table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
         });
     }
 

@@ -20,7 +20,8 @@ class CreatePropertyMediaTable extends Migration
             $table->unsignedBigInteger('media_sub_category_id');
             $table->string('media_url');
             $table->string('media_meta_data')->nullable();
-            $table->timestamps();
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+$table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
             $table->foreign('property_id')->references('id')->on('properties');
             $table->foreign('media_category_id')->references('id')->on('media_categories');
             $table->foreign('media_sub_category_id')->references('id')->on('media_sub_categories');

@@ -15,7 +15,14 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
         $this->call([
-            HotelFaciltySeeder::class
+            RoleSeeder::class,
+            UserSeeder::class,
+            PropertyChargableTypeSeeder::class,
+            MediaCategorySeeder::class,
+            MediaSubCategorySeeder::class,
+            AmenitiesSeeder::class,
+            RoomInclusionSeeder::class,
+            LocationSeeder::class
         ]);
     }
 }

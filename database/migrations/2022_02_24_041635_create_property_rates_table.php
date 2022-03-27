@@ -26,7 +26,8 @@ class CreatePropertyRatesTable extends Migration
             $table->boolean('status')->default(1)->comment('0 is active 1 is active');
             $table->foreign('hotel_chargable_type_id')->references('id')->on('hotel_chargable_types');
             $table->foreign('property_id')->references('id')->on('properties');
-            $table->timestamps();
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+$table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
         });
     }
 

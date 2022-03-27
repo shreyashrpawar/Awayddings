@@ -20,7 +20,8 @@ class CreateMediaSubCategoriesTable extends Migration
             $table->unsignedBigInteger('media_category_id');
             $table->boolean('status')->default(1)->comment('0 is active 1 is active');
             $table->foreign('media_category_id')->references('id')->on('media_categories');
-            $table->timestamps();
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+$table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
         });
     }
 
