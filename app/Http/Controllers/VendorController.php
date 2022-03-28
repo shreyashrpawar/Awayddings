@@ -123,6 +123,7 @@ class VendorController extends Controller
             'state' => $request->state,
             'pin_code' => $request->pin_code,
             'gst' => $request->gst,
+            'pan' => $request->pan,
             'first_name'=> $request->first_name,
             'last_name'=> $request->last_name,
             'email'=> $request->email,

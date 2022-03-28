@@ -24,7 +24,8 @@ class CreateVendorsTable extends Migration
             $table->string('city');
             $table->string('state');
             $table->string('pin_code');
-            $table->string('gst');
+            $table->string('pan')->nullable();
+            $table->string('gst')->nullable();
             $table->boolean('status')->default(1)->comment('0 is active 1 is active');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
 $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));

@@ -21,5 +21,6 @@ class Vendor extends Model
         'pin_code',
         'gst',
         'status',
+        'pan'
     ];
 }
