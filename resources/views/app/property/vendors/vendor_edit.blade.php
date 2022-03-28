@@ -13,27 +13,31 @@
                     <div class="col-md-6">
                         <h6 class="text-uppercase">Basic Details</h6>
                         <div class="form-group">
-                            <label for="">Name</label>
+                            <label for="">Name  <span style="color:red">*</span></label>
                             <input type="text" class="form-control"  name="name" required  value="{{ $data->name }}">
                         </div>
                         <div class="form-group">
-                            <label for="">Address</label>
+                            <label for="">Address  <span style="color:red">*</span></label>
                             <input type="text" class="form-control"  name="address" required value="{{ $data->address }}" >
                         </div>
 
                         <div class="form-group">
-                            <label for="">City</label>
+                            <label for="">City  <span style="color:red">*</span></label>
                             <input type="text" class="form-control"  name="city" required  value="{{ $data->city }}" >
                         </div>
 
                         <div class="form-group">
-                            <label for="">State</label>
+                            <label for="">State  <span style="color:red">*</span></label>
                             <input type="text" class="form-control"  name="state" required  value="{{ $data->state }}" >
                         </div>
 
                         <div class="form-group">
-                            <label for="">Pin Code</label>
+                            <label for="">Pin Code  <span style="color:red">*</span></label>
                             <input type="text" class="form-control"  name="pin_code" required  value="{{ $data->pin_code }}" >
+                        </div>
+                        <div class="form-group">
+                            <label for="">Pan Card </label>
+                            <input type="text" class="form-control"  name="pan"  >
                         </div>
                         <div class="form-group">
                             <label for="">GST</label>
@@ -44,21 +48,21 @@
                         <h6 class="text-uppercase">Contact Person Details</h6>
 
                         <div class="form-group">
-                            <label for="">First Name</label>
+                            <label for="">First Name  <span style="color:red">*</span></label>
                             <input type="text" class="form-control"  name="first_name"  id="first_name" value="{{ $data->first_name }}" required>
                         </div>
                         <div class="form-group">
-                            <label for="">Last Name</label>
+                            <label for="">Last Name  <span style="color:red">*</span></label>
                             <input type="text" class="form-control"  name="last_name"   id="last_name" value="{{ $data->last_name }}" required>
                         </div>
 
                         <div class="form-group">
-                            <label for="">Email</label>
+                            <label for="">Email  <span style="color:red">*</span></label>
                             <input type="email" class="form-control"  name="email"  id="email" value="{{ $data->email }}" required>
                         </div>
                         <div class="form-group">
-                            <label for="">Phone</label>
-                            <input type="text" class="form-control"  name="phone"  id="phone" value="{{ $data->phone }}" required>
+                            <label for="">Phone  <span style="color:red">*</span></label>
+                            <input type="text" class="form-control phone"  name="phone"  id="phone" value="{{ $data->phone }}"  maxlength="10" required>
                         </div>
 
                     </div>
@@ -86,5 +90,13 @@
             let last_name = $('#last_name').val();
             $('#login_name').val(first_name +' '+ last_name);
         })
+        $('.phone').keyup(function(e)
+        {
+            if (/\D/g.test(this.value))
+            {
+                // Filter non-digits from input value.
+                this.value = this.value.replace(/\D/g, '');
+            }
+        });
     </script>
 @endsection

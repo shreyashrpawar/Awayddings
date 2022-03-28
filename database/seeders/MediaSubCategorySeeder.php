@@ -23,7 +23,8 @@ class MediaSubCategorySeeder extends Seeder
         $images = [
             'Entrance',
             'Lobby',
-            'Rooms',
+            'Double Room',
+            'Triple Room',
             'Restaurant',
             'Swimming Pool Side',
             'Banquet hall',

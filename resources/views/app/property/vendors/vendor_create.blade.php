@@ -1,9 +1,9 @@
 @extends('layouts.app')
-@section('title','User Registration')
+@section('title','Vendor Registration')
 @section('contents')
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title">Vendor Registration</h4>
+            <h4 class="card-title text-uppercase">Vendor Registration</h4>
             <hr>
             <form id="propertyRegistrationFrom" action="{{ route('vendors.store') }}" method="POST" >
                 @csrf
@@ -12,27 +12,31 @@
                     <div class="col-md-6">
                         <h6 class="text-uppercase">Basic Details</h6>
                         <div class="form-group">
-                            <label for="">Name</label>
+                            <label for="">Name <span style="color:red">*</span></label>
                             <input type="text" class="form-control"  name="name" required >
                         </div>
                         <div class="form-group">
-                            <label for="">Address</label>
+                            <label for="">Address <span style="color:red">*</span></label>
                             <input type="text" class="form-control"  name="address" required >
                         </div>
 
                         <div class="form-group">
-                            <label for="">City</label>
+                            <label for="">City <span style="color:red">*</span></label>
                             <input type="text" class="form-control"  name="city" required >
                         </div>
 
                         <div class="form-group">
-                            <label for="">State</label>
+                            <label for="">State <span style="color:red">*</span></label>
                             <input type="text" class="form-control"  name="state" required >
                         </div>
 
                         <div class="form-group">
-                            <label for="">Pin Code</label>
+                            <label for="">Pin Code <span style="color:red">*</span></label>
                             <input type="text" class="form-control"  name="pin_code" required >
+                        </div>
+                        <div class="form-group">
+                            <label for="">Pan Card</label>
+                            <input type="text" class="form-control"  name="pan"  >
                         </div>
                         <div class="form-group">
                             <label for="">GST</label>
@@ -43,41 +47,41 @@
                         <h6 class="text-uppercase">Contact Person Details</h6>
 
                         <div class="form-group">
-                            <label for="">First Name</label>
+                            <label for="">First Name <span style="color:red">*</span></label>
                             <input type="text" class="form-control"  name="first_name"  id="first_name" required>
                         </div>
                         <div class="form-group">
-                            <label for="">Last Name</label>
+                            <label for="">Last Name <span style="color:red">*</span></label>
                             <input type="text" class="form-control"  name="last_name"   id="last_name" required>
                         </div>
 
                         <div class="form-group">
-                            <label for="">Email</label>
+                            <label for="">Email <span style="color:red">*</span></label>
                             <input type="email" class="form-control"  name="email"  id="email" required>
                         </div>
                         <div class="form-group">
-                            <label for="">Phone</label>
-                            <input type="text" class="form-control"  name="phone"  id="phone" required>
+                            <label for="">Phone <span style="color:red">*</span></label>
+                            <input type="text"  class="form-control phone"  name="phone"  id="phone"   maxlength="10" required>
                         </div>
 
                     </div>
                     <div class="col-md-6">
                         <h6 class="text-uppercase">Login Details</h6>
                         <div class="form-group">
-                            <label for="">Name</label>
-                            <input type="text" class="form-control"  name="login_name" id="login_name"  required>
+                            <label for="">Name <span style="color:red">*</span></label>
+                            <input type="text" class="form-control"  name="login_name" id="login_name"  required autocomplete="off">
                         </div>
                         <div class="form-group">
-                            <label for="">Email</label>
-                            <input type="text" class="form-control"  name="login_email"  id="login_email" required>
+                            <label for="">Email <span style="color:red">*</span></label>
+                            <input type="text" class="form-control"  name="login_email"  id="login_email" required autocomplete="off">
                         </div>
                         <div class="form-group">
-                            <label for="">Phone</label>
-                            <input type="text" class="form-control"  name="login_phone"  id="login_phone" required>
+                            <label for="">Phone <span style="color:red">*</span></label>
+                            <input type="number" class="form-control phone"  name="login_phone"  id="login_phone"  maxlength="10" required autocomplete="off">
                         </div>
                         <div class="form-group">
-                            <label for="">Password</label>
-                            <input type="password" class="form-control"  name="login_password" id="login_password"  required>
+                            <label for="">Password <span style="color:red">*</span></label>
+                            <input type="password" class="form-control"  name="login_password" id="login_password"  required autocomplete="off">
                         </div>
                         <div class="form-group">
                             <button class="btn btn-primary">Save</button>
@@ -102,5 +106,13 @@
             let last_name = $('#last_name').val();
             $('#login_name').val(first_name +' '+ last_name);
         })
+        $('.phone').keyup(function(e)
+        {
+            if (/\D/g.test(this.value))
+            {
+                // Filter non-digits from input value.
+                this.value = this.value.replace(/\D/g, '');
+            }
+        });
     </script>
 @endsection

@@ -5,10 +5,10 @@
         <div class="card-body">
             <div class="row form-group">
                 <div class="col-md-6">
-                    <h4 class="card-title">Vendors List</h4>
+                    <h4 class="card-title text-uppercase">Vendors List</h4>
                 </div>
                 <div class="col-md-6 text-right">
-                    <a href="{{ route('vendors.create') }}" class="btn btn-sm btn-primary">Register Vendor</a>
+                    <a href="{{ route('vendors.create') }}" class="btn btn-sm btn-primary">Add</a>
                 </div>
             </div>
 

@@ -72,7 +72,7 @@
                                 <section>
                                     <div class="form-group row">
                                         <div class="col-md-6">
-                                            <h3>Images</h3>
+                                            <h3>Images <small style="color:red;font-size: 15px">* size of image(s) should be maximum 5 MB</small></h3>
                                         </div>
                                         <div class="col-md-6 text-right">
 
@@ -143,7 +143,7 @@
                                 <section>
                                     <div class="form-group row">
                                         <div class="col-md-6">
-                                            <h3>Menu </h3>
+                                            <h3>Menu <small style="color:red;font-size: 15px">* size of pdf(s) should be maximum 5 MB</small> </h3>
                                         </div>
                                         <div class="col-md-6 text-right">
 
@@ -199,7 +199,7 @@
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="">Total No. Of Triple Occupancy Rooms</label>
+                                                <label for="">Max No. Of Triple Occupancy Rooms</label>
                                                 <input type="number" class="form-control" name=""
                                                        v-model="form.triple_occupancy_rooms">
                                             </div>
@@ -409,8 +409,16 @@ export default {
 
                     }
                 } catch (err) {
-                    console.log(err);
-                    this.loading = false;
+                    console.log(err.message);
+                    if (err.response) {
+                        this.loading = false;
+                        this.$swal.fire({
+                            text: err.response.data.message,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        })
+                    }
+
                 }
 
 

@@ -7,7 +7,7 @@
                 <div class="card-body">
                     <div class="form-group row">
                         <div class="col-md-6">
-                            <h4 class="card-title">Property Rate</h4>
+                            <h4 class="card-title text-uppercase">Property Rate</h4>
                         </div>
                         <div class="col-md-6 text-right">
 

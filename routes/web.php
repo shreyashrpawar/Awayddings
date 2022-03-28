@@ -18,7 +18,7 @@ Route::get('/', function () {
 });
 
 
-Auth::routes();
+Auth::routes(['register' => false]);
 Route::resource('users',\App\Http\Controllers\UserController::class);
 Route::middleware(['auth'])->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -27,7 +27,6 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('vendors',App\Http\Controllers\VendorController::class);
     Route::get('property/vendor/{vendor_id}/associate',[App\Http\Controllers\VendorController::class,'showPropertyVendorAssociationPage']);
     Route::post('property/vendor/{vendor_id}/associate',[App\Http\Controllers\VendorController::class,'submitPropertyVendorAssociationForm']);
-
     Route::resource('property/rate',App\Http\Controllers\PropertyRateController::class);
     Route::post('/media',[App\Http\Controllers\MediaController::class,'upload']);
 });

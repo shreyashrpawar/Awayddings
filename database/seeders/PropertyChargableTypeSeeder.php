@@ -18,7 +18,9 @@ class PropertyChargableTypeSeeder extends Seeder
         $data = [
             'Double Occupancy Room',
             'Triple Occupancy Room',
-            'Beach Lawn'
+            'Beach Lawn',
+            'Garden Hall',
+            'Banquet Hall'
             ];
         foreach($data as $val){
             HotelChargableType::create([

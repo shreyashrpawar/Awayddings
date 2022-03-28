@@ -35,7 +35,7 @@
                                 <div class="form-check">
 
                                 </div>
-                                <button class="btn btn-link  text-black">Forgot password?</button>
+
                             </div>
 
                         </form>

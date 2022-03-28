@@ -58,23 +58,29 @@ class LoginController extends Controller
         $field       = $this->field($request);
         $messages    = ["{$this->username()}.exists" => 'The account you are trying to login is not registered or it has been disabled.'];
         $user        = User::where($field, $request->email)->where('status',1)->first();
-        $currentRole =  $user->hasAnyRole(['vendor','admin']);
-        if ($currentRole)
-        {
-            $this->validate($request,[
-                $this->username() => "required|exists:users,{$field}",
-                'password' => 'required'
-            ], $messages);
-            return true;
-        } else {
+        if($user){
+            $currentRole =  $user->hasAnyRole(['vendor','admin']);
+            if ($currentRole)
+            {
+                $this->validate($request,[
+                    $this->username() => "required|exists:users,{$field}",
+                    'password' => 'required'
+                ], $messages);
+                return true;
+            } else {
+                return false;
+            }
+        }
+        else{
             return false;
         }
+
     }
 
     public function login(Request $request)
     {
         $resp = $this->validateLogin($request);
-        if (!$resp) { abort(401);}
+        if (!$resp) { $this->sendFailedLoginResponse($request); }
         if (
             method_exists($this, 'hasTooManyLoginAttempts') &&
             $this->hasTooManyLoginAttempts($request)
