@@ -451,40 +451,48 @@ export default {
             this.files = event.target.files;
             this.loading = true;
             for (let i = 0; i < this.files.length; i++) {
-                let formData = new FormData();
-                formData.append('file', this.files[i]);
-                try {
-                    let resp = await axios.post('/media',
-                        formData,
-                        {
-                            headers: {
-                                'Content-Type': 'multipart/form-data'
+                if(this.files[i].size < 5000){
+                    let formData = new FormData();
+
+                    formData.append('file', this.files[i]);
+                    try {
+                        let resp = await axios.post('/media',
+                            formData,
+                            {
+                                headers: {
+                                    'Content-Type': 'multipart/form-data'
+                                }
                             }
+                        )
+                        if (resp.data.success) {
+                            if(data == 'cover_image'){
+                                this.form.cover_image = resp.data.url
+                            }else{
+                                this.form.images.push({
+                                    category: category,
+                                    category_id: data.id,
+                                    url: resp.data.url
+                                })
+                            }
+
                         }
-                    )
-                    if (resp.data.success) {
-                        if (data == 'cover_image') {
-                            this.form.cover_image = resp.data.url
-                        } else {
-                            this.form.images.push({
-                                category: category,
-                                category_id: data.id,
-                                url: resp.data.url
+                    } catch (err) {
+                        if (err.response) {
+                            this.loading = false;
+                            this.$swal.fire({
+                                text: err.response.data.message,
+                                icon: 'error',
+                                confirmButtonText: 'OK'
                             })
                         }
+
                     }
-                }
-            catch (err) {
-                    console.log(err);
-                    this.loading = false;
-                    if (err.response) {
-                        this.loading = false;
-                        this.$swal.fire({
-                            text: err.response.data.message,
-                            icon: 'error',
-                            confirmButtonText: 'OK'
-                        })
-                    }
+                }else{
+                    this.$swal.fire({
+                        text: "File size should be less than 5MB",
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    })
                 }
             }
             this.loading = false;
