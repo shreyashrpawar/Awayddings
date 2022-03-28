@@ -385,7 +385,7 @@ export default {
             this.files = event.target.files;
             this.loading = true;
             for (let i = 0; i < this.files.length; i++) {
-                if(this.files[i].size < 5000){
+                if(this.files[i].size < 5000000){
                     let formData = new FormData();
 
                     formData.append('file', this.files[i]);
