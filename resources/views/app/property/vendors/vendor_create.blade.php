@@ -32,7 +32,7 @@
 
                         <div class="form-group">
                             <label for="">Pin Code <span style="color:red">*</span></label>
-                            <input type="text" class="form-control"  name="pin_code" required >
+                            <input type="text" class="form-control phone"  name="pin_code" required maxlength="6">
                         </div>
                         <div class="form-group">
                             <label for="">Pan Card</label>
@@ -61,7 +61,7 @@
                         </div>
                         <div class="form-group">
                             <label for="">Phone <span style="color:red">*</span></label>
-                            <input type="text"  class="form-control phone"  name="phone"  id="phone"   maxlength="10" required>
+                            <input type="text"  class="form-control phone"  name="phone"  id="phone"   maxlength="11" required>
                         </div>
 
                     </div>

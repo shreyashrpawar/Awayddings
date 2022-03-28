@@ -33,7 +33,7 @@
 
                         <div class="form-group">
                             <label for="">Pin Code  <span style="color:red">*</span></label>
-                            <input type="text" class="form-control"  name="pin_code" required  value="{{ $data->pin_code }}" >
+                            <input type="text" class="form-control phone"  name="pin_code" required  value="{{ $data->pin_code }}" maxlength="6" >
                         </div>
                         <div class="form-group">
                             <label for="">Pan Card </label>
@@ -62,7 +62,7 @@
                         </div>
                         <div class="form-group">
                             <label for="">Phone  <span style="color:red">*</span></label>
-                            <input type="text" class="form-control phone"  name="phone"  id="phone" value="{{ $data->phone }}"  maxlength="10" required>
+                            <input type="text" class="form-control phone"  name="phone"  id="phone" value="{{ $data->phone }}"  maxlength="11" required>
                         </div>
 
                     </div>
