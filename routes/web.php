@@ -23,6 +23,7 @@ Route::resource('users',\App\Http\Controllers\UserController::class);
 Route::middleware(['auth'])->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::delete('property/media',[App\Http\Controllers\PropertyController::class,'deletePropertyMedia']);
+    Route::post('property/status',[App\Http\Controllers\PropertyController::class,'updatePropertyStatus']);
     Route::resource('property',App\Http\Controllers\PropertyController::class);
     Route::resource('vendors',App\Http\Controllers\VendorController::class);
     Route::get('property/vendor/{vendor_id}/associate',[App\Http\Controllers\VendorController::class,'showPropertyVendorAssociationPage']);

@@ -449,4 +449,16 @@ class PropertyController extends Controller
         ]);
 
     }
+    public function updatePropertyStatus(Request $request){
+        $property_id = $request->property_id;
+        $status = $request->status;
+        $propertyDetails = Property::where('id',$property_id)
+            ->update([
+                'status' => $status
+            ]);
+        return response()->json([
+           'success' => true,
+           'message' => 'SUCCESS'
+        ]);
+    }
 }

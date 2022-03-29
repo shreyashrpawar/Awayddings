@@ -35,9 +35,9 @@
                                 <td>{{ $val->location->name }}</td>
                                 <td>
                                     @if($val->status == 0)
-                                        <span class="badge badge-warning">In Active</span>
+                                        <button class="badge badge-warning inactiveButton" value="{{ $val->id }}" >In Active</button>
                                     @else
-                                        <span class="badge badge-success">Active</span>
+                                        <button class="badge badge-success activeButton" value="{{ $val->id }}" >Active</button>
                                     @endif
                                 </td>
                                 <td>
@@ -65,3 +65,43 @@
         </div>
     </div>
 @endsection
+@section('js')
+    <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $('.activeButton').click(async (e) => {
+            let property_id = e.target.value;
+            let resp  = $.ajax({
+                url: '/property/status',
+                data: {
+                    property_id: property_id,
+                    status : 0
+                },
+                type: 'POST',
+                success:function(resp){
+                   location.reload();
+                }
+            })
+        })
+
+        $('.inactiveButton').click(async (e) => {
+            let property_id = e.target.value;
+
+             $.ajax({
+                url: '/property/status',
+                data: {
+                    property_id: property_id,
+                    status : 1
+                },
+                type: 'POST',
+                success:(resp) => {
+                    location.reload();
+                }
+            })
+        })
+    </script>
+    @endsection
