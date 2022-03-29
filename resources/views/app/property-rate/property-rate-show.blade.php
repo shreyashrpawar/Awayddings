@@ -47,6 +47,7 @@
                     </tr>
                     </thead>
                     <tbody>
+                    @if(count($property_rates) > 0)
                     @foreach($property_rates as $key => $val)
                         <tr>
                             <th>{{ $loop->index + 1 }}</th>
@@ -59,6 +60,11 @@
                             </td>
                         </tr>
                     @endforeach
+                    @else
+                        <tr>
+                            <th colspan="4" class="text-center text-uppercase">Please set up the default price of the rooms</th>
+                        </tr>
+                    @endif
                     </tbody>
                 </table>
             </div>
