@@ -41,15 +41,17 @@ class PropertyRateController extends Controller
      */
     public function store(Request $request)
     {
-            $property_id = $request->property_id;
 
-            $hotel_chargable_type_id = $request->hotel_chargable_type_id;
-            $amount = $request->amount;
-            $date = $request->date;
-            $available =  $request->available;
-            $occupancy = $request->occupancy;
 
-            $type= $request->type;
+        $hotel_chargable_type_id = $request->hotel_chargable_type_id;
+        $property_id = $request->property_id;
+        $amount = $request->amount;
+        $date = $request->date;
+        $type = $request->type;
+//        $available =  $request->available;
+//        $occupancy = $request->occupancy;
+
+
 
         $propertyDefaultRate = PropertyDefaultRate::where('property_id', $request->property_id)
                                                   ->where('hotel_charagable_type_id',$hotel_chargable_type_id)
@@ -57,75 +59,69 @@ class PropertyRateController extends Controller
 
 
         if($type == 'amount')
-            {
-                if($request->id){
-                    $oldPurchaseEntry = PropertyRate::find($request->id);
-
-                    $data =  $oldPurchaseEntry->update([
-                        'amount' => $amount,
-                        'date' => $oldPurchaseEntry->date,
-                        'available' => $oldPurchaseEntry->qty,
-                        'occupancy_percentage' => $oldPurchaseEntry->chargable_percentage
-                    ]);
-                }else{
-                    $data = PropertyRate::create([
-                        'property_id' => $property_id,
-                        'hotel_chargable_type_id' => $propertyDefaultRate->hotel_charagable_type_id,
-                        'amount' => $amount,
-                        'date' => $date,
-                        'available' => $propertyDefaultRate->qty,
-                        'occupancy_percentage' =>$propertyDefaultRate->chargable_percentage
-                    ]);
-                }
-            }
-
-        if($type == 'available'){
+        {
             if($request->id){
                 $oldPurchaseEntry = PropertyRate::find($request->id);
-                $data =  $oldPurchaseEntry->update([
-                    'amount' =>$oldPurchaseEntry->amount,
-                    'date' => $oldPurchaseEntry->date,
-                    'available' => $available,
-                    'occupancy_percentage' => $oldPurchaseEntry->chargable_percentage
+                $oldPurchaseEntry->update([
+                    'amount' => $amount
                 ]);
             }else{
-                $data = PropertyRate::create([
+                 PropertyRate::create([
                     'property_id' => $property_id,
                     'hotel_chargable_type_id' => $propertyDefaultRate->hotel_charagable_type_id,
-                    'amount' => $propertyDefaultRate->amount,
+                    'amount' => $amount,
                     'date' => $date,
-                    'available' => $available,
+                    'available' => $propertyDefaultRate->qty,
                     'occupancy_percentage' =>$propertyDefaultRate->chargable_percentage
                 ]);
             }
         }
 
-        if($type == 'occupancy'){
-            if($request->id){
-                $oldPurchaseEntry = PropertyRate::find($request->id);
-                $data =  $oldPurchaseEntry->update([
-                    'amount' =>$oldPurchaseEntry->amount,
-                    'date' => $oldPurchaseEntry->date,
-                    'available' =>  $oldPurchaseEntry->available,
-                    'occupancy_percentage' => $occupancy
-                ]);
-            }else{
-                $data = PropertyRate::create([
-                    'property_id' => $property_id,
-                    'hotel_chargable_type_id' => $propertyDefaultRate->hotel_charagable_type_id,
-                    'amount' => $propertyDefaultRate->amount,
-                    'date' => $date,
-                    'available' => $propertyDefaultRate->qty,
-                    'occupancy_percentage' =>$occupancy
-                ]);
-            }
-        }
-
-
+//        if($type == 'available'){
+//            if($request->id){
+//                $oldPurchaseEntry = PropertyRate::find($request->id);
+//                $data =  $oldPurchaseEntry->update([
+//                    'amount' =>$oldPurchaseEntry->amount,
+//                    'date' => $oldPurchaseEntry->date,
+//                    'available' => $available,
+//                    'occupancy_percentage' => $oldPurchaseEntry->chargable_percentage
+//                ]);
+//            }else{
+//                $data = PropertyRate::create([
+//                    'property_id' => $property_id,
+//                    'hotel_chargable_type_id' => $propertyDefaultRate->hotel_charagable_type_id,
+//                    'amount' => $propertyDefaultRate->amount,
+//                    'date' => $date,
+//                    'available' => $available,
+//                    'occupancy_percentage' =>$propertyDefaultRate->chargable_percentage
+//                ]);
+//            }
+//        }
+//
+//        if($type == 'occupancy'){
+//            if($request->id){
+//                $oldPurchaseEntry = PropertyRate::find($request->id);
+//                $data =  $oldPurchaseEntry->update([
+//                    'amount' =>$oldPurchaseEntry->amount,
+//                    'date' => $oldPurchaseEntry->date,
+//                    'available' =>  $oldPurchaseEntry->available,
+//                    'occupancy_percentage' => $occupancy
+//                ]);
+//            }else{
+//                $data = PropertyRate::create([
+//                    'property_id' => $property_id,
+//                    'hotel_chargable_type_id' => $propertyDefaultRate->hotel_charagable_type_id,
+//                    'amount' => $propertyDefaultRate->amount,
+//                    'date' => $date,
+//                    'available' => $propertyDefaultRate->qty,
+//                    'occupancy_percentage' =>$occupancy
+//                ]);
+//            }
+//        }
+//
         return response()->json([
             'success' =>  true,
-            'message' => 'successfully saved',
-            'data' => $data
+            'message' => 'successfully saved'
         ]);
 
     }
@@ -144,14 +140,14 @@ class PropertyRateController extends Controller
         if($request->has('start_date') && $request->start_date != ''){
             $start_date = Carbon::parse($request->start_date)->startOfDay();
         }
-
         if($request->has('end_date') && $request->end_date != '' ){
             $end_date = Carbon::parse($request->end_date)->endOfDay();
         }
-        // get range of the dates.
-        $dateRange = CarbonPeriod::create($start_date, $end_date);
 
-        $property_default_rates = PropertyDefaultRate::where('property_id',$id)->whereIn('id',[1,2])->get();
+        $dateRange              = CarbonPeriod::create($start_date, $end_date);
+        $property_default_rates = PropertyDefaultRate::where('property_id',$id)
+                                    ->whereIn('id',[1,2])
+                                    ->get();
 
         $property_rates = [];
         foreach($dateRange as $key => $date)
@@ -159,9 +155,9 @@ class PropertyRateController extends Controller
             foreach($property_default_rates as $key => $default_rate)
             {
                 $property_rate = PropertyRate::where('property_id',$id)
-                        ->where('hotel_chargable_type_id',$default_rate->hotel_charagable_type_id)
-                        ->whereDate('date',$date)
-                        ->first();
+                                            ->where('hotel_chargable_type_id',$default_rate->hotel_charagable_type_id)
+                                            ->whereDate('date',$date)
+                                            ->first();
 
                 if($property_rate)
                 {
@@ -193,7 +189,7 @@ class PropertyRateController extends Controller
             }
         }
 
-        return view('app.property-rate.property-rate-show',compact('property_rates'));
+        return view('app.property-rate.property-rate-show',compact('property_rates','start_date','end_date'));
     }
 
     /**

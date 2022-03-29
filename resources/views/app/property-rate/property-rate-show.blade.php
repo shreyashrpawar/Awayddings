@@ -14,32 +14,23 @@
 
             <div class="container-fluid">
                 <form action="">
-                <div class="row">
-
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="">Start Date</label>
-                            <input type="date" class="form-control" name="start_date" >
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="">Start Date</label>
+                                <input type="date" class="form-control" name="start_date" value="{{ Carbon\Carbon::parse($start_date)->format('Y-m-d') }}" >
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="">End Date</label>
+                                <input type="date" class="form-control" name="end_date" value="{{  Carbon\Carbon::parse($end_date)->format('Y-m-d')  }}"  >
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <button class="btn  btn-primary mt-4">Search</button>
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="">End Date</label>
-                            <input type="date" class="form-control" name="end_date" >
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label for="">Type</label>
-                            <select name="" id="" class="form-control">
-                                <option value="">Select Type</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-1">
-                        <button class="btn  btn-primary mt-4">Search</button>
-                    </div>
-                </div>
                 </form>
 
             </div>
@@ -52,10 +43,7 @@
                         <th>#</th>
                         <th>Date</th>
                         <th>Type</th>
-                        <th>Amount</th>
-                        <th>Rooms</th>
-                        <th>Percentage</th>
-
+                        <th width="10%">Amount</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -68,12 +56,6 @@
                             </td>
                             <td>
                                 <input type="text" value="{{$val['amount']}}" class="form-control amountInput"  data="{{ $val }}">
-                            </td>
-                            <td>
-                                <input type="text" value="{{$val['available']}}" class="form-control availableInput" data="{{ $val }}">
-                            </td>
-                            <td>
-                                <input type="text" value="{{$val['occupancy']}}" class="form-control occupancyInput" data="{{ $val }}" max="100" min="0">
                             </td>
                         </tr>
                     @endforeach
