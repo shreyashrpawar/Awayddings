@@ -35,7 +35,11 @@
     <script src="{{ asset('assets/js/off-canvas.js') }}"></script>
     <script src="{{ asset('assets/js/hoverable-collapse.js') }}"></script>
     <script src="{{ asset('assets/js/template.js') }}"></script>
-
+    <script>
+        $(document).ready(function(){
+            $(".alert").delay(2000).slideUp(300);
+        });
+    </script>
     @yield('js')
 
 </body>
