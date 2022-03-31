@@ -21,6 +21,9 @@ class Vendor extends Model
         'pin_code',
         'gst',
         'status',
-        'pan'
+        'pan',
+        'gst_file',
+        'pan_card_file',
+        'cancelled_cheque_file'
     ];
 }

@@ -8,6 +8,7 @@ use App\Models\UserVendorAlignment;
 use App\Models\Vendor;
 use App\Models\VendorPropertyAlignment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class VendorController extends Controller
 {
@@ -43,6 +44,22 @@ class VendorController extends Controller
     public function store(Request $request)
     {
 
+        $this->validate($request,[
+            'name' => 'required',
+            'address' => 'required',
+            'city' => 'required',
+            'state' => 'required',
+            'pin_code' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required',
+            'phone' => 'required',
+            'login_password' => 'required',
+//            'cancelled_cheque_file' => 'mimes:png,jpg,jpeg,pdf|max:5000',
+//            'pan_card_file' => 'mimes:png,jpg,jpeg,pdf|max:5000',
+//            'gst_file' => 'mimes:png,jpg,jpeg,pdf|max:5000'
+        ]);
+
         // create vendor
         $vendor_data =[
             'name' => $request->name,
@@ -56,8 +73,33 @@ class VendorController extends Controller
             'last_name'=> $request->last_name,
             'email'=> $request->email,
             'phone'=> $request->phone,
-
         ];
+
+        if($request->hasFile('cancelled_cheque_file')){
+            $file = $request->file('cancelled_cheque_file');
+            $name = time() . $file->getClientOriginalName();
+            $filePath = 'images/'. $name;
+            Storage::disk('s3')->put($filePath, file_get_contents($file),'public');
+            $vendor_data['cancelled_cheque_file']=  Storage::disk('s3')->url($filePath);
+        }
+
+        if($request->hasFile('pan_card_file')){
+            $file = $request->file('pan_card_file');
+            $name = time() . $file->getClientOriginalName();
+            $filePath = 'images/'. $name;
+            Storage::disk('s3')->put($filePath, file_get_contents($file),'public');
+            $vendor_data['pan_card_file']=  Storage::disk('s3')->url($filePath);
+        }
+
+        if($request->hasFile('gst_file')){
+            $file = $request->file('gst_file');
+            $name = time() . $file->getClientOriginalName();
+            $filePath = 'images/'. $name;
+            Storage::disk('s3')->put($filePath, file_get_contents($file),'public');
+            $vendor_data['gst_file']=  Storage::disk('s3')->url($filePath);
+        }
+
+
         $vendorResp = Vendor::create($vendor_data);
 
         $login_data = [
@@ -115,6 +157,11 @@ class VendorController extends Controller
      */
     public function update(Request $request, $id)
     {
+//        $this->validate($request,[
+//            'cancelled_cheque_file' => 'sometimes|required|mimes:png,jpg,jpeg,pdf|max:5000',
+//            'pan_card_file' => 'sometimes|required|mimes:png,jpg,jpeg,pdf|max:5000',
+//            'gst_file' => 'sometimes|required|mimes:png,jpg,jpeg,pdf|max:5000'
+//        ]);
 
         $vendor = Vendor::find($id);
         $vendor_data =[
@@ -131,6 +178,29 @@ class VendorController extends Controller
             'phone'=> $request->phone,
 
         ];
+        if($request->hasFile('cancelled_cheque_file')){
+            $file = $request->file('cancelled_cheque_file');
+            $name = time() . $file->getClientOriginalName();
+            $filePath = 'images/'. $name;
+            Storage::disk('s3')->put($filePath, file_get_contents($file),'public');
+            $vendor_data['cancelled_cheque_file']=  Storage::disk('s3')->url($filePath);
+        }
+
+        if($request->hasFile('pan_card_file')){
+            $file = $request->file('pan_card_file');
+            $name = time() . $file->getClientOriginalName();
+            $filePath = 'images/'. $name;
+            Storage::disk('s3')->put($filePath, file_get_contents($file),'public');
+            $vendor_data['pan_card_file']=  Storage::disk('s3')->url($filePath);
+        }
+
+        if($request->hasFile('gst_file')){
+            $file = $request->file('gst_file');
+            $name = time() . $file->getClientOriginalName();
+            $filePath = 'images/'. $name;
+            Storage::disk('s3')->put($filePath, file_get_contents($file),'public');
+            $vendor_data['gst_file']=  Storage::disk('s3')->url($filePath);
+        }
         $vendor->update($vendor_data);
         $request->session()->flash('success','Successfully Updated');
         return redirect(route('vendors.index'));

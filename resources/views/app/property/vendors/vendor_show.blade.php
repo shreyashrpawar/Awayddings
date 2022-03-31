@@ -49,6 +49,37 @@
                     <th>GST</th>
                     <td>{{ $data->gst }}</td>
                 </tr>
+                <tr>
+                    <th>Pan Card Attachment</th>
+                    <td>
+                        @if($data->pan_card_file)
+                            <a href="{{$data->pan_card_file}}" target="_blank" >Download</a>
+                        @else
+                                No Attachment
+                        @endif
+                    </td>
+                </tr>
+                <tr>
+                    <th>GST Attachment</th>
+                    <td>
+                        @if($data->gst_file)
+
+                            <a href="{{$data->gst_file}}" target="_blank" >Download</a>
+                        @else
+                            No Attachment
+                        @endif
+                    </td>
+                </tr>
+                <tr>
+                    <th>Cancelled Cheque Attachment</th>
+                    <td>
+                        @if($data->cancelled_cheque_file)
+                            <a href="{{$data->cancelled_cheque_file}}" target="_blank" >Download</a>
+                        @else
+                            No Attachment
+                        @endif
+                    </td>
+                </tr>
 
                 </tbody>
             </table>

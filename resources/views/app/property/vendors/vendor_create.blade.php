@@ -5,14 +5,14 @@
         <div class="card-body">
             <h4 class="card-title text-uppercase">Vendor Registration</h4>
             <hr>
-            <form id="propertyRegistrationFrom" action="{{ route('vendors.store') }}" method="POST" >
+            <form id="propertyRegistrationFrom" action="{{ route('vendors.store') }}" method="POST"  enctype="multipart/form-data">
                 @csrf
                 <div class="row">
 
                     <div class="col-md-6">
                         <h6 class="text-uppercase">Basic Details</h6>
                         <div class="form-group">
-                            <label for="">Name <span style="color:red">*</span></label>
+                            <label for="">Vendor Name <span style="color:red">*</span></label>
                             <input type="text" class="form-control"  name="name" required >
                         </div>
                         <div class="form-group">
@@ -40,7 +40,19 @@
                         </div>
                         <div class="form-group">
                             <label for="">GST</label>
-                            <input type="text" class="form-control"  name="gst" required >
+                            <input type="text" class="form-control"  name="gst"  >
+                        </div>
+                        <div class="form-group">
+                            <label for="">Cancelled Cheque</label>
+                            <input type="file" class="form-control"  name="cancelled_cheque_file"  >
+                        </div>
+                        <div class="form-group">
+                            <label for="">Pan Card</label>
+                            <input type="file" class="form-control"  name="pan_card_file"  >
+                        </div>
+                        <div class="form-group">
+                            <label for="">GST</label>
+                            <input type="file" class="form-control"  name="gst_file"  >
                         </div>
                     </div>
                     <div class="col-md-6">
