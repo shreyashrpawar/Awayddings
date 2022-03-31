@@ -1,7 +1,7 @@
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
     <ul class="nav">
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('login') }}">
+            <a class="nav-link" href="{{ route('home') }}">
                 <i class="mdi mdi-clipboard-text-outline menu-icon"></i>
                 <span class="menu-title">Dashboard</span>
             </a>
@@ -14,17 +14,24 @@
             </a>
             <div class="collapse" id="ui-basic" style="">
                 <ul class="nav flex-column sub-menu">
+                    @can('property show')
                     <li class="nav-item"> <a class="nav-link" href="{{ route('property.index') }}">Property</a></li>
+                    @endcan
+                    @can('property_vendor show')
                     <li class="nav-item"> <a class="nav-link" href="{{ route('vendors.index') }}">Property Vendors</a></li>
+                    @endcan
                 </ul>
             </div>
         </li>
+        @can('user show')
         <li class="nav-item">
             <a class="nav-link" href="{{ route('users.index') }}">
                 <i class="mdi mdi-account-group-outline menu-icon"></i>
                 <span class="menu-title">Users</span>
             </a>
         </li>
+        @endcan
+        @hasrole('admin')
         <li class="nav-item">
             <a class="nav-link collapsed" data-toggle="collapse" href="#ui-basic1" aria-expanded="false" aria-controls="ui-basic1">
                 <i class="mdi mdi-settings menu-icon"></i>
@@ -33,11 +40,18 @@
             </a>
             <div class="collapse" id="ui-basic1">
                 <ul class="nav flex-column sub-menu">
+                    @can('location show')
                     <li class="nav-item"> <a class="nav-link" href="{{ route('locations.index') }}">Locations</a></li>
+                    @endcan
+                    @can('amenities show')
                     <li class="nav-item"> <a class="nav-link" href="{{ route('amenities.index') }}">Amenities</a></li>
+                    @endcan
+                    @can('room_inclusion show')
                     <li class="nav-item"> <a class="nav-link" href="{{ route('room-inclusion.index') }}">Room Inclusion</a></li>
+                    @endcan
                 </ul>
             </div>
         </li>
+        @endrole
     </ul>
 </nav>

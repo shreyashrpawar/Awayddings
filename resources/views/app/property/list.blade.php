@@ -43,14 +43,22 @@
                                 </td>
                                 <td>
                                     <div class="btn-group">
+                                        @can('property show')
                                         <a href="{{ route('property.show',$val->id) }}" class="btn btn-sm btn-outline-primary">View</a>
+                                        @endcan
+                                        @can('property update')
                                         <a href="{{ route('property.edit',$val->id) }}" class="btn btn-sm btn-outline-warning">Edit</a>
+                                        @endcan
+                                        @can('property rate')
                                         <a href="{{ route('rate.show',$val->id) }}" class="btn btn-sm btn-outline-info">Rates</a>
-                                        @if($val->status == 0)
-                                            <button class="btn btn-sm btn-outline-success activeButton" value="{{ $val->id }}" >Enable</button>
-                                        @else
-                                            <button class="btn btn-sm btn-outline-danger inactiveButton" value="{{ $val->id }}" >Disable</button>
-                                        @endif
+                                        @endcan
+                                        @can('property update')
+                                            @if($val->status == 0)
+                                                <button class="btn btn-sm btn-outline-success activeButton" value="{{ $val->id }}" >Enable</button>
+                                            @else
+                                                <button class="btn btn-sm btn-outline-danger inactiveButton" value="{{ $val->id }}" >Disable</button>
+                                            @endif
+                                        @endcan
                                     </div>
 
                                 </td>
