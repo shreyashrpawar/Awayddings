@@ -35,9 +35,10 @@
                                 <td>{{ $val->location->name }}</td>
                                 <td>
                                     @if($val->status == 0)
-                                        <button class="badge badge-warning inactiveButton" value="{{ $val->id }}" >In Active</button>
+                                        <span class="badge badge-danger">Inactive</span>
                                     @else
-                                        <button class="badge badge-success activeButton" value="{{ $val->id }}" >Active</button>
+                                        <span class="badge badge-success">Active</span>
+
                                     @endif
                                 </td>
                                 <td>
@@ -45,6 +46,11 @@
                                         <a href="{{ route('property.show',$val->id) }}" class="btn btn-sm btn-outline-primary">View</a>
                                         <a href="{{ route('property.edit',$val->id) }}" class="btn btn-sm btn-outline-warning">Edit</a>
                                         <a href="{{ route('rate.show',$val->id) }}" class="btn btn-sm btn-outline-info">Rates</a>
+                                        @if($val->status == 0)
+                                            <button class="btn btn-sm btn-outline-success activeButton" value="{{ $val->id }}" >Enable</button>
+                                        @else
+                                            <button class="btn btn-sm btn-outline-danger inactiveButton" value="{{ $val->id }}" >Disable</button>
+                                        @endif
                                     </div>
 
                                 </td>
@@ -79,7 +85,7 @@
                 url: '/property/status',
                 data: {
                     property_id: property_id,
-                    status : 0
+                    status : 1
                 },
                 type: 'POST',
                 success:function(resp){
@@ -95,7 +101,7 @@
                 url: '/property/status',
                 data: {
                     property_id: property_id,
-                    status : 1
+                    status : 0
                 },
                 type: 'POST',
                 success:(resp) => {
