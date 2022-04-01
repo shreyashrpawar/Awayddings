@@ -5,7 +5,7 @@
         <div class="card-body">
             <h4 class="card-title">Vendor Details Edit</h4>
             <hr>
-            <form id="propertyRegistrationFrom" action="{{ route('vendors.update',$data->id) }}" method="POST" >
+            <form id="propertyRegistrationFrom" action="{{ route('vendors.update',$data->id) }}" method="POST"   enctype="multipart/form-data">
                 @csrf
                 @method('put')
                 <div class="row">
@@ -13,7 +13,7 @@
                     <div class="col-md-6">
                         <h6 class="text-uppercase">Basic Details</h6>
                         <div class="form-group">
-                            <label for="">Name  <span style="color:red">*</span></label>
+                            <label for="">Vendor Name  <span style="color:red">*</span></label>
                             <input type="text" class="form-control"  name="name" required  value="{{ $data->name }}">
                         </div>
                         <div class="form-group">
@@ -41,7 +41,22 @@
                         </div>
                         <div class="form-group">
                             <label for="">GST</label>
-                            <input type="text" class="form-control"  name="gst" required  value="{{ $data->gst }}" >
+                            <input type="text" class="form-control"  name="gst"    value="{{ $data->gst }}" >
+                        </div>
+                        <div class="form-group">
+                            <label for="">Cancelled Cheque</label>
+                            <input type="file" class="form-control"  name="cancelled_cheque_file"  >
+                            <a href="{{$data->cancelled_cheque_file}}" target="_blank" >Download</a>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Pan Card</label>
+                            <input type="file" class="form-control"  name="pan_card_file"  >
+                            <a href="{{$data->pan_card_file}}" target="_blank" >Download</a>
+                        </div>
+                        <div class="form-group">
+                            <label for="">GST</label>
+                            <input type="file" class="form-control"  name="gst_file"  >
+                            <a href="{{$data->gst_file}}" target="_blank" >Download</a>
                         </div>
                     </div>
                     <div class="col-md-6">

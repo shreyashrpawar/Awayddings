@@ -22,7 +22,9 @@ class DatabaseSeeder extends Seeder
             MediaSubCategorySeeder::class,
             AmenitiesSeeder::class,
             RoomInclusionSeeder::class,
-            LocationSeeder::class
+            LocationSeeder::class,
+            PermissionSeeder::class,
+            RolePermissionSeeder::class
         ]);
     }
 }
