@@ -12,6 +12,8 @@ use App\Models\PropertyDefaultRate;
 use App\Models\PropertyMedia;
 use App\Models\PropertyRoomInclusion;
 use App\Models\RoomInclusion;
+use App\Models\UserVendorAlignment;
+use App\Models\VendorPropertyAlignment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -26,9 +28,18 @@ class PropertyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request  $request)
     {
-        $properties = Property::orderBy('id', 'DESC')->paginate(50);
+        $user = $request->user();
+        $roles = $user->getRoleNames();
+        $q = Property::orderBy('id', 'DESC');
+        if (in_array("vendor", $roles->toArray())){
+            $userVendor = UserVendorAlignment::where('user_id',$user->id)->first();
+            $vendor_id =  $userVendor->vendor_id;
+            $property_id =  VendorPropertyAlignment::where('vendor_id',$vendor_id)->pluck('property_id')->all();
+            $q->whereIn('id',$property_id);
+        }
+        $properties = $q->paginate(50);
         return view('app.property.list', compact('properties'));
     }
 
@@ -74,6 +85,9 @@ class PropertyController extends Controller
                 'status' => 0
             ];
             DB::beginTransaction();
+            $user = $request->user();
+            $roles = $user->getRoleNames();
+
             $propertyDetails = Property::create($property_basic_details);
 
             if(count($request->property_charges) > 0 ) {
@@ -165,6 +179,18 @@ class PropertyController extends Controller
                     }
                 }
             }
+
+            if (in_array("vendor", $roles->toArray())){
+
+                $userVendor = UserVendorAlignment::where('user_id',$user->id)->first();
+                $vendor_id =  $userVendor->vendor_id;
+                VendorPropertyAlignment::create([
+                   'vendor_id' => $vendor_id,
+                   'property_id' => $propertyDetails->id
+                ]);
+            }
+
+
             DB::commit();
             return response()->json([
                 'success' => true,
@@ -185,8 +211,18 @@ class PropertyController extends Controller
      * @param \App\Models\Property $property
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request,$id)
     {
+        $user = $request->user();
+        $roles = $user->getRoleNames();
+        if (in_array("vendor", $roles->toArray())){
+            $userVendor = UserVendorAlignment::where('user_id',$user->id)->first();
+            $vendor_id =  $userVendor->vendor_id;
+            VendorPropertyAlignment::where('property_id',$id)
+                ->where('vendor_id',$vendor_id)
+                ->firstOrfail();
+        }
+
         $data = Property::find($id);
         return view('app.property.show', compact('data'));
 
@@ -198,8 +234,19 @@ class PropertyController extends Controller
      * @param \App\Models\Property $property
      * @return \Illuminate\Http\Response
      */
-    public function edit(Property $property)
+    public function edit(REquest $request,Property $property)
     {
+        $user = $request->user();
+        $roles = $user->getRoleNames();
+
+        if (in_array("vendor", $roles->toArray())){
+            $userVendor = UserVendorAlignment::where('user_id',$user->id)->first();
+            $vendor_id =  $userVendor->vendor_id;
+            VendorPropertyAlignment::where('property_id',$property->id)
+                ->where('vendor_id',$vendor_id)
+                ->firstOrfail();
+        }
+        
         $images_video_categories = MediaSubCategory::where('status', 1)->where('media_category_id', 1)->pluck('name', 'id')->all();
         $video_categories = MediaSubCategory::where('status', 1)->where('media_category_id', 2)->pluck('name', 'id')->all();
         $menu_sub_categories = MediaSubCategory::where('status', 1)->where('media_category_id', 3)->pluck('name', 'id')->all();
@@ -212,6 +259,8 @@ class PropertyController extends Controller
 
         $locations = Location::where('status', 1)
             ->pluck('name', 'id')->all();
+
+
 
         $data = $property;
 
