@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Property;
 use App\Models\PropertyDefaultRate;
 use App\Models\PropertyRate;
+use App\Models\UserVendorAlignment;
+use App\Models\VendorPropertyAlignment;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
@@ -134,6 +136,15 @@ class PropertyRateController extends Controller
      */
     public function show($id,Request  $request)
     {
+        $user = $request->user();
+        $roles = $user->getRoleNames();
+        if (in_array("vendor", $roles->toArray())){
+            $userVendor = UserVendorAlignment::where('user_id',$user->id)->first();
+            $vendor_id =  $userVendor->vendor_id;
+            VendorPropertyAlignment::where('property_id',$id)
+                ->where('vendor_id',$vendor_id)
+                ->firstOrfail();
+        }
         $start_date  = Carbon::now()->subDays(7)->startOfDay();
         $end_date    = Carbon::now()->endOfDay();
 
