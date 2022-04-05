@@ -52,7 +52,8 @@
                                         @can('property rate')
                                         <a href="{{ route('rate.show',$val->id) }}" class="btn btn-sm btn-outline-info">Rates</a>
                                         @endcan
-                                        @can('property update')
+                                          
+                                        @can('property status')
                                             @if($val->status == 0)
                                                 <button class="btn btn-sm btn-outline-success activeButton" value="{{ $val->id }}" >Enable</button>
                                             @else

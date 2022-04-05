@@ -111,6 +111,10 @@ class RolePermissionSeeder extends Seeder
                     [
                         'role' => 'admin',
                         'permission' =>   'room_inclusion update',
+                    ],
+                    [
+                        'role' => 'admin',
+                        'permission' =>  'property status',
                     ]
         ];
         foreach($data as $val){

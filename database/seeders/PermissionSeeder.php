@@ -19,6 +19,7 @@ class PermissionSeeder extends Seeder
             'property show',
             'property update',
             'property rate',
+            'property status',
             'property_vendor show',
             'property_vendor create',
             'property_vendor update',
