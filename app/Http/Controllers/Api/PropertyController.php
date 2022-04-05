@@ -67,13 +67,13 @@ class PropertyController extends Controller
 
 
         $properties = Property::join('locations','locations.id','=','properties.location_id')
-                                ->join('property_default_rates','property_default_rates.property_id','=','properties.id')
-                                ->where('properties.status',$location_id)
-                                ->where('properties.location_id',1)
-                                ->where('property_default_rates.hotel_charagable_type_id',$double_occupancy_details->id)
-                                ->where('property_default_rates.qty','>=',$double_room_count)
-                                ->select('properties.id','properties.name','properties.featured_image','properties.description','locations.name as location',
-                                    'property_default_rates.amount','property_default_rates.qty')
+                            ->join('property_default_rates','property_default_rates.property_id','=','properties.id')
+                            ->where('properties.status',1)
+                            ->where('properties.location_id',$location_id)
+                            ->where('property_default_rates.hotel_charagable_type_id',$double_occupancy_details->id)
+                            ->where('property_default_rates.qty','>=',$double_room_count)
+                            ->select('properties.id','properties.name','properties.featured_image','properties.description','locations.name as location',
+                                'property_default_rates.amount','property_default_rates.qty')
                             ->inRandomOrder()
                             ->limit(3)
                             ->get();

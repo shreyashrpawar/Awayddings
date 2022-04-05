@@ -246,7 +246,7 @@ class PropertyController extends Controller
                 ->where('vendor_id',$vendor_id)
                 ->firstOrfail();
         }
-        
+
         $images_video_categories = MediaSubCategory::where('status', 1)->where('media_category_id', 1)->pluck('name', 'id')->all();
         $video_categories = MediaSubCategory::where('status', 1)->where('media_category_id', 2)->pluck('name', 'id')->all();
         $menu_sub_categories = MediaSubCategory::where('status', 1)->where('media_category_id', 3)->pluck('name', 'id')->all();
