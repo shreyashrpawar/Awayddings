@@ -337,6 +337,26 @@ class PropertyController extends Controller
     ]);
 
   }
+
+  public function propertyAvailable(Request  $request){
+      $property_id = $request->property_id;
+      $check_in    = Carbon::parse($request->check_in);
+      $check_out   = Carbon::parse($request->check_out);
+      $adults      = $request->adults;
+
+      $rooms     = $adults/2;
+      $dateRange = CarbonPeriod::create($check_in, $check_out);
+
+
+
+      return response()->json([
+          'success' => true,
+          'message' => 'SUCCESS'
+      ]);
+
+
+
+  }
   public function getPropertyDetails(Request  $request){
       $property_id = $request->property_id;
       $check_in    = Carbon::parse($request->check_in);
