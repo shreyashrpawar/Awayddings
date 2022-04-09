@@ -25,6 +25,7 @@ Route::prefix('v1')->group(function () {
     Route::get('properties/{id}',[\App\Http\Controllers\Api\PropertyController::class,'propertyDetails']);
     Route::get('properties/{id}/budget',[\App\Http\Controllers\Api\PropertyController::class,'getPropertyBudget']);
     Route::get('locations',[\App\Http\Controllers\Api\LocationController::class,'getActiveLocation']);
+    Route::get('properties/{id}/budget-calculator',[\App\Http\Controllers\Api\PropertyController::class,'getPropertyDetails']);
     Route::group(['middleware' => ['jwt.verify']], function() {
 
     });

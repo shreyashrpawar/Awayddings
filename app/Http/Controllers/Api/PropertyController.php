@@ -18,7 +18,7 @@ class PropertyController extends Controller
 {
   public function getRandomProperty(Request  $request){
       $adults = 50;
-      $now = Carbon::now();
+      $now    = Carbon::now();
       $double_room_count = $adults/2;
       $double_occupancy_details = HotelChargableType::where('name','Double Occupancy Room')->where('status',1)->first();
 
@@ -119,16 +119,16 @@ class PropertyController extends Controller
                                           ->whereIn('media_sub_category_id',[1,2,3,6,7,8,9,10,11,12,13])
                                            ->where('property_id',$id)
                                            ->get();
-
+        //
         $wedding_images= PropertyMedia::with('MediaSubCategory')
-            ->where('media_category_id',1)
-            ->whereIn('media_sub_category_id',[4])
-            ->where('property_id',$id)
-            ->get();
+                            ->where('media_category_id',1)
+                            ->whereIn('media_sub_category_id',[18])
+                            ->where('property_id',$id)
+                            ->get();
 
         $wedding_video = PropertyMedia::with('MediaSubCategory')
             ->where('media_category_id',2)
-            ->whereIn('media_sub_category_id',[5])
+            ->whereIn('media_sub_category_id',[12])
             ->where('property_id',$id)
             ->get();
 
@@ -235,12 +235,13 @@ class PropertyController extends Controller
     // get date range
     $dateRange              = CarbonPeriod::create($start_date, $end_date);
     $property_default_rates = PropertyDefaultRate::where('property_id',$property_id)->get();
-    $property_chargable = $property_default_rates->unique('hotel_charagable_type_id')->all();
+    $property_chargable     = $property_default_rates->unique('hotel_charagable_type_id')->all();
     $property_rates = [];
     foreach($dateRange as $date) {
         foreach($property_chargable as $chargable_entity)
         {
-            $propertyRate =  PropertyRate::where('property_id',$property_id)->where('hotel_chargable_type_id',$chargable_entity->hotel_charagable_type_id)->first();
+            $propertyRate =  PropertyRate::where('property_id',$property_id)
+                ->where('hotel_chargable_type_id',$chargable_entity->hotel_charagable_type_id)->first();
             if($propertyRate){
                 $temp_data = [
                     'date' => $date,
@@ -306,28 +307,28 @@ class PropertyController extends Controller
          ];
       }
 
-      $mid_budget_total_adult = $adult;
-      $mid_budget_half_adult = $mid_budget_total_adult / 2;
-      $mid_budget_double_room_count =  ceil($mid_budget_half_adult/2);
-      $mid_budget_triple_room_count =  ceil($mid_budget_half_adult/3);
-       // calculate the mid_budget_plan if the double occupancy rooms are available and triple occupancy room available
-      if($min_dbl_room >= $mid_budget_double_room_count && $min_triple_room >= $mid_budget_triple_room_count  ) {
-          $mid_budget  = $nights * ($mid_budget_double_room_count * $double_room_rate_avg + $mid_budget_triple_room_count * $triple_room_rate_avg );
-          $mid_budget_in_words =$this->formatNumberToLakhs($mid_budget);
-        $mid_budget_plan = [
-              'double_occupancy_room_count' => $mid_budget_double_room_count,
-          'triple_occupancy_room_count' => $mid_budget_triple_room_count,
-          'budget' => $mid_budget,
-          'budget_display' => $mid_budget_in_words
-        ];
-      }
+//      $mid_budget_total_adult = $adult;
+//      $mid_budget_half_adult = $mid_budget_total_adult / 2;
+//      $mid_budget_double_room_count =  ceil($mid_budget_half_adult/2);
+//      $mid_budget_triple_room_count =  ceil($mid_budget_half_adult/3);
+//       // calculate the mid_budget_plan if the double occupancy rooms are available and triple occupancy room available
+//      if($min_dbl_room >= $mid_budget_double_room_count && $min_triple_room >= $mid_budget_triple_room_count  ) {
+//          $mid_budget  = $nights * ($mid_budget_double_room_count * $double_room_rate_avg + $mid_budget_triple_room_count * $triple_room_rate_avg );
+//          $mid_budget_in_words =$this->formatNumberToLakhs($mid_budget);
+//        $mid_budget_plan = [
+//              'double_occupancy_room_count' => $mid_budget_double_room_count,
+//          'triple_occupancy_room_count' => $mid_budget_triple_room_count,
+//          'budget' => $mid_budget,
+//          'budget_display' => $mid_budget_in_words
+//        ];
+//      }
 
     return response()->json([
         'success' => true,
         'message' => 'SUCCESS',
         'data' =>  [
                 'best_budget_plan' => $best_budget_plan,
-                'mid_budget_plan' => $mid_budget_plan,
+//                'mid_budget_plan' => $mid_budget_plan,
                 'comfortable_budget_plan' => $comfortable_budget_plan,
                 'double_occupancy_rate' =>  $double_room_rate_avg,
                 'triple_occupancy_rate' => $triple_room_rate_avg,
@@ -336,7 +337,64 @@ class PropertyController extends Controller
     ]);
 
   }
+  public function getPropertyDetails(Request  $request){
+      $property_id = $request->property_id;
+      $check_in    = Carbon::parse($request->check_in);
+      $check_out   = Carbon::parse($request->check_out);
+      $adults      = $request->adults;
 
+      $nights      = $check_in->diffInDays($check_out);
+      $days        = $nights + 1;
+
+      $max_rooms  = ceil( $adults/2);
+      $min_rooms  = ceil($adults/3);
+
+      $dateRange              = CarbonPeriod::create($check_in, $check_out);
+
+      $property_chargable_items =
+          PropertyDefaultRate::with('hotel_charagable_type')
+             ->where('property_id',$property_id)
+             ->where('amount','>',0)
+             ->get();
+
+
+      $property_rates = [];
+
+      foreach($dateRange as $date) {
+          foreach($property_chargable_items as $key => $val){
+              $propertyRate =  PropertyRate::where('property_id',$property_id)
+                            ->where('hotel_chargable_type_id',$val->hotel_charagable_type_id)
+                            ->first();
+              if($propertyRate)
+              {
+                  $temp_data = [
+                      'date' => $date,
+                      'chargable_type_id' => $val->hotel_charagable_type_id,
+                      'chargable_type_details' => $val->hotel_charagable_type->name,
+                      'amount' => $propertyRate->amount,
+                      'qty' => $propertyRate->available,
+                      'percentage_occupancy' => $propertyRate->occupancy_percentage
+                  ];
+              }else{
+                  $temp_data = [
+                      'date' => $date,
+                      'chargable_type_id' => $val->hotel_charagable_type_id,
+                      'chargable_type_details' => $val->hotel_charagable_type->name,
+                      'amount' => $val->amount,
+                      'qty' => $val->qty,
+                      'percentage_occupancy' => $val->chargable_percentage
+                  ];
+              }
+              array_push($property_rates,$temp_data);
+          }
+      }
+
+      return response()->json($property_rates);
+
+
+
+
+  }
   private function formatNumberToLakhs($n,$precision = 2){
 
 	if ($n < 900) {
@@ -369,5 +427,6 @@ class PropertyController extends Controller
 
 	    return $n_format . $suffix;
     }
+
 
 }

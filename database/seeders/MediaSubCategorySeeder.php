@@ -32,6 +32,7 @@ class MediaSubCategorySeeder extends Seeder
             'Beach or Other Lawn',
             'Top View',
             'Decor Picture Of Wedding',
+            'Wedding Images'
         ];
 
         $video = [
