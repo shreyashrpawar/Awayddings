@@ -361,32 +361,37 @@ class PropertyController extends Controller
       $property_rates = [];
 
       foreach($dateRange as $date) {
+          $temp_data =[
+              'date' => $date->format('d-m-Y'),
+              'data' => []
+          ];
           foreach($property_chargable_items as $key => $val){
               $propertyRate =  PropertyRate::where('property_id',$property_id)
                             ->where('hotel_chargable_type_id',$val->hotel_charagable_type_id)
                             ->first();
               if($propertyRate)
               {
-                  $temp_data = [
-                      'date' => $date,
+                  $temp_data1 = [
+                      'date' => $date->format('d-m-Y'),
                       'chargable_type_id' => $val->hotel_charagable_type_id,
                       'chargable_type_details' => $val->hotel_charagable_type->name,
-                      'amount' => $propertyRate->amount,
+                      'rate' => $propertyRate->amount,
                       'qty' => $propertyRate->available,
                       'percentage_occupancy' => $propertyRate->occupancy_percentage
                   ];
               }else{
-                  $temp_data = [
-                      'date' => $date,
+                  $temp_data1 = [
+                      'date' => $date->format('d-m-Y'),
                       'chargable_type_id' => $val->hotel_charagable_type_id,
                       'chargable_type_details' => $val->hotel_charagable_type->name,
-                      'amount' => $val->amount,
+                      'rate' => $val->amount,
                       'qty' => $val->qty,
                       'percentage_occupancy' => $val->chargable_percentage
                   ];
               }
-              array_push($property_rates,$temp_data);
+              array_push($temp_data['data'],$temp_data1);
           }
+          array_push($property_rates,$temp_data);
       }
 
       return response()->json($property_rates);

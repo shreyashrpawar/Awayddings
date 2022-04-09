@@ -160,7 +160,7 @@ class PropertyRateController extends Controller
         $property_default_rates = PropertyDefaultRate::where('property_id',$id)
                                     ->whereIn('hotel_charagable_type_id',[1,2])
                                     ->get();
-      
+
         $property_rates = [];
         foreach($dateRange as $key => $date)
         {
