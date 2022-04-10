@@ -68,8 +68,12 @@ class PropertyController extends Controller
   public function searchProperty(Request  $request){
         $adults          =  $request->adults;
         $location_id     =  $request->location_id;
-        $start_date      =  $request->start_date;
-        $end_date        =  $request->end_date;
+      $start_date = Carbon::parse($request->start_date);
+      $end_date =  Carbon::parse($request->end_date);
+      $nights = $start_date->diffInDays($end_date);
+      $days = $nights + 1;
+
+        $nights = $start_date->diffInDays($end_date);
         $budget          =  $request->budget;
 
         $double_room_count = $adults/2;
@@ -84,18 +88,26 @@ class PropertyController extends Controller
                                 ->select('properties.id','properties.name','properties.address','properties.featured_image','properties.description','locations.name as location',
                                     'property_default_rates.amount','property_default_rates.qty')
                                 ->inRandomOrder()
-                                ->limit(3)
-                                ->get();
+                                ->simplePaginate(1);
         // get double occupancy price for today
         // room availability
         foreach($properties as $key => $property)
         {
             $custom_rate_double_occupancy =  PropertyRate::where('property_id',$property->id)
-                ->where('hotel_chargable_type_id',$double_occupancy_details->id)->first();
-            if(!$custom_rate_double_occupancy)
+                                                        ->where('hotel_chargable_type_id',$double_occupancy_details->id)
+                                                        ->first();
+            if(!$custom_rate_double_occupancy){
                 $property->amount = $property->amount * $double_room_count;
-            else
+                $property->nights = $nights;
+                $property->days = $days;
+                $property->pax = $adults;
+            }else{
                 $property->amount = $custom_rate_double_occupancy->amount * $double_room_count;
+                $property->nights = $nights;
+                $property->days = $days;
+                $property->pax = $adults;
+            }
+
 
         }
 
@@ -229,7 +241,7 @@ class PropertyController extends Controller
     $end_date =  Carbon::parse($request->end_date);
 
     $nights = $start_date->diffInDays($end_date);
-    $days = $nights +1;
+    $days = $nights + 1;
     $max_rooms  = ceil( $adult/2);
     $min_rooms = ceil($adult/3);
 
