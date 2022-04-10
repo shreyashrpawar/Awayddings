@@ -21,7 +21,10 @@ class PropertyController extends Controller
       $now    = Carbon::now();
       $double_room_count = $adults/2;
       $double_occupancy_details = HotelChargableType::where('name','Double Occupancy Room')->where('status',1)->first();
+      $start_date = Carbon::parse(Carbon::now());
+      $end_date   =  Carbon::now()->addDays(2);
 
+      $nights = $start_date->diffInDays($end_date);
 
       $properties = Property::join('locations','locations.id','=','properties.location_id')
                       ->join('property_default_rates','property_default_rates.property_id','=','properties.id')
@@ -41,10 +44,18 @@ class PropertyController extends Controller
         $custom_rate_double_occupancy =  PropertyRate::where('property_id',$property->id)
                                         ->whereDate('date',$now)
                                         ->where('hotel_chargable_type_id',$double_occupancy_details->id)->first();
-        if(!$custom_rate_double_occupancy)
+        if(!$custom_rate_double_occupancy){
             $property->amount = $property->amount * $double_room_count;
-       else
-            $property->amount = $custom_rate_double_occupancy->amount * $double_room_count;
+            $property->night  = $nights;
+            $property->pax    = $adults;
+        }
+
+       else{
+           $property->amount = $custom_rate_double_occupancy->amount * $double_room_count;
+           $property->night  = $nights;
+           $property->pax  = $adults;
+       }
+
 
       }
 
@@ -62,21 +73,19 @@ class PropertyController extends Controller
         $budget          =  $request->budget;
 
         $double_room_count = $adults/2;
-
         $double_occupancy_details = HotelChargableType::where('name','Double Occupancy Room')->where('status',1)->first();
 
-
         $properties = Property::join('locations','locations.id','=','properties.location_id')
-                            ->join('property_default_rates','property_default_rates.property_id','=','properties.id')
-                            ->where('properties.status',1)
-                            ->where('properties.location_id',$location_id)
-                            ->where('property_default_rates.hotel_charagable_type_id',$double_occupancy_details->id)
-                            ->where('property_default_rates.qty','>=',$double_room_count)
-                            ->select('properties.id','properties.name','properties.featured_image','properties.description','locations.name as location',
-                                'property_default_rates.amount','property_default_rates.qty')
-                            ->inRandomOrder()
-                            ->limit(3)
-                            ->get();
+                                ->join('property_default_rates','property_default_rates.property_id','=','properties.id')
+                                ->where('properties.status',1)
+                                ->where('properties.location_id',$location_id)
+                                ->where('property_default_rates.hotel_charagable_type_id',$double_occupancy_details->id)
+                                ->where('property_default_rates.qty','>=',$double_room_count)
+                                ->select('properties.id','properties.name','properties.address','properties.featured_image','properties.description','locations.name as location',
+                                    'property_default_rates.amount','property_default_rates.qty')
+                                ->inRandomOrder()
+                                ->limit(3)
+                                ->get();
         // get double occupancy price for today
         // room availability
         foreach($properties as $key => $property)
