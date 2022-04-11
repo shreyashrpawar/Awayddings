@@ -1,0 +1,85 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\PreBookingSummary;
+use Illuminate\Http\Request;
+
+class PreBookingSummaryController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        //
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\PreBookingSummary  $preBookingSummary
+     * @return \Illuminate\Http\Response
+     */
+    public function show(PreBookingSummary $preBookingSummary)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\PreBookingSummary  $preBookingSummary
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(PreBookingSummary $preBookingSummary)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\PreBookingSummary  $preBookingSummary
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, PreBookingSummary $preBookingSummary)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\PreBookingSummary  $preBookingSummary
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(PreBookingSummary $preBookingSummary)
+    {
+        //
+    }
+}
