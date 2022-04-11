@@ -20,8 +20,10 @@ class CreatePreBookingSummariesTable extends Migration
             $table->date('check_in');
             $table->date('check_out');
             $table->double('total_amount');
+            $table->double('budget');
             $table->string('remarks');
             $table->integer('status');
+            $table->integer('pax');
             $table->softDeletes();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');

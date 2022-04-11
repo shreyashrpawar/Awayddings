@@ -14,7 +14,8 @@ class PreBookingSummaryController extends Controller
      */
     public function index()
     {
-        //
+        $booking_summary = PreBookingSummary::orderby('id','DESC')->paginate(50);
+        return view('app.prebooking.index',compact('booking_summary'));
     }
 
     /**

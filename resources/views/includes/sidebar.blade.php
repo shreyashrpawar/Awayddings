@@ -23,6 +23,21 @@
                 </ul>
             </div>
         </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-toggle="collapse" href="#booking">
+                <i class="mdi mdi-seat-individual-suite menu-icon"></i>
+                <span class="menu-title">Bookings</span>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="booking" style="">
+                <ul class="nav flex-column sub-menu">
+                    @can('pre-booking show')
+                        <li class="nav-item"> <a class="nav-link" href="{{ route('pre-bookings.index') }}">Pre Bookings</a></li>
+                    @endcan
+
+                </ul>
+            </div>
+        </li>
         @can('user show')
         <li class="nav-item">
             <a class="nav-link" href="{{ route('users.index') }}">
