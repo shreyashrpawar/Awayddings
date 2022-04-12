@@ -10,4 +10,15 @@ class PreBookingDetails extends Model
 {
     use HasFactory,SoftDeletes;
 
+    protected  $fillable = [
+        'pre_booking_summaries_id',
+        'date',
+        'hotel_chargable_type_id',
+        'threshold',
+        'rate',
+        'qty',
+    ];
+
+
+
 }

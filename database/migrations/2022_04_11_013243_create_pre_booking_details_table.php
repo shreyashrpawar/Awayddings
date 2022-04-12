@@ -20,6 +20,7 @@ class CreatePreBookingDetailsTable extends Migration
             $table->unsignedBigInteger('hotel_chargable_type_id');
             $table->double('rate');
             $table->integer('qty');
+            $table->double('threshold');
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('pre_booking_summaries_id')->references('id')->on('pre_booking_summaries');

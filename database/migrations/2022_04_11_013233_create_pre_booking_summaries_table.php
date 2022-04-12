@@ -21,7 +21,8 @@ class CreatePreBookingSummariesTable extends Migration
             $table->date('check_out');
             $table->double('total_amount');
             $table->double('budget');
-            $table->string('remarks');
+            $table->string('user_remarks')->nullable();
+            $table->string('admin_remarks')->nullable();
             $table->integer('status');
             $table->integer('pax');
             $table->softDeletes();
