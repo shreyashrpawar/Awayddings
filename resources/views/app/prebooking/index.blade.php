@@ -20,8 +20,9 @@
                         <th>Property</th>
                         <th>Check In</th>
                         <th>Check Out</th>
+                        <th>PAX</th>
                         <th>Client Budget</th>
-                        <th>Amount</th>
+
                         <th>Status</th>
                         <th width="10%">Actions</th>
                     </tr>
@@ -32,37 +33,30 @@
                             <tr>
                                 <th>{{ 1+ $key }}</th>
                                 <td>
-                                    <img src="{{ $val->featured_image }}" alt="" width="50px" height="50px">
+                                    {{ $val->user->name }}
                                 </td>
-                                <td>{{ $val->name }}</td>
-                                <td>{{ $val->location->name }}</td>
+                                <td>{{ $val->property->name }}</td>
+                                <td>{{ $val->check_in->format('d-m-Y') }}</td>
+                                <td>{{ $val->check_out->format('d-m-Y') }}</td>
+                                <td>{{ $val->pax }}</td>
+                                <td>{{ $val->budget }}</td>
                                 <td>
-                                    @if($val->status == 0)
-                                        <span class="badge badge-danger">Inactive</span>
-                                    @else
-                                        <span class="badge badge-success">Active</span>
-
+                                    @if($val->status == 1)
+                                        <span class="badge badge-warning">New</span>
+                                    @elseif($val->status == 2)
+                                        <span class="badge badge-info">Cancelled</span>
+                                    @elseif($val->status == 3)
+                                            <span class="badge badge-success">Accepted</span>
+                                    @elseif($val->status == 4)
+                                        <span class="badge badge-danger">Rejected</span>
                                     @endif
                                 </td>
                                 <td>
                                     <div class="btn-group">
                                         @can('property show')
-                                            <a href="{{ route('property.show',$val->id) }}" class="btn btn-sm btn-outline-primary">View</a>
-                                        @endcan
-                                        @can('property update')
-                                            <a href="{{ route('property.edit',$val->id) }}" class="btn btn-sm btn-outline-warning">Edit</a>
-                                        @endcan
-                                        @can('property rate')
-                                            <a href="{{ route('rate.show',$val->id) }}" class="btn btn-sm btn-outline-info">Rates</a>
+                                            <a href="{{ route('pre-bookings.show',$val->id) }}" class="btn btn-sm btn-outline-primary">View</a>
                                         @endcan
 
-                                        @can('property status')
-                                            @if($val->status == 0)
-                                                <button class="btn btn-sm btn-outline-success activeButton" value="{{ $val->id }}" >Enable</button>
-                                            @else
-                                                <button class="btn btn-sm btn-outline-danger inactiveButton" value="{{ $val->id }}" >Disable</button>
-                                            @endif
-                                        @endcan
                                     </div>
 
                                 </td>

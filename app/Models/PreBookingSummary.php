@@ -21,5 +21,12 @@ class PreBookingSummary extends Model
         'status',
         'pax',
     ];
+    protected $dates = ['check_in','check_out'];
+    public function user(){
+        return $this->belongsTo('App\Models\User');
+    }
+    public function property(){
+        return $this->belongsTo('App\Models\Property');
+    }
 
 }
