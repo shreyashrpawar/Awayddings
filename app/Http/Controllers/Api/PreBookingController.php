@@ -39,7 +39,6 @@ class PreBookingController extends Controller
                 'user_remarks' => $user_remark,
                 'status' => 1
         ];
-//      return $temp_data;
       try {
              $pre_booking_summary = PreBookingSummary::create($temp_data);
 
@@ -70,8 +69,12 @@ class PreBookingController extends Controller
               }
           }
       }
+          DB::commit();
+        return response()->json([
+           'success' => true,
+           'message' => 'Successfully Saved'
+        ]);
 
-        DB::commit();
       } catch (\Exception $e) {
           DB::rollback();
           return $e;
