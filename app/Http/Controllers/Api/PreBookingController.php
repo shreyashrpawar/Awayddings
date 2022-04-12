@@ -45,7 +45,7 @@ class PreBookingController extends Controller
       foreach($details as $key => $val){
           $date = $val['date'];
           foreach($val['data'] as $key1 => $data){
-              $temp_qty = $data['qty'];
+              $temp_qty = $data['selectedQty'];
               if($temp_qty > 0) {
                   $temp_chargable_type_id = $data['chargable_type_id'];
                   $temp_qty = $data['selectedQty'];
