@@ -48,7 +48,7 @@ class PreBookingController extends Controller
               $temp_qty = $data['qty'];
               if($temp_qty > 0) {
                   $temp_chargable_type_id = $data['chargable_type_id'];
-                  $temp_qty = $data['qty'];
+                  $temp_qty = $data['selectedQty'];
                   $rate = $data['rate'];
                   $temp_percentage_occupancy = $data['percentage_occupancy'];
                   $temp_data = [
