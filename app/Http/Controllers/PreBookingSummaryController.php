@@ -45,9 +45,17 @@ class PreBookingSummaryController extends Controller
      * @param  \App\Models\PreBookingSummary  $preBookingSummary
      * @return \Illuminate\Http\Response
      */
-    public function show(PreBookingSummary $preBookingSummary)
+    public function show($id)
     {
-        //
+        $summary = PreBookingSummary::with(['user','property','pre_booking_details','pre_booking_details.hotel_chargable_type'])
+            ->find($id);
+
+       return response()->json([
+           'success' => true,
+           'message' => 'Success',
+           'data' => $summary
+       ]);
+
     }
 
     /**

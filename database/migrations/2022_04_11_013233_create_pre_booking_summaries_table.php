@@ -24,10 +24,13 @@ class CreatePreBookingSummariesTable extends Migration
             $table->string('user_remarks')->nullable();
             $table->string('admin_remarks')->nullable();
             $table->integer('status');
+            $table->unsignedBigInteger('pre_booking_summary_status_id');
             $table->integer('pax');
             $table->softDeletes();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('pre_booking_summary_status_id')->references('id')->on('pre_booking_summary_statuses');
+
             $table->foreign('property_id')->references('id')->on('properties');
         });
     }

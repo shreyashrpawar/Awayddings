@@ -251,7 +251,7 @@ class PropertyController extends Controller
                         ->join('property_default_rates','property_default_rates.property_id','=','properties.id')
                         ->where('properties.id', $property_id)
                         ->where('properties.status',1)
-                        ->select('properties.id','properties.name','properties.featured_image','properties.description','locations.name as location')
+                        ->select('properties.id','properties.name','properties.featured_image','properties.description','locations.name as location','total_rooms')
                         ->first();
     // get date range
     $dateRange              = CarbonPeriod::create($start_date, $end_date);
@@ -348,8 +348,9 @@ class PropertyController extends Controller
         'success' => true,
         'message' => 'SUCCESS',
         'data' =>  [
+               'total_rooms' => $properties->total_rooms,
                 'best_budget_plan' => $best_budget_plan,
-//                'mid_budget_plan' => $mid_budget_plan,
+//               'mid_budget_plan' => $mid_budget_plan,
                 'comfortable_budget_plan' => $comfortable_budget_plan,
                 'double_occupancy_rate' =>  $double_room_rate_avg,
                 'triple_occupancy_rate' => $triple_room_rate_avg,
@@ -392,6 +393,7 @@ class PropertyController extends Controller
 
       $dateRange              = CarbonPeriod::create($check_in, $check_out);
 
+      $propertDetails = Property::find($property_id);
       $property_chargable_items =
           PropertyDefaultRate::with('hotel_charagable_type')
              ->where('property_id',$property_id)
@@ -413,6 +415,7 @@ class PropertyController extends Controller
               if($propertyRate)
               {
                   $temp_data1 = [
+                      'total_rooms' => $propertDetails->total_rooms,
                       'date' => $date->format('d-m-Y'),
                       'chargable_type_id' => $val->hotel_charagable_type_id,
                       'chargable_type_details' => $val->hotel_charagable_type->name,
@@ -422,6 +425,7 @@ class PropertyController extends Controller
                   ];
               }else{
                   $temp_data1 = [
+                      'total_rooms' => $propertDetails->total_rooms,
                       'date' => $date->format('d-m-Y'),
                       'chargable_type_id' => $val->hotel_charagable_type_id,
                       'chargable_type_details' => $val->hotel_charagable_type->name,
@@ -435,7 +439,11 @@ class PropertyController extends Controller
           array_push($property_rates,$temp_data);
       }
 
-      return response()->json($property_rates);
+      return response()->json([
+          'success' => true,
+          'message' => 'Success',
+          'data' => $property_rates
+      ]);
 
 
 

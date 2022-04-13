@@ -28,5 +28,8 @@ class PreBookingSummary extends Model
     public function property(){
         return $this->belongsTo('App\Models\Property');
     }
+    public function pre_booking_details(){
+        return $this->hasMany('App\Models\PreBookingDetails','pre_booking_summaries_id','id');
+    }
 
 }

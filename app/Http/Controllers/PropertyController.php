@@ -92,9 +92,12 @@ class PropertyController extends Controller
 
             if(count($request->property_charges) > 0 ) {
                 foreach ($request->property_charges as $charges) {
+                    // double occupancy
                     if ($charges['category_id'] == 1) {
+                        $propertyDetails->update(['total_rooms' => $request->total_rooms]);
                         $qty = $request->total_rooms;
                         $occupancy_threshold = 100;
+                   // triple occupancy
                     } elseif ($charges['category_id'] == 2) {
                         $qty = $request->triple_occupancy_rooms;
                         $occupancy_threshold = 100;
@@ -296,8 +299,10 @@ class PropertyController extends Controller
                 foreach ($request->property_charges as $charges) {
                     Log::info($charges);
                     if ($charges['category_id'] == 1) {
+
                         $qty = $request->total_rooms;
                         $occupancy_threshold = 100;
+                        $property->update(['total_rooms' => $request->total_rooms]);
                     } elseif ($charges['category_id'] == 2) {
                         $qty = $request->triple_occupancy_rooms;
                         $occupancy_threshold = 100;

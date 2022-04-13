@@ -81,4 +81,18 @@ class PreBookingController extends Controller
       }
 
     }
+
+    public function show(Request  $request){
+        $user = auth()->user();
+        $user_id = $user->id;
+        $summary = PreBookingSummary::with(['user','property','pre_booking_details','pre_booking_details.hotel_chargable_type'])
+                    ->where('user_id',$user_id)
+                    ->paginate(50);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Success',
+            'data' => $summary
+        ]);
+    }
 }

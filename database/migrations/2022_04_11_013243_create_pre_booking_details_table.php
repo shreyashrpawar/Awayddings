@@ -34,6 +34,7 @@ class CreatePreBookingDetailsTable extends Migration
      */
     public function down()
     {
+
         Schema::dropIfExists('pre_booking_details');
     }
 }

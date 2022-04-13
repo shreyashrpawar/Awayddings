@@ -24,7 +24,8 @@ class DatabaseSeeder extends Seeder
             RoomInclusionSeeder::class,
             LocationSeeder::class,
             PermissionSeeder::class,
-            RolePermissionSeeder::class
+            RolePermissionSeeder::class,
+            PrebookingStatusSeeder::class
         ]);
     }
 }
