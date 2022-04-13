@@ -29,5 +29,6 @@ Route::prefix('v1')->group(function () {
     Route::get('properties/{id}/budget-calculator',[\App\Http\Controllers\Api\PropertyController::class,'getPropertyDetails']);
     Route::group(['middleware' => ['jwt.verify']], function() {
         Route::post('pre-booking',[\App\Http\Controllers\Api\PreBookingController::class,'submit']);
+        Route::get('pre-booking',[\App\Http\Controllers\Api\PreBookingController::class,'index']);
     });
 });

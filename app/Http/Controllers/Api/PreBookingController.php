@@ -37,7 +37,8 @@ class PreBookingController extends Controller
                 'pax' => $adults,
                 'property_id' => $property_id,
                 'user_remarks' => $user_remark,
-                'status' => 1
+                'status' => 1,
+                'pre_booking_summary_status_id' => 1
         ];
       try {
              $pre_booking_summary = PreBookingSummary::create($temp_data);
@@ -82,10 +83,10 @@ class PreBookingController extends Controller
 
     }
 
-    public function show(Request  $request){
+    public function index(Request  $request){
         $user = auth()->user();
         $user_id = $user->id;
-        $summary = PreBookingSummary::with(['user','property','pre_booking_details','pre_booking_details.hotel_chargable_type'])
+        $summary = PreBookingSummary::with(['user','pre_booking_summary_status','property','pre_booking_details','pre_booking_details.hotel_chargable_type'])
                     ->where('user_id',$user_id)
                     ->paginate(50);
 

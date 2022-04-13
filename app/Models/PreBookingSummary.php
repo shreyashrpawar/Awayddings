@@ -20,6 +20,7 @@ class PreBookingSummary extends Model
         'admin_remarks',
         'status',
         'pax',
+        'pre_booking_summary_status_id'
     ];
     protected $dates = ['check_in','check_out'];
     public function user(){
@@ -30,6 +31,10 @@ class PreBookingSummary extends Model
     }
     public function pre_booking_details(){
         return $this->hasMany('App\Models\PreBookingDetails','pre_booking_summaries_id','id');
+    }
+    public function pre_booking_summary_status(){
+        return $this->belongsTo('App\Models\PreBookingSummaryStatus','pre_booking_summary_status_id','id');
+
     }
 
 }
