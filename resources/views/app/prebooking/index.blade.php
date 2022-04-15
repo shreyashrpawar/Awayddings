@@ -41,15 +41,8 @@
                                 <td>{{ $val->pax }}</td>
                                 <td>{{ $val->budget }}</td>
                                 <td>
-                                    @if($val->status == 1)
-                                        <span class="badge badge-warning">New</span>
-                                    @elseif($val->status == 2)
-                                        <span class="badge badge-info">Cancelled</span>
-                                    @elseif($val->status == 3)
-                                            <span class="badge badge-success">Accepted</span>
-                                    @elseif($val->status == 4)
-                                        <span class="badge badge-danger">Rejected</span>
-                                    @endif
+                                    <span class="badge badge-pill badge-info text-uppercase">{{ $val->pre_booking_summary_status->name }}</span>
+
                                 </td>
                                 <td>
                                     <div class="btn-group">

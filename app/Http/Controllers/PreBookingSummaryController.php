@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PreBookingSummary;
+use App\Models\PreBookingSummaryStatus;
 use Illuminate\Http\Request;
 
 class PreBookingSummaryController extends Controller
@@ -47,14 +48,15 @@ class PreBookingSummaryController extends Controller
      */
     public function show($id)
     {
-        $summary = PreBookingSummary::with(['user','property','pre_booking_details','pre_booking_details.hotel_chargable_type'])
+        $summary = PreBookingSummary::with(['user','property','pre_booking_details','pre_booking_details.hotel_chargable_type','pre_booking_summary_status'])
             ->find($id);
-
-       return response()->json([
-           'success' => true,
-           'message' => 'Success',
-           'data' => $summary
-       ]);
+        $pre_booking_summary_status = PreBookingSummaryStatus::pluck('name','id')->all();
+       return view('app.prebooking.show',compact('summary','pre_booking_summary_status'));
+//       return response()->json([
+//           'success' => true,
+//           'message' => 'Success',
+//           'data' => $summary
+//       ]);
 
     }
 

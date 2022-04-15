@@ -401,6 +401,7 @@ class PropertyController extends Controller
              ->get();
 
 
+
       $property_rates = [];
 
       foreach($dateRange as $date) {
@@ -411,7 +412,7 @@ class PropertyController extends Controller
           foreach($property_chargable_items as $key => $val){
               $propertyRate =  PropertyRate::where('property_id',$property_id)
                             ->where('hotel_chargable_type_id',$val->hotel_charagable_type_id)
-                            ->first();
+                              ->first();
               if($propertyRate)
               {
                   $temp_data1 = [
@@ -434,6 +435,7 @@ class PropertyController extends Controller
                       'percentage_occupancy' => $val->chargable_percentage
                   ];
               }
+
               array_push($temp_data['data'],$temp_data1);
           }
           array_push($property_rates,$temp_data);
