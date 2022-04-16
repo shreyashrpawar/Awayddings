@@ -82,6 +82,7 @@ class PropertyController extends Controller
                 'location_id' => $request->location_id,
                 'gmap_embedded_code' => $request->google_embedded_url,
                 'featured_image' => $request->cover_image,
+                'wedding_planning_decoration_budget' => $request->wedding_planning_decoration_budget,
                 'status' => 0
             ];
             DB::beginTransaction();
@@ -289,7 +290,8 @@ class PropertyController extends Controller
                 'alias_name' => $request->name,
                 'location_id' => $request->location_id,
                 'gmap_embedded_code' => $request->google_embedded_url,
-                'featured_image' => $request->cover_image
+                'featured_image' => $request->cover_image,
+                'wedding_planning_decoration_budget' => $request->wedding_planning_decoration_budget
             ];
             DB::beginTransaction();
             $propertyDetails = $property->update($property_basic_details);

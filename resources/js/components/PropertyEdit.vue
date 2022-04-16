@@ -262,6 +262,12 @@
 
                                             </div>
                                         </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="wedding_planning_decoration_budget">Wedding Planning & Decoration budget</label>
+                                                <input type="number" class="form-control" id="wedding_planning_decoration_budget" v-model="form.wedding_planning_decoration_budget" required>
+                                            </div>
+                                        </div>
 
                                     </div>
                                 </section>
@@ -288,7 +294,7 @@ export default {
                 location_id: '',
                 cover_image: '',
                 google_embedded_url: '',
-
+                wedding_planning_decoration_budget:'',
                 images: [],
                 videos: [],
                 total_rooms: 0,

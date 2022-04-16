@@ -18,6 +18,7 @@ class Property extends Model
         'address',
         'total_rooms',
         'gmap_embedded_code',
+        'wedding_planning_decoration_budget',
         'status',
     ];
 
