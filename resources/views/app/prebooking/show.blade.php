@@ -142,8 +142,11 @@
 
                 <!-- Modal body -->
                 <div class="modal-body">
-                    <form action="">
-
+                    <form action="{{ route('pre-bookings.update',$summary->id) }}" method="POST">
+                        @csrf
+                        @method('put')
+                        <input type="hidden" name="pre_booking_id" value="{{ $summary->id }}">
+                        <input type="hidden" name="selected_status" id="selected_status" value="{{ $summary->id }}">
                         <div class="form-group">
                             <label for="">
                                 User Budget
@@ -154,7 +157,7 @@
                             <label for="">
                                 Final Amount
                             </label>
-                            <input type="text" class="form-control" value="{{ $total }}">
+                            <input type="text" class="form-control" name="final_amount" value="{{ $total }}">
                         </div>
                         <div class="form-group">
                             <label for="">
@@ -179,7 +182,9 @@
             let current_val = $(this).val();
             let old_val = {{ $summary->pre_booking_summary_status_id  }};
             if(current_val != old_val){
-                $('#myModal').modal('show')
+                $('#myModal').modal('show');
+                $('#selected_status').val(current_val);
+
             }
 
         })

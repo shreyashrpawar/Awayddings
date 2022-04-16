@@ -80,7 +80,49 @@ class PreBookingSummaryController extends Controller
      */
     public function update(Request $request, PreBookingSummary $preBookingSummary)
     {
-        //
+        //  "_token": "uEjwXdGoiWtOM6AigD3hop1d6mRIcHKwzV4RD72x",
+        //"_method": "put",
+        //"pre_booking_id": "2",
+        //"selected_status": "2",
+        //"final_amount": "2145000",
+        //"admin_remark": "ss"
+        //}
+        $status = $request->selected_status;
+        $pre_booking_id = $request->pre_booking_id;
+        $amount = $request->final_amount;
+        $admin_remarks = $request->admin_remark;
+
+        $current_status = PreBookingSummaryStatus::find($pre_booking_id);
+        $pre_booking_summary = PreBookingSummary::find($pre_booking_id);
+        if($current_status == 'approved'){
+            // create a record in the booking
+
+            $pre_booking_summary->update([
+                'pre_booking_summary_status_id' => $status,
+                'admin_remarks' => $admin_remarks
+            ]);
+            $request->session()->flash('success','Successfully Updated');
+            return redirect(route('pre-bookings.index'));
+        }else{
+            // update on the existing pre booking
+
+            $pre_booking_summary->update([
+                'pre_booking_summary_status_id' => $status,
+                'admin_remarks' => $admin_remarks
+            ]);
+            $request->session()->flash('success','Successfully Updated');
+            return redirect(route('pre-bookings.index'));
+
+        }
+
+
+
+
+
+
+
+
+       return $request->all();
     }
 
     /**
