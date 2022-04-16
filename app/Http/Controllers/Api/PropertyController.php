@@ -160,12 +160,29 @@ class PropertyController extends Controller
                                                         ->get();
 
 
+        $property_menus_data = PropertyMedia::with('MediaSubCategory')
+            ->where('media_category_id',3)
+            ->whereIn('media_sub_category_id',[14,15,16,17,18])
+            ->where('property_id',$id)
+            ->get();
+
+
+
         $property_images = [];
         $property_wedding_images = [];
         $property_wedding_video = '';
         $property_amenities = [];
         $property_room_inclusions = [];
         $property_menus = [];
+
+        foreach($property_menus_data as $key => $val){
+            $temp_data =[
+                'category' => $val->MediaSubCategory->name,
+                'url' => $val->media_url,
+            ];
+            array_push($property_menus,$temp_data);
+        }
+
 
         foreach($properties_images as $key => $val){
             $temp_data =[
@@ -200,15 +217,13 @@ class PropertyController extends Controller
             array_push($property_room_inclusions,$temp_data);
         }
 
-        foreach($wedding_video as $key => $val){
-            $property_wedding_video = $val->media_url;
-        }
 
         $properties->images = $property_images;
         $properties->wedding_images = $property_wedding_images;
         $properties->wedding_video  = $property_wedding_video;
         $properties->amenities  = $property_amenities;
         $properties->room_inclusion  = $property_room_inclusions;
+        $properties->property_menus = $property_menus;
 
         //
         $properties->double_occupancy_rate  = PropertyDefaultRate::where('property_id',$id)
