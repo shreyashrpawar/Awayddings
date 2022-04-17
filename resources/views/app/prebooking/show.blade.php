@@ -119,7 +119,7 @@
                         </p>
                     </div>
                     <div>
-                        <label for="" class="font-weight-bold">Admin Remarks</label>
+                        <label for="" class="font-weight-bold">Internal Remarks</label>
                         <p>
 
                             {{ $summary->admin_remarks }}
@@ -130,23 +130,23 @@
 
         </div>
     </div>
-    <div class="modal" id="myModal">
+    <div class="modal" id="confirmationModal">
         <div class="modal-dialog">
             <div class="modal-content">
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h4 class="modal-title"> Pre Booking status change</h4>
+                    <h4 class="modal-title">Pre Booking Confirmation</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
                 <!-- Modal body -->
                 <div class="modal-body">
-                    <form action="{{ route('pre-bookings.update',$summary->id) }}" method="POST">
+                    <form action="{{ route('pre-bookings.update',$summary->id) }}" id="ConfirmBookingForm" method="POST">
                         @csrf
                         @method('put')
                         <input type="hidden" name="pre_booking_id" value="{{ $summary->id }}">
-                        <input type="hidden" name="selected_status" id="selected_status" value="{{ $summary->id }}">
+                        <input type="hidden" name="selected_status" class="selected_status" value="{{ $summary->id }}">
                         <div class="form-group">
                             <label for="">
                                 User Budget
@@ -157,15 +157,121 @@
                             <label for="">
                                 Final Amount
                             </label>
-                            <input type="text" class="form-control" name="final_amount" value="{{ $total }}">
+                            <input type="text" class="form-control" name="final_amount" value="{{ $total }}" readonly>
                         </div>
                         <div class="form-group">
                             <label for="">
-                                Admin Remark
+                               Additional Discounts
+                            </label>
+                            <input type="text" class="form-control" name="additional_discount" value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="">
+                                No Of Installment
+                            </label>
+                            <select name="installments" id="installments" class="form-control">
+                                <option value="">Select Installments</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="">
+                                Remark
                             </label>
                             <textarea name="admin_remark"  class="form-control"  cols="30" rows="5"></textarea>
                         </div>
-                        <button class="btn btn-sm btn-success btn-block">Confirm</button>
+                        <button class="btn btn-sm btn-success btn-block">Confirm Booking</button>
+                    </form>
+                </div>
+
+                <!-- Modal footer -->
+
+
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="rejectModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title"> Reject Pre Booking  </h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('pre-bookings.update',$summary->id) }}" id="RejectPreBookingForm" method="POST">
+                        @csrf
+                        @method('put')
+                        <input type="hidden" name="pre_booking_id" value="{{ $summary->id }}">
+                        <input type="hidden" name="selected_status" class="selected_status" value="{{ $summary->id }}">
+                        <div class="form-group">
+                            <label for="">
+                                User Budget
+                            </label>
+                            <input type="text" class="form-control" value="{{ $summary->budget }}" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="">
+                                Final Amount
+                            </label>
+                            <input type="text" class="form-control" name="final_amount" value="{{ $total }}" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="">
+                                Remarks
+                            </label>
+                            <textarea name="admin_remark"  class="form-control"  cols="30" rows="5" required></textarea>
+                        </div>
+                        <button class="btn btn-sm btn-success btn-block">Reject Booking</button>
+                    </form>
+                </div>
+
+                <!-- Modal footer -->
+
+
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="cancelModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Cancel Booking  </h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('pre-bookings.update',$summary->id) }}" id="RejectPreBookingForm" method="POST">
+                        @csrf
+                        @method('put')
+                        <input type="hidden" name="pre_booking_id" value="{{ $summary->id }}">
+                        <input type="hidden" name="selected_status" class="selected_status" value="{{ $summary->id }}">
+                        <div class="form-group">
+                            <label for="">
+                                User Budget
+                            </label>
+                            <input type="text" class="form-control" value="{{ $summary->budget }}" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="">
+                                Final Amount
+                            </label>
+                            <input type="text" class="form-control" name="final_amount" value="{{ $total }}" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="">
+                                Remarks
+                            </label>
+                            <textarea name="admin_remark"  class="form-control"  cols="30" rows="5" required></textarea>
+                        </div>
+                        <button class="btn btn-sm btn-success btn-block">Cancel Booking</button>
                     </form>
                 </div>
 
@@ -179,12 +285,22 @@
 @section('js')
     <script>
         $('#new_status').change(function(){
-            let current_val = $(this).val();
+            let current_val = parseInt($(this).val());
             let old_val = {{ $summary->pre_booking_summary_status_id  }};
-            if(current_val != old_val){
-                $('#myModal').modal('show');
-                $('#selected_status').val(current_val);
+            $('.selected_status').val(current_val);
+            console.log(current_val);
+            console.log(old_val);
+            console.log(typeof(current_val));
+            console.log(typeof(old_val));
+            if(current_val !== old_val && current_val === 2 ) {
 
+                $('#confirmationModal').modal('show');
+            }else if(current_val !== old_val && current_val === 4 ) {
+                $('#rejectModal').modal('show');
+            }else if(current_val !== old_val && current_val === 4 ) {
+                 $('#rejectModal').modal('show');
+            }else if(current_val !== old_val && current_val === 3) {
+                $('#cancelModal').modal('show');
             }
 
         })

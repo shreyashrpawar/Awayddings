@@ -256,7 +256,6 @@ class PropertyController extends Controller
     $end_date =  Carbon::parse($request->end_date);
 
     $nights = $start_date->diffInDays($end_date);
-    $days = $nights + 1;
     $max_rooms  = ceil( $adult/2);
     $min_rooms = ceil($adult/3);
 
@@ -363,7 +362,7 @@ class PropertyController extends Controller
         'success' => true,
         'message' => 'SUCCESS',
         'data' =>  [
-               'total_rooms' => $properties->total_rooms,
+                'total_rooms' => $properties->total_rooms,
                 'best_budget_plan' => $best_budget_plan,
 //               'mid_budget_plan' => $mid_budget_plan,
                 'comfortable_budget_plan' => $comfortable_budget_plan,
@@ -397,16 +396,16 @@ class PropertyController extends Controller
   public function getPropertyDetails(Request  $request){
       $property_id = $request->property_id;
       $check_in    = Carbon::parse($request->check_in);
-      $check_out   = Carbon::parse($request->check_out);
+      $check_out   =  Carbon::parse($request->check_out);
+      $temp_checkout_date = $check_out->subDay();
       $adults      = $request->adults;
 
       $nights      = $check_in->diffInDays($check_out);
       $days        = $nights + 1;
-
       $max_rooms  = ceil( $adults/2);
       $min_rooms  = ceil($adults/3);
 
-      $dateRange              = CarbonPeriod::create($check_in, $check_out);
+      $dateRange              = CarbonPeriod::create($check_in, $temp_checkout_date);
 
       $propertDetails = Property::find($property_id);
       $property_chargable_items =

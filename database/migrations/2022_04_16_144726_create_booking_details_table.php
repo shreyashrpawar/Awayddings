@@ -15,6 +15,12 @@ class CreateBookingDetailsTable extends Migration
     {
         Schema::create('booking_details', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('booking_summaries_id');
+            $table->date('date');
+            $table->unsignedBigInteger('hotel_chargable_type_id');
+            $table->double('rate');
+            $table->integer('qty');
+            $table->double('threshold');
             $table->timestamps();
         });
     }
