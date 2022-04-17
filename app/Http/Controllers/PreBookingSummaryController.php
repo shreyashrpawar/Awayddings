@@ -81,14 +81,15 @@ class PreBookingSummaryController extends Controller
      */
     public function update(Request $request, PreBookingSummary $preBookingSummary)
     {
-        return $request->all();
+
         $status = $request->selected_status;
         $pre_booking_id = $request->pre_booking_id;
-        $amount = $request->final_amount;
         $admin_remarks = $request->admin_remark;
 
         $current_status      = PreBookingSummaryStatus::find($pre_booking_id);
         $pre_booking_summary = PreBookingSummary::find($pre_booking_id);
+
+
         if($current_status == 'approved'){
             // create a record in the booking
             $additional_discount = $request->additional_discount;
@@ -110,11 +111,12 @@ class PreBookingSummaryController extends Controller
             $installment_details = $this->calculateInstallments($pre_booking_summary,$installments,$total_amount);
             return $installment_details;
             // booking
+            $booking_summary =  Bookingsummary::create($booking_data);
             // booking details
 
             // booking payment
             $booking_payment_details = [
-                'booking_id' => $booking->id,
+                'booking_id' => $booking_summary->id,
                 'installment_no' => $installments,
                 'amount' => $total_amount,
                 'status' => 1

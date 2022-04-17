@@ -66,8 +66,8 @@ class PropertyController extends Controller
       ]);
   }
   public function searchProperty(Request  $request){
-        $adults          =  $request->adults;
-        $location_id     =  $request->location_id;
+      $adults          =  $request->adults;
+     $location_id     =  $request->location_id;
       $start_date = Carbon::parse($request->start_date);
       $end_date =  Carbon::parse($request->end_date);
       $nights = $start_date->diffInDays($end_date);
@@ -88,7 +88,7 @@ class PropertyController extends Controller
                                 ->select('properties.id','properties.name','properties.address','properties.featured_image','properties.description','locations.name as location',
                                     'property_default_rates.amount','property_default_rates.qty')
                                 ->inRandomOrder()
-                                ->simplePaginate(1);
+                                ->simplePaginate(20);
         // get double occupancy price for today
         // room availability
         foreach($properties as $key => $property)
