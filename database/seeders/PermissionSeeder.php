@@ -19,6 +19,7 @@ class PermissionSeeder extends Seeder
             'property show',
             'property update',
             'property rate',
+            'property status',
             'property_vendor show',
             'property_vendor create',
             'property_vendor update',
@@ -35,6 +36,8 @@ class PermissionSeeder extends Seeder
             'room_inclusion create',
             'room_inclusion show',
             'room_inclusion update',
+            'pre-booking show',
+            'pre-booking update',
         ];
         foreach($data as $val){
             $media = Permission::create([

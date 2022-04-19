@@ -82,6 +82,7 @@ class PropertyController extends Controller
                 'location_id' => $request->location_id,
                 'gmap_embedded_code' => $request->google_embedded_url,
                 'featured_image' => $request->cover_image,
+                'wedding_planning_decoration_budget' => $request->wedding_planning_decoration_budget,
                 'status' => 0
             ];
             DB::beginTransaction();
@@ -92,9 +93,12 @@ class PropertyController extends Controller
 
             if(count($request->property_charges) > 0 ) {
                 foreach ($request->property_charges as $charges) {
+                    // double occupancy
                     if ($charges['category_id'] == 1) {
+                        $propertyDetails->update(['total_rooms' => $request->total_rooms]);
                         $qty = $request->total_rooms;
                         $occupancy_threshold = 100;
+                   // triple occupancy
                     } elseif ($charges['category_id'] == 2) {
                         $qty = $request->triple_occupancy_rooms;
                         $occupancy_threshold = 100;
@@ -246,7 +250,7 @@ class PropertyController extends Controller
                 ->where('vendor_id',$vendor_id)
                 ->firstOrfail();
         }
-        
+
         $images_video_categories = MediaSubCategory::where('status', 1)->where('media_category_id', 1)->pluck('name', 'id')->all();
         $video_categories = MediaSubCategory::where('status', 1)->where('media_category_id', 2)->pluck('name', 'id')->all();
         $menu_sub_categories = MediaSubCategory::where('status', 1)->where('media_category_id', 3)->pluck('name', 'id')->all();
@@ -287,7 +291,7 @@ class PropertyController extends Controller
                 'location_id' => $request->location_id,
                 'gmap_embedded_code' => $request->google_embedded_url,
                 'featured_image' => $request->cover_image,
-                'status' => 0
+                'wedding_planning_decoration_budget' => $request->wedding_planning_decoration_budget
             ];
             DB::beginTransaction();
             $propertyDetails = $property->update($property_basic_details);
@@ -297,8 +301,10 @@ class PropertyController extends Controller
                 foreach ($request->property_charges as $charges) {
                     Log::info($charges);
                     if ($charges['category_id'] == 1) {
+
                         $qty = $request->total_rooms;
                         $occupancy_threshold = 100;
+                        $property->update(['total_rooms' => $request->total_rooms]);
                     } elseif ($charges['category_id'] == 2) {
                         $qty = $request->triple_occupancy_rooms;
                         $occupancy_threshold = 100;

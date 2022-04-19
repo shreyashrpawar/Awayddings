@@ -1,7 +1,6 @@
 @extends('layouts.app')
 @section('title','Home Page')
 @section('contents')
-
        <div class="card">
            <div class="card-body">
                <h5 class="text-uppercase mb-2">{{ $data->name }}</h5>
@@ -14,9 +13,6 @@
                        <iframe src="{{ $data->gmap_embedded_code }}" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                        <p class="font-weight-bold text-center">Google Map</p>
                    </div>
-
-
-
                        <div class="col-md-4">
                            @foreach($data->videos  as $key => $video)
 
@@ -46,6 +42,8 @@
                        <td>{{ $data->location->name }}</td>
                        <th>Address</th>
                        <td>{{ $data->address }}</td>
+                       <th>Wedding Planning Decoration Budget</th>
+                       <td>{{ $data->wedding_planning_decoration_budget }}</td>
                    </tr>
 
 

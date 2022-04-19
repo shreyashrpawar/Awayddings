@@ -25,6 +25,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('property/media',[App\Http\Controllers\PropertyController::class,'deletePropertyMedia']);
     Route::post('property/status',[App\Http\Controllers\PropertyController::class,'updatePropertyStatus']);
     Route::resource('property',App\Http\Controllers\PropertyController::class);
+    Route::resource('pre-bookings',App\Http\Controllers\PreBookingSummaryController::class);
     Route::resource('vendors',App\Http\Controllers\VendorController::class);
     Route::get('property/vendor/{vendor_id}/associate',[App\Http\Controllers\VendorController::class,'showPropertyVendorAssociationPage']);
     Route::post('property/vendor/{vendor_id}/associate',[App\Http\Controllers\VendorController::class,'submitPropertyVendorAssociationForm']);

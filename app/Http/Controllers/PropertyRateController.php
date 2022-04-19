@@ -136,6 +136,7 @@ class PropertyRateController extends Controller
      */
     public function show($id,Request  $request)
     {
+
         $user = $request->user();
         $roles = $user->getRoleNames();
         if (in_array("vendor", $roles->toArray())){
@@ -157,7 +158,7 @@ class PropertyRateController extends Controller
 
         $dateRange              = CarbonPeriod::create($start_date, $end_date);
         $property_default_rates = PropertyDefaultRate::where('property_id',$id)
-                                    ->whereIn('id',[1,2])
+                                    ->whereIn('hotel_charagable_type_id',[1,2])
                                     ->get();
 
         $property_rates = [];

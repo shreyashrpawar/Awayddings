@@ -5,10 +5,10 @@
         <div class="card-body">
             <div class="row form-group">
                 <div class="col-md-6">
-                    <h4 class="card-title text-uppercase">Property List</h4>
+                    <h4 class="card-title text-uppercase">Pre Booking List</h4>
                 </div>
                 <div class="col-md-6 text-right">
-                    <a href="{{ route('property.create') }}" class="btn btn-sm btn-primary">Add</a>
+{{--                    <a href="{{ route('property.create') }}" class="btn btn-sm btn-primary">Add</a>--}}
                 </div>
             </div>
             <div class="table-responsive">
@@ -16,50 +16,40 @@
                     <thead class="thead-dark">
                     <tr>
                         <th width="5%">#</th>
-                        <th>Image</th>
-                        <th>Name</th>
-                        <th>Location</th>
+                        <th>User</th>
+                        <th>Property</th>
+                        <th>Check In</th>
+                        <th>Check Out</th>
+                        <th>PAX</th>
+                        <th>Client Budget</th>
+
                         <th>Status</th>
                         <th width="10%">Actions</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @if($properties->count() > 0)
-                        @foreach($properties as $key => $val)
+                    @if($booking_summary->count() > 0)
+                        @foreach($booking_summary as $key => $val)
                             <tr>
                                 <th>{{ 1+ $key }}</th>
                                 <td>
-                                    <img src="{{ $val->featured_image }}" alt="" width="50px" height="50px">
+                                    {{ $val->user->name }}
                                 </td>
-                                <td>{{ $val->name }}</td>
-                                <td>{{ $val->location->name }}</td>
+                                <td>{{ $val->property->name }}</td>
+                                <td>{{ $val->check_in->format('d-m-Y') }}</td>
+                                <td>{{ $val->check_out->format('d-m-Y') }}</td>
+                                <td>{{ $val->pax }}</td>
+                                <td>{{ $val->budget }}</td>
                                 <td>
-                                    @if($val->status == 0)
-                                        <span class="badge badge-danger">Inactive</span>
-                                    @else
-                                        <span class="badge badge-success">Active</span>
+                                    <span class="badge badge-pill badge-info text-uppercase">{{ $val->pre_booking_summary_status->name }}</span>
 
-                                    @endif
                                 </td>
                                 <td>
                                     <div class="btn-group">
                                         @can('property show')
-                                        <a href="{{ route('property.show',$val->id) }}" class="btn btn-sm btn-outline-primary">View</a>
-                                        @endcan
-                                        @can('property update')
-                                        <a href="{{ route('property.edit',$val->id) }}" class="btn btn-sm btn-outline-warning">Edit</a>
-                                        @endcan
-                                        @can('property rate')
-                                        <a href="{{ route('rate.show',$val->id) }}" class="btn btn-sm btn-outline-info">Rates</a>
+                                            <a href="{{ route('pre-bookings.show',$val->id) }}" class="btn btn-sm btn-outline-primary">View</a>
                                         @endcan
 
-                                        @can('property status')
-                                            @if($val->status == 0)
-                                                <button class="btn btn-sm btn-outline-success activeButton" value="{{ $val->id }}" >Enable</button>
-                                            @else
-                                                <button class="btn btn-sm btn-outline-danger inactiveButton" value="{{ $val->id }}" >Disable</button>
-                                            @endif
-                                        @endcan
                                     </div>
 
                                 </td>
@@ -68,8 +58,7 @@
                         @endforeach
                     @else
                         <tr>
-                            <td colspan="5" class="text-center">No Result Found</td>
-
+                            <td colspan="9" class="text-center">No Result Found</td>
                         </tr>
                     @endif
 
@@ -98,7 +87,7 @@
                 },
                 type: 'POST',
                 success:function(resp){
-                   location.reload();
+                    location.reload();
                 }
             })
         })
@@ -106,7 +95,7 @@
         $('.inactiveButton').click(async (e) => {
             let property_id = e.target.value;
 
-             $.ajax({
+            $.ajax({
                 url: '/property/status',
                 data: {
                     property_id: property_id,
@@ -119,4 +108,4 @@
             })
         })
     </script>
-    @endsection
+@endsection
