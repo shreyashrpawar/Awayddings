@@ -31,6 +31,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('property/vendor/{vendor_id}/associate',[App\Http\Controllers\VendorController::class,'submitPropertyVendorAssociationForm']);
     Route::resource('property/rate',App\Http\Controllers\PropertyRateController::class);
     Route::post('/media',[App\Http\Controllers\MediaController::class,'upload']);
+    Route::resource('bookings',App\Http\Controllers\BookingSummaryController::class);
+
 });
 Route::prefix('settings')->middleware(['auth'])->group(function () {
     Route::resource('locations',App\Http\Controllers\Settings\LocationController::class);
@@ -46,6 +48,5 @@ Route::prefix('api')->middleware(['auth'])->group(function () {
     Route::get('menu-category',[App\Http\Controllers\MediaSubCategoryController::class,'getAllMenuCategory']);
     Route::get('property-chargable-category',[App\Http\Controllers\HotelChargableTypeController::class,'getAllPropertyChargableCategory']);
     Route::get('amenities-room-inclusion',[App\Http\Controllers\Settings\HotelAmenitiesController::class,'getAllAmenitiesRoomInclusion']);
-
 });
 

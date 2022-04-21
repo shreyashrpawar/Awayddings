@@ -27,13 +27,12 @@ class CreateBookingSummariesTable extends Migration
             $table->string('user_remarks')->nullable();
             $table->string('admin_remarks')->nullable();
             $table->integer('status');
-
             $table->softDeletes();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('property_id')->references('id')->on('properties');
             $table->foreign('pre_booking_summary_id')->references('id')->on('pre_booking_summaries');
-            $table->timestamps();
+
         });
     }
 

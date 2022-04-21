@@ -209,7 +209,7 @@
                         @csrf
                         @method('put')
                         <input type="hidden" name="pre_booking_id" value="{{ $summary->id }}">
-                        <input type="hidden" name="selected_status" class="selected_status" value="{{ $summary->id }}">
+                        <input type="hidden" name="selected_status" class="selected_status" value="">
                         <div class="form-group">
                             <label for="">
                                 User Budget
@@ -251,7 +251,7 @@
                         @csrf
                         @method('put')
                         <input type="hidden" name="pre_booking_id" value="{{ $summary->id }}">
-                        <input type="hidden" name="selected_status" class="selected_status" value="{{ $summary->id }}">
+                        <input type="hidden" name="selected_status" class="selected_status" value="">
                         <div class="form-group">
                             <label for="">
                                 User Budget
@@ -288,12 +288,7 @@
             let current_val = parseInt($(this).val());
             let old_val = {{ $summary->pre_booking_summary_status_id  }};
             $('.selected_status').val(current_val);
-            console.log(current_val);
-            console.log(old_val);
-            console.log(typeof(current_val));
-            console.log(typeof(old_val));
             if(current_val !== old_val && current_val === 2 ) {
-
                 $('#confirmationModal').modal('show');
             }else if(current_val !== old_val && current_val === 4 ) {
                 $('#rejectModal').modal('show');
@@ -302,7 +297,6 @@
             }else if(current_val !== old_val && current_val === 3) {
                 $('#cancelModal').modal('show');
             }
-
         })
     </script>
 @endsection

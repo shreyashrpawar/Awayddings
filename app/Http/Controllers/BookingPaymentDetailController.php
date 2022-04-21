@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\BookingSummary;
+use App\Models\BookingPaymentDetail;
 use Illuminate\Http\Request;
 
-class BookingSummaryController extends Controller
+class BookingPaymentDetailController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +14,7 @@ class BookingSummaryController extends Controller
      */
     public function index()
     {
-       $bookings = BookingSummary::get();
-       return view('app.bookings.index',compact('bookings'));
+        //
     }
 
     /**
@@ -42,23 +41,21 @@ class BookingSummaryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\BookingSummary  $bookingSummary
+     * @param  \App\Models\BookingPaymentDetail  $bookingPaymentDetail
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(BookingPaymentDetail $bookingPaymentDetail)
     {
-        $bookings = BookingSummary::find($id);
-
-        return view('app.bookings.show',compact('bookings'));
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\BookingSummary  $bookingSummary
+     * @param  \App\Models\BookingPaymentDetail  $bookingPaymentDetail
      * @return \Illuminate\Http\Response
      */
-    public function edit(BookingSummary $bookingSummary)
+    public function edit(BookingPaymentDetail $bookingPaymentDetail)
     {
         //
     }
@@ -67,10 +64,10 @@ class BookingSummaryController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\BookingSummary  $bookingSummary
+     * @param  \App\Models\BookingPaymentDetail  $bookingPaymentDetail
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, BookingSummary $bookingSummary)
+    public function update(Request $request, BookingPaymentDetail $bookingPaymentDetail)
     {
         //
     }
@@ -78,10 +75,10 @@ class BookingSummaryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\BookingSummary  $bookingSummary
+     * @param  \App\Models\BookingPaymentDetail  $bookingPaymentDetail
      * @return \Illuminate\Http\Response
      */
-    public function destroy(BookingSummary $bookingSummary)
+    public function destroy(BookingPaymentDetail $bookingPaymentDetail)
     {
         //
     }
