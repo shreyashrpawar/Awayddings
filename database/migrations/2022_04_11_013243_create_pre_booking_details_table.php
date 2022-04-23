@@ -24,6 +24,7 @@ class CreatePreBookingDetailsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('pre_booking_summaries_id')->references('id')->on('pre_booking_summaries');
+            $table->foreign('hotel_chargable_type_id')->references('id')->on('hotel_chargable_types');
         });
     }
 

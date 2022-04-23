@@ -123,7 +123,13 @@ class RolePermissionSeeder extends Seeder
                     [
                         'role' => 'admin',
                         'permission' =>  'pre-booking update',
+                    ],
+                    [
+                        'role' => 'admin',
+                        'permission' =>   'booking show',
                     ]
+
+
         ];
         foreach($data as $val){
             $role       = Role::where('name',$val['role'])->first();

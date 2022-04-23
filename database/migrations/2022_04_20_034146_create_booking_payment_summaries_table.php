@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBookingDetailsTable extends Migration
+class CreateBookingPaymentSummariesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,16 @@ class CreateBookingDetailsTable extends Migration
      */
     public function up()
     {
-        Schema::create('booking_details', function (Blueprint $table) {
+        Schema::create('booking_payment_summaries', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('booking_summaries_id');
-            $table->date('date');
-            $table->unsignedBigInteger('hotel_chargable_type_id');
-            $table->double('rate');
-            $table->integer('qty');
-            $table->double('threshold');
+            $table->integer('installment_no');
+            $table->double('discount')->nullable(0);
+            $table->double('amount');
+            $table->double('paid');
+            $table->double('due')->default(0);
+            $table->integer('status')->default(1)->comment('0 is inactive and 1 is active');
             $table->foreign('booking_summaries_id')->references('id')->on('booking_summaries');
-            $table->foreign('hotel_chargable_type_id')->references('id')->on('hotel_chargable_types');
             $table->timestamps();
         });
     }
@@ -34,6 +34,6 @@ class CreateBookingDetailsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('booking_details');
+        Schema::dropIfExists('booking_payment_summaries');
     }
 }

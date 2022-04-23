@@ -34,6 +34,9 @@
                     @can('pre-booking show')
                         <li class="nav-item"> <a class="nav-link" href="{{ route('pre-bookings.index') }}">Pre Bookings</a></li>
                     @endcan
+                    @can('booking show')
+                        <li class="nav-item"> <a class="nav-link" href="{{ route('bookings.index') }}">Bookings</a></li>
+                    @endcan
 
                 </ul>
             </div>
