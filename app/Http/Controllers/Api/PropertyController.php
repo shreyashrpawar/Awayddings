@@ -143,13 +143,13 @@ class PropertyController extends Controller
         //
         $wedding_images= PropertyMedia::with('MediaSubCategory')
                             ->where('media_category_id',1)
-                            ->whereIn('media_sub_category_id',[11,12])
+                            ->whereIn('media_sub_category_id',[11,18])
                             ->where('property_id',$id)
                             ->get();
 
         $wedding_video = PropertyMedia::with('MediaSubCategory')
             ->where('media_category_id',2)
-            ->whereIn('media_sub_category_id',[13])
+            ->whereIn('media_sub_category_id',[12])
             ->where('property_id',$id)
             ->get();
 
