@@ -62,7 +62,7 @@ class PropertyController extends Controller
       return response()->json([
           'success'=>true,
           'message' => 'Successfully Saved',
-          'data' => $properties
+          'data' => $properties->orderBy('amount')
       ]);
   }
   public function searchProperty(Request  $request){
@@ -107,9 +107,8 @@ class PropertyController extends Controller
                 $property->days = $days;
                 $property->pax = $adults;
             }
-
-
         }
+
 
         return response()->json([
             'success'=>true,
