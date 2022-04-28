@@ -17,6 +17,7 @@
                     <tr>
                         <th width="5%">#</th>
                         <th>User</th>
+                        <th>Phone</th>
                         <th>Property</th>
                         <th>Check In</th>
                         <th>Check Out</th>
@@ -35,6 +36,7 @@
                                 <td>
                                     {{ $val->user->name }}
                                 </td>
+                                <td>{{  $val->user->phone  }}</td>
                                 <td>{{ $val->property->name }}</td>
                                 <td>{{ $val->check_in->format('d-m-Y') }}</td>
                                 <td>{{ $val->check_out->format('d-m-Y') }}</td>

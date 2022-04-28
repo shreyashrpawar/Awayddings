@@ -62,7 +62,7 @@ class PropertyController extends Controller
       return response()->json([
           'success'=>true,
           'message' => 'Successfully Saved',
-          'data' => $properties->orderBy('amount')
+          'data' => $properties
       ]);
   }
   public function searchProperty(Request  $request){
@@ -87,7 +87,7 @@ class PropertyController extends Controller
                                 ->where('property_default_rates.qty','>=',$double_room_count)
                                 ->select('properties.id','properties.name','properties.address','properties.featured_image','properties.description','locations.name as location',
                                     'property_default_rates.amount','property_default_rates.qty')
-                                ->inRandomOrder()
+                                 ->orderBy('property_default_rates.amount','ASC')
                                 ->simplePaginate(20);
         // get double occupancy price for today
         // room availability
