@@ -124,6 +124,7 @@ class PropertyController extends Controller
                                 ->where('properties.id',$id)
                                 ->select('properties.id',
                                     'properties.name',
+                                    'properties.wedding_planning_decoration_budget',
                                     'properties.featured_image as cover_image',
                                     'locations.name as location',
                                     'locations.id as location_id',

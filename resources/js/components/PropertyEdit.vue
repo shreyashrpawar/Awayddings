@@ -294,7 +294,7 @@ export default {
                 location_id: '',
                 cover_image: '',
                 google_embedded_url: '',
-                wedding_planning_decoration_budget:'',
+                wedding_planning_decoration_budget:0,
                 images: [],
                 videos: [],
                 total_rooms: 0,
