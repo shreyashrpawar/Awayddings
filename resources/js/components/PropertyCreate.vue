@@ -264,7 +264,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="wedding_planning_decoration_budget">Wedding Planning & Decoration budget</label>
-                                                <input type="number" class="form-control" id="wedding_planning_decoration_budget" v-model="form.wedding_planning_decoration_budget" required>
+                                                <input type="text" class="form-control" id="wedding_planning_decoration_budget" v-model="form.wedding_planning_decoration_budget" required>
                                             </div>
                                         </div>
 

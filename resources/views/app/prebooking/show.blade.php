@@ -22,6 +22,8 @@
                         <tr>
                             <th>Name</th>
                             <td> {{ $summary->user->name }}</td>
+                            <th>Phone</th>
+                            <td>{{  $summary->user->phone  }}</td>
                             <th>Property Name</th>
                             <td> {{ $summary->property->name }}</td>
                         </tr>

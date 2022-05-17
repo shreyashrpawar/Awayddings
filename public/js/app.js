@@ -6163,7 +6163,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         location_id: '',
         cover_image: '',
         google_embedded_url: '',
-        wedding_planning_decoration_budget: '',
+        wedding_planning_decoration_budget: 0,
         images: [],
         videos: [],
         total_rooms: 0,
@@ -31517,7 +31517,7 @@ var render = function () {
                                 ],
                                 staticClass: "form-control",
                                 attrs: {
-                                  type: "number",
+                                  type: "text",
                                   id: "wedding_planning_decoration_budget",
                                   required: "",
                                 },
@@ -32653,7 +32653,7 @@ var render = function () {
                                 ],
                                 staticClass: "form-control",
                                 attrs: {
-                                  type: "number",
+                                  type: "text",
                                   id: "wedding_planning_decoration_budget",
                                   required: "",
                                 },

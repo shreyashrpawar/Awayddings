@@ -25,7 +25,7 @@ class PreBookingController extends Controller
       $property_id = $request->property_id;
       $details = $request->details;
       $user_remark = $request->remarks;
- // return $user_id;
+
         DB::beginTransaction();
 
         $temp_data = [
@@ -40,8 +40,10 @@ class PreBookingController extends Controller
                 'status' => 1,
                 'pre_booking_summary_status_id' => 1
         ];
+      return response()->json($temp_data);
       try {
              $pre_booking_summary = PreBookingSummary::create($temp_data);
+
 
       foreach($details as $key => $val){
           $date = $val['date'];
@@ -88,12 +90,17 @@ class PreBookingController extends Controller
         $user_id = $user->id;
         $summary = PreBookingSummary::with(['user','pre_booking_summary_status','property','pre_booking_details','pre_booking_details.hotel_chargable_type'])
                     ->where('user_id',$user_id)
+
                     ->paginate(50);
 
         return response()->json([
             'success' => true,
             'message' => 'Success',
-            'data' => $summary
+            'data' => [
+                'pending' => $summary->where('pre_booking_summary_status_id',1),
+                'cancelled' => $summary->whereIn('pre_booking_summary_status_id',[3,4]),
+                'approved' => $summary->where('pre_booking_summary_status_id',2)
+            ]
         ]);
     }
 }

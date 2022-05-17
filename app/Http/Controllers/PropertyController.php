@@ -494,6 +494,7 @@ class PropertyController extends Controller
             'location_id' => $property_details->location_id,
             'cover_image' => $property_details->featured_image,
             'google_embedded_url' => $property_details->gmap_embedded_code,
+            'wedding_planning_decoration_budget' => $property_details->wedding_planning_decoration_budget,
             'images' => $temp_images,
             'property_charges' => $temp_rate,
             'amenities' => $temp_amenities,
