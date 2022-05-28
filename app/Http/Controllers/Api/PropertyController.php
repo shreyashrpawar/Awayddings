@@ -130,6 +130,7 @@ class PropertyController extends Controller
                                     'locations.id as location_id',
                                     'properties.gmap_embedded_code',
                                     'properties.description',
+                                    'properties.property_terms',
                                     )
                                 ->inRandomOrder()
                                 ->first();

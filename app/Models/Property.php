@@ -20,6 +20,7 @@ class Property extends Model
         'gmap_embedded_code',
         'wedding_planning_decoration_budget',
         'status',
+        'property_terms'
     ];
 
     public function location()
