@@ -55,6 +55,10 @@
 
 
                </div>
+               <div class="col-md-12">
+                   <label for="" class="font-weight-bold">Terms & Conditions</label>
+                   <p>{{ $data->property_terms}}</p>
+               </div>
                <hr>
                <h5>Property Rates</h5>
                <table class="table table-sm">

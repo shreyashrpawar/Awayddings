@@ -268,6 +268,15 @@
                                                 <input type="text" class="form-control" id="wedding_planning_decoration_budget" v-model="form.wedding_planning_decoration_budget" required>
                                             </div>
                                         </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="property_terms">Property Terms and Conditions</label>
+                                                <textarea class="form-control" cols="30" rows="3"
+                                                          v-model="form.property_terms"
+                                                          placeholder="Enter the Property Terms and Conditions"
+                                                          required></textarea>
+                                            </div>
+                                        </div>
 
                                     </div>
                                 </section>
@@ -303,7 +312,8 @@ export default {
                 triple_occupancy_rate: 0,
                 double_occupancy_rate: 0,
                 amenities: [],
-                room_inclusions: []
+                room_inclusions: [],
+                property_terms: '',
 
             },
             msg: 'Loading ... ',

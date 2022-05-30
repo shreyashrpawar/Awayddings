@@ -83,7 +83,8 @@ class PropertyController extends Controller
                 'gmap_embedded_code' => $request->google_embedded_url,
                 'featured_image' => $request->cover_image,
                 'wedding_planning_decoration_budget' => $request->wedding_planning_decoration_budget,
-                'status' => 0
+                'status' => 0,
+                'property_terms' => $request->property_terms
             ];
             DB::beginTransaction();
             $user = $request->user();
@@ -291,7 +292,8 @@ class PropertyController extends Controller
                 'location_id' => $request->location_id,
                 'gmap_embedded_code' => $request->google_embedded_url,
                 'featured_image' => $request->cover_image,
-                'wedding_planning_decoration_budget' => $request->wedding_planning_decoration_budget
+                'wedding_planning_decoration_budget' => $request->wedding_planning_decoration_budget,
+                'property_terms' => $request->property_terms
             ];
             DB::beginTransaction();
             $propertyDetails = $property->update($property_basic_details);
@@ -501,7 +503,8 @@ class PropertyController extends Controller
             'room_inclusions' => $temp_room_inclusions,
             'triple_occupancy_rooms' => $triple_occupancy_rate,
             'total_rooms' => $double_occupancy_rate,
-            'videos' => $temp_videos
+            'videos' => $temp_videos,
+            'property_terms' => $property_details->property_terms,
         ]);
 
     }

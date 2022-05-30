@@ -5598,6 +5598,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "PropertyCreate",
   data: function data() {
@@ -5619,7 +5627,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         double_occupancy_rate: 0,
         amenities: [],
         room_inclusions: [],
-        wedding_planning_decoration_budget: ''
+        wedding_planning_decoration_budget: '',
+        property_terms: ''
       },
       msg: 'Loading ... ',
       html: '<i class="mdi mdi-settings menu-icon mdi-48px"></i>',
@@ -6152,6 +6161,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "PropertyCreate",
   data: function data() {
@@ -6172,7 +6190,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         triple_occupancy_rate: 0,
         double_occupancy_rate: 0,
         amenities: [],
-        room_inclusions: []
+        room_inclusions: [],
+        property_terms: ''
       },
       msg: 'Loading ... ',
       html: '<i class="mdi mdi-settings menu-icon mdi-48px"></i>',
@@ -31540,6 +31559,48 @@ var render = function () {
                               }),
                             ]),
                           ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "col-md-6" }, [
+                            _c("div", { staticClass: "form-group" }, [
+                              _c(
+                                "label",
+                                { attrs: { for: "property_terms" } },
+                                [_vm._v("Property Terms and Conditions")]
+                              ),
+                              _vm._v(" "),
+                              _c("textarea", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.form.property_terms,
+                                    expression: "form.property_terms",
+                                  },
+                                ],
+                                staticClass: "form-control",
+                                attrs: {
+                                  cols: "30",
+                                  rows: "3",
+                                  placeholder:
+                                    "Enter the Property Terms and Conditions",
+                                  required: "",
+                                },
+                                domProps: { value: _vm.form.property_terms },
+                                on: {
+                                  input: function ($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.form,
+                                      "property_terms",
+                                      $event.target.value
+                                    )
+                                  },
+                                },
+                              }),
+                            ]),
+                          ]),
                         ]),
                       ],
                       2
@@ -32669,6 +32730,48 @@ var render = function () {
                                     _vm.$set(
                                       _vm.form,
                                       "wedding_planning_decoration_budget",
+                                      $event.target.value
+                                    )
+                                  },
+                                },
+                              }),
+                            ]),
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "col-md-6" }, [
+                            _c("div", { staticClass: "form-group" }, [
+                              _c(
+                                "label",
+                                { attrs: { for: "property_terms" } },
+                                [_vm._v("Property Terms and Conditions")]
+                              ),
+                              _vm._v(" "),
+                              _c("textarea", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.form.property_terms,
+                                    expression: "form.property_terms",
+                                  },
+                                ],
+                                staticClass: "form-control",
+                                attrs: {
+                                  cols: "30",
+                                  rows: "3",
+                                  placeholder:
+                                    "Enter the Property Terms and Conditions",
+                                  required: "",
+                                },
+                                domProps: { value: _vm.form.property_terms },
+                                on: {
+                                  input: function ($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.form,
+                                      "property_terms",
                                       $event.target.value
                                     )
                                   },
