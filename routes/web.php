@@ -17,11 +17,19 @@ Route::get('/', function () {
     return redirect(route('login'));
 });
 
+Route::middleware(['guest'])->group(function () {
+    Route::get('/forgot-password', [App\Http\Controllers\ForgotPasswordController::class, 'index'])->name('forgot-password');
+    Route::post('/forgot-password-submit', [App\Http\Controllers\ForgotPasswordController::class, 'forgotPasswordSubmit'])->name('forgot-password-submit');
+    Route::get('/reset-password/{token}', [App\Http\Controllers\ForgotPasswordController::class, 'showResetPasswordForm'])->name('reset-password');
+    Route::post('/reset-password-submit', [App\Http\Controllers\ForgotPasswordController::class, 'submitResetPasswordForm'])->name('reset-password-submit');
+});
 
 Auth::routes(['register' => false]);
 Route::resource('users',\App\Http\Controllers\UserController::class);
 Route::middleware(['auth'])->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::get('/change-password', [App\Http\Controllers\ChangePasswordController::class, 'index'])->name('change-password');
+    Route::post('/change-password/submit', [App\Http\Controllers\ChangePasswordController::class, 'changePassword'])->name('change-password.submit');
     Route::delete('property/media',[App\Http\Controllers\PropertyController::class,'deletePropertyMedia']);
     Route::post('property/status',[App\Http\Controllers\PropertyController::class,'updatePropertyStatus']);
     Route::resource('property',App\Http\Controllers\PropertyController::class);

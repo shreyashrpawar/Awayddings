@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendGenricEmail;
 use App\Models\BookingSummary;
 use App\Models\PreBookingDetails;
 use App\Models\PreBookingSummary;
@@ -40,12 +41,11 @@ class PreBookingController extends Controller
             'property_id' => $property_id,
             'user_remarks' => $user_remark,
             'status' => 1,
-            'pre_booking_summary_status_id' => 1
+            'pre_booking_summary_status_id' => 1,
         ];
 
         try {
             $pre_booking_summary = PreBookingSummary::create($temp_data);
-
 
             foreach ($details as $key => $val) {
                 $date = $val['date'];
@@ -62,7 +62,7 @@ class PreBookingController extends Controller
                             'rate' => $rate,
                             'date' => Carbon::parse($date),
                             'threshold' => $temp_percentage_occupancy,
-                            'pre_booking_summaries_id' => $pre_booking_summary->id
+                            'pre_booking_summaries_id' => $pre_booking_summary->id,
                         ];
                         try {
                             PreBookingDetails::create($temp_data);
@@ -74,9 +74,15 @@ class PreBookingController extends Controller
                 }
             }
             DB::commit();
+
+            //prejourney mail trigger
+            $details = ['email' => $user->email, 'mailbtnLink' => '', 'mailBtnText' => '',
+                'mailTitle' => 'Thank you for your Booking', 'mailBody' => 'We are happy to serve you. Start a journey with us'];
+            SendGenricEmail::dispatch($details);
+
             return response()->json([
                 'success' => true,
-                'message' => 'Successfully Saved'
+                'message' => 'Successfully Saved',
             ]);
 
         } catch (\Exception $e) {
@@ -96,7 +102,7 @@ class PreBookingController extends Controller
         $cancelled_summary = PreBookingSummary::with(['user', 'pre_booking_summary_status', 'property', 'pre_booking_details', 'pre_booking_details.hotel_chargable_type'])
             ->where('user_id', $user_id)->whereIn('pre_booking_summary_status_id', [3, 4])->get();
 
-        $approved_summary = BookingSummary::with(['user', 'booking_details', 'booking_details.hotel_chargable_type' , 'property', 'booking_payment_summary', 'booking_payment_summary.booking_payment_details'])
+        $approved_summary = BookingSummary::with(['user', 'booking_details', 'booking_details.hotel_chargable_type', 'property', 'booking_payment_summary', 'booking_payment_summary.booking_payment_details'])
             ->where('user_id', $user_id)->get();
 
         return response()->json([
@@ -106,8 +112,8 @@ class PreBookingController extends Controller
                 'pending' => $pending_summary,
                 'cancelled' => $cancelled_summary,
                 'approved' => $approved_summary,
-                'completed' => []
-            ]
+                'completed' => [],
+            ],
         ]);
     }
 }
