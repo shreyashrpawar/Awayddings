@@ -45,7 +45,7 @@ class GenaricMail extends Mailable
         $data['mailBody'] = $this->mailBody;
         $data['mailBtnText'] =  $this->mailBtnText;
         $data['mailBtnUrl'] = $this->mailbtnLink;
-        return $this->from('info@awayddings.com', 'Awayddings')
+        return $this->from('support@dosetap.com', 'Awayddings')
             ->subject($this->mailTitle)
             ->view('emails.reset-password',$data);
     }

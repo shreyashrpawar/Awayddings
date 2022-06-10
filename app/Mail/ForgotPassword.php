@@ -38,8 +38,9 @@ class ForgotPassword extends Mailable
         $data['mailBody'] = 'You are receiving this email because we received a password reset request for your account.';
         $data['mailBtnText'] = 'Reset Password';
         $data['mailBtnUrl'] = $this->link.'?email='.$this->email;
-        return $this->from('info@awayddings.com', 'Awayddings')
+        return $this->from('support@dosetap.com', 'Awayddings')
             ->subject('Reset Password')
             ->view('emails.reset-password',$data);
     }
 }
+    
