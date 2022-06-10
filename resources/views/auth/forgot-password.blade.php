@@ -1,5 +1,5 @@
 @extends('layouts.auth')
-@section('title','Login Page')
+@section('title','Forgot Password')
 @section('contents')
     <div class="container-fluid page-body-wrapper full-page-wrapper">
         <div class="content-wrapper d-flex align-items-center auth px-0">
@@ -9,8 +9,7 @@
                         <div class="brand-logo text-center">
                             <img src="{{ asset('assets/images/logo.png') }}" alt="logo">
                         </div>
-                        <h4>Welcome Back !</h4>
-                        <h6 class="font-weight-light">Sign in to continue.</h6>
+                        <h4>Forgot Password !</h4>
                         @if ($errors->any())
                             <div class="alert alert-danger">
                                 <ul>
@@ -25,28 +24,20 @@
                                 {{ session('message') }}
                             </div>
                         @endif
-                        @if (session('error'))
-                            <div class="alert alert-danger">
-                                {{ session('error') }}
-                            </div>
-                        @endif
-                        <form class="pt-3" method="POST" action="{{ url('login') }}">
+                        <form class="pt-3" method="POST" action="{{ route('forgot-password-submit') }}">
                             @csrf
                             <div class="form-group">
-                                <input type="email" class="form-control form-control-lg"  placeholder="Username" name="email">
+                                <input type="email" class="form-control form-control-lg"  placeholder="Please enter your email address" name="email">
                             </div>
-                            <div class="form-group">
-                                <input type="password" class="form-control form-control-lg"  placeholder="Password"  name="password">
-                            </div>
-                           
                             <div class="mt-3">
-                                <button class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" >SIGN IN</button>
+                                <button class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn">SEND PASSWORD RESET LINK</button>
                             </div>
-                            <center>
-                                <a class="btn btn-link" href="{{ route('forgot-password') }}">
-                                    Forgot Your Password?
-                                </a>
-                            </center>
+                            <div class="my-2 d-flex justify-content-between align-items-center">
+                                <div class="form-check">
+
+                                </div>
+
+                            </div>
 
                         </form>
                     </div>
