@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Mail\GenaricMail;
+use App\Mail\GenericMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -11,7 +11,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Mail;
 
-class SendGenricEmail implements ShouldQueue
+class SendGenericEmail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     protected $details;
@@ -32,7 +32,7 @@ class SendGenricEmail implements ShouldQueue
      */
     public function handle()
     {
-        $email = new GenaricMail($this->details['email'],$this->details['mailbtnLink'],$this->details['mailBtnText'],
+        $email = new GenericMail($this->details['email'],$this->details['mailbtnLink'],$this->details['mailBtnText'],
         $this->details['mailTitle'],$this->details['mailBody']);
 
         Mail::to($this->details['email'])->send($email);

@@ -33,14 +33,13 @@ class ForgotPassword extends Mailable
      */
     public function build()
     {
-        $data['mailTitle'] = 'Thank you';
-        $data['mailSubTitle'] = 'FOR PASSWORD RESET REQUEST';
-        $data['mailBody'] = 'You are receiving this email because we received a password reset request for your account.';
+        $data['mailTitle'] = 'RESET YOUR PASSWORD';
+        $data['mailSubTitle'] = 'You have requested to reset your password';
+        $data['mailBody'] = 'We cannot simply send you your old password. A unique link to reset your password has been generated for you. To reset your password, click the following link and follow the instructions.';
         $data['mailBtnText'] = 'Reset Password';
         $data['mailBtnUrl'] = $this->link.'?email='.$this->email;
         return $this->from('support@dosetap.com', 'Awayddings')
             ->subject('Reset Password')
-            ->view('emails.reset-password',$data);
+            ->view('emails.generic-template',$data);
     }
 }
-    

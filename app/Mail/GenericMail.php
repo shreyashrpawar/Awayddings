@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class GenaricMail extends Mailable
+class GenericMail extends Mailable
 {
     use Queueable, SerializesModels;
     protected $email;
@@ -16,7 +16,7 @@ class GenaricMail extends Mailable
     protected $mailTitle;
     protected $mailBody;
 
-    
+
 
     /**
      * Create a new message instance.
@@ -47,6 +47,6 @@ class GenaricMail extends Mailable
         $data['mailBtnUrl'] = $this->mailbtnLink;
         return $this->from('support@dosetap.com', 'Awayddings')
             ->subject($this->mailTitle)
-            ->view('emails.reset-password',$data);
+            ->view('emails.generic-template',$data);
     }
 }

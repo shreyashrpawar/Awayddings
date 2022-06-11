@@ -16,18 +16,18 @@
 	<meta name="format-detection" content="address=no" />
 	<meta name="format-detection" content="telephone=no" />
 	<title>Email Template</title>
-	
+
 
 	<style type="text/css" media="screen">
 		/* Linked Styles */
 		body { padding:0 !important; margin:0 !important; display:block !important; background:#1e1e1e; -webkit-text-size-adjust:none }
 		a { color:#a88123; text-decoration:none }
-		p { padding:0 !important; margin:0 !important } 
+		p { padding:0 !important; margin:0 !important }
 
 		/* Mobile styles */
 		</style>
 		<style media="only screen and (max-device-width: 480px), only screen and (max-width: 480px)" type="text/css">
-		@media only screen and (max-device-width: 480px), only screen and (max-width: 480px) { 
+		@media only screen and (max-device-width: 480px), only screen and (max-width: 480px) {
 			div[class='mobile-br-5'] { height: 5px !important; }
 			div[class='mobile-br-10'] { height: 10px !important; }
 			div[class='mobile-br-15'] { height: 15px !important; }
@@ -35,9 +35,9 @@
 			div[class='mobile-br-25'] { height: 25px !important; }
 			div[class='mobile-br-30'] { height: 30px !important; }
 
-			th[class='m-td'], 
-			td[class='m-td'], 
-			div[class='hide-for-mobile'], 
+			th[class='m-td'],
+			td[class='m-td'],
+			div[class='hide-for-mobile'],
 			span[class='hide-for-mobile'] { display: none !important; width: 0 !important; height: 0 !important; font-size: 0 !important; line-height: 0 !important; min-height: 0 !important; }
 
 			span[class='mobile-block'] { display: block !important; }
@@ -51,9 +51,9 @@
 
 			table[class='mobile-shell'] { width: 100% !important; min-width: 100% !important; }
 			td[class='td'] { width: 100% !important; min-width: 100% !important; }
-			
+
 			table[class='center'] { margin: 0 auto; }
-			
+
 			td[class='column-top'],
 			th[class='column-top'],
 			td[class='column'],
@@ -62,7 +62,7 @@
 			td[class='content-spacing'] { width: 15px !important; }
 
 			div[class='h2'] { font-size: 44px !important; line-height: 48px !important; }
-		} 
+		}
 	</style>
 </head>
     @yield('content')

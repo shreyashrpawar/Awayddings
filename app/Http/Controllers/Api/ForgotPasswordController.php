@@ -51,7 +51,7 @@ class ForgotPasswordController extends Controller
             'password_confirmation' => 'required',
             'token' => 'required'
         ]);
-       
+
 
         if ($validator->fails()) {
             return response()->json([
@@ -59,10 +59,10 @@ class ForgotPasswordController extends Controller
                 'message' => 'Please check all required field',
                 'data' => ""
             ],200);
-        }       
+        }
         $tokenModel = DB::table('password_resets')
                             ->where([
-                            'email' => $request->email, 
+                            'email' => $request->email,
                             'token' => $request->token
                             ])
                             ->first();
@@ -93,8 +93,7 @@ class ForgotPasswordController extends Controller
     protected function validateEmail(Request $request)
     {
         $field = $this->field($request);
-        $messages = ["{$this->username()}.exists" => 'The account you are trying to login is not registered or it has been disabled.'];
-        $user        = User::where($field, $request->email)->where('status',1)->first();
+        $messages = ["{$this->username()}.exists" => 'The account you are trying to login is not registered or it has been disabled.'];        $user        = User::where($field, $request->email)->where('status',1)->first();
         if ($user) {
             $currentRole = $user->hasAnyRole(['user']);
             if ($currentRole) {
