@@ -40,6 +40,6 @@ class ForgotPassword extends Mailable
         $data['mailBtnUrl'] = $this->link.'?email='.$this->email;
         return $this->from('support@dosetap.com', 'Awayddings')
             ->subject('Reset Password')
-            ->view('emails.generic-template',$data);
+            ->view('emails.generic',$data);
     }
 }
