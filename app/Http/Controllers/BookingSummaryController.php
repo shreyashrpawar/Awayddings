@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BookingPaymentDetail;
+use App\Models\BookingPaymentSummary;
 use App\Models\BookingSummary;
 use Illuminate\Http\Request;
 
@@ -72,7 +74,23 @@ class BookingSummaryController extends Controller
      */
     public function update(Request $request, BookingSummary $bookingSummary)
     {
-        //
+        $bookingPaymentDetail = BookingPaymentDetail::where('id',$request->booking_payment_details_id)->where('installment_no',$request->installment_no)->first();
+        if($bookingPaymentDetail){
+            if($bookingPaymentDetail->status=='1'){                
+                $bookingPaymentSummary = BookingPaymentSummary::where('id',$bookingPaymentDetail->booking_payment_summaries_id)->first();
+                $bookingPaymentSummary->paid = $bookingPaymentSummary->paid + $bookingPaymentDetail->amount;
+                $bookingPaymentSummary->due = $bookingPaymentSummary->amount - $bookingPaymentSummary->paid;
+                $bookingPaymentSummary->save();
+
+                $bookingPaymentDetail->status = 2;
+            }
+            $bookingPaymentDetail->payment_mode = $request->payment_mode;
+            $bookingPaymentDetail->remarks = $request->remarks;
+            $bookingPaymentDetail->save();
+            return back()->with('success', 'Status updated successfully.');
+        }else{
+            return back()->with('error', 'Installment not found.');
+        }
     }
 
     /**
