@@ -45,7 +45,7 @@ class GenericMail extends Mailable
         $data['mailBody'] = $this->mailBody;
         $data['mailBtnText'] =  $this->mailBtnText;
         $data['mailBtnUrl'] = $this->mailbtnLink;
-        return $this->from('support@dosetap.com', 'Awayddings')
+        return $this->from(env('MAIL_FROM_ADDRESS'), 'Awayddings')
             ->subject($this->mailTitle)
             ->view('emails.generic',$data);
     }

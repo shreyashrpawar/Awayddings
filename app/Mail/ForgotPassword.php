@@ -38,7 +38,7 @@ class ForgotPassword extends Mailable
         $data['mailBody'] = 'We cannot simply send you your old password. A unique link to reset your password has been generated for you. To reset your password, click the following link and follow the instructions.';
         $data['mailBtnText'] = 'Reset Password';
         $data['mailBtnUrl'] = $this->link.'?email='.$this->email;
-        return $this->from('support@dosetap.com', 'Awayddings')
+        return $this->from(env('MAIL_FROM_ADDRESS'), 'Awayddings')
             ->subject('Reset Password')
             ->view('emails.generic',$data);
     }

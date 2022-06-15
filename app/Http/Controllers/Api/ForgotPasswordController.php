@@ -34,7 +34,7 @@ class ForgotPasswordController extends Controller
             'token' => $token,
             'created_at' => Carbon::now(),
         ]);
-        $details = ['email' => $request->email, 'token' => $token, 'link'=>'http://www.awayddings.com/reset-password/'.$token];
+        $details = ['email' => $request->email, 'token' => $token, 'link'=> env('APP_URL') . '/reset-password/'.$token];
         SendEmail::dispatch($details);
         return response()->json([
             'hasError' => false,
