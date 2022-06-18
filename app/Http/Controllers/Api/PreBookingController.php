@@ -77,7 +77,7 @@ class PreBookingController extends Controller
 
             //prejourney mail trigger
             $details = ['email' => $user->email, 'mailbtnLink' => '', 'mailBtnText' => '',
-                'mailTitle' => 'Thank you!', 'mailSubTitle' => 'Your prebooking has been confirmed', 'mailBody' => 'We are thrilled that you chose us to plan your destination wedding. Our representative will connect with you shortly'];
+                'mailTitle' => 'Thank you!', 'mailSubTitle' => 'Your prebooking has been confirmed!', 'mailBody' => 'We are thrilled that you chose us to plan your destination wedding. Our representative will connect with you shortly'];
             SendGenericEmail::dispatch($details);
 
             return response()->json([
