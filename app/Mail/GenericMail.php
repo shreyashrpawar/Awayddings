@@ -40,8 +40,8 @@ class GenericMail extends Mailable
      */
     public function build()
     {
-        $data['mailTitle'] = 'Thank you';
-        $data['mailSubTitle'] =  $this->mailTitle;
+        $data['mailTitle'] = $this->mailTitle;
+        $data['mailSubTitle'] =  $this->mailSubTitle;
         $data['mailBody'] = $this->mailBody;
         $data['mailBtnText'] =  $this->mailBtnText;
         $data['mailBtnUrl'] = $this->mailbtnLink;
