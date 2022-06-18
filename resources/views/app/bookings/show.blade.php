@@ -87,7 +87,7 @@
                             <div class="form-group row">
                                 <label class="col-sm-3 col-form-label">Total Amount</label>
                                 <div class="col-sm-9">
-                                  <input type="text" class="form-control" value="{{ $bookings->amount ?? '' }}" readonly>
+                                  <input type="text" class="form-control" value="{{ number_format($bookings->amount ?? '', 2, '.', ',') }}" readonly>
                                 </div>
                             </div>
 
@@ -101,21 +101,21 @@
                             <div class="form-group row">
                                 <label class="col-sm-3 col-form-label">Amount</label>
                                 <div class="col-sm-9">
-                                  <input type="text" class="form-control" value="{{ $bookings->booking_payment_summary->amount }}" readonly>
+                                  <input type="text" class="form-control" value="{{ number_format($bookings->booking_payment_summary->amount, 2, '.', ',') }}" readonly>
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <label class="col-sm-3 col-form-label">Paid</label>
                                 <div class="col-sm-9">
-                                  <input type="text" class="form-control" value="{{ $bookings->booking_payment_summary->paid }}" readonly>
+                                  <input type="text" class="form-control" value="{{ number_format($bookings->booking_payment_summary->paid, 1, '.', ',') }}" readonly>
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <label class="col-sm-3 col-form-label">Due</label>
                                 <div class="col-sm-9">
-                                  <input type="text" class="form-control" value="{{ $bookings->booking_payment_summary->due }}" readonly>
+                                  <input type="text" class="form-control" value="{{ number_format($bookings->booking_payment_summary->due, 1, '.', ',') }}" readonly>
                                 </div>
                             </div>
                         </div>
@@ -235,9 +235,9 @@
                                 
                                     <tr>
                                         <th>{{ 1+ $loop->index }}</th>
-                                        <td>{{ $val->date }}</td>
+                                        <td id="installment_date{{ $val->installment_no }}" data-installment_date="{{ $val->date }}">{{ $val->date }}</td>
                                         <td>{{ $val->installment_no }}</td>
-                                        <td>{{ $val->amount }}</td>
+                                        <td>{{ number_format($val->amount, 2, '.', ',') }}</td>
                                         <td>
                                             @if($val->status == 1)
                                                 PENDING
@@ -292,8 +292,11 @@
                         @method('put')
                         <input type="hidden" name="booking_payment_details_id" id="booking_payment_details_id">
                         <input type="hidden" name="installment_no" id="installment_no">
+                        <input type="hidden" name="user_email" id="user_email" value="{{ $bookings->user->email }}">
 
                         <input type="hidden" name="total_amount" value="{{ $bookings->booking_payment_summary->amount }}">
+
+                        <input type="hidden" id="next_installment_date" name="next_installment_date">
 
                         <div class="form-group">
                             <label for="Status">Status</label>
@@ -335,6 +338,9 @@
         $('.installmentStatus').click(function(){
             let id = $(this).data('id');
             let installment_no = $(this).data('installment_no');
+            let next_installment_no = installment_no + 1;
+            
+            let next_installment_date = $('#installment_date'+next_installment_no).data('installment_date');
             let payment_mode = $(this).data('payment_mode');
             let remarks = $(this).data('remarks');
             let status = $(this).data('status');
@@ -352,6 +358,7 @@
             formModal.find('.modal-body #installment_no').val(installment_no);
             formModal.find('.modal-body #payment_mode').val(payment_mode);
             formModal.find('.modal-body #remarks').val(remarks);
+            formModal.find('.modal-body #next_installment_date').val(next_installment_date);
             $form.attr('action', updateUrl);
             formModal.modal('show');
         });
