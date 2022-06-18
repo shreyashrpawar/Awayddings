@@ -32,7 +32,7 @@ class SendGenericEmail implements ShouldQueue
      */
     public function handle()
     {
-        $email = new GenericMail($this->details['email'],$this->details['mailbtnLink'],$this->details['mailBtnText'],
+        $email = new GenericMail($this->details['email'],$this->details['mailSubTitle'], $this->details['mailbtnLink'],$this->details['mailBtnText'],
         $this->details['mailTitle'],$this->details['mailBody']);
 
         Mail::to($this->details['email'])->send($email);
