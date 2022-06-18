@@ -29,6 +29,10 @@
                         <i class="mdi mdi-settings "></i>
                         Settings
                     </a>
+                    <a href="{{ route('change-password') }}" class="dropdown-item">
+                        <i class="mdi mdi-key "></i>
+                        Change Password
+                    </a>
                     <a class="dropdown-item" href="{{ route('logout') }}"  onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                         <i class="mdi mdi-logout"></i>

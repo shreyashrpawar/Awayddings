@@ -13,6 +13,7 @@ use App\Models\PropertyRoomInclusion;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PropertyController extends Controller
 {
@@ -374,7 +375,23 @@ class PropertyController extends Controller
     ]);
 
   }
-
+  public function propertyCountWithLocation(Request  $request)
+  {
+        $data = DB::select("SELECT
+                count(locations.name) as count,
+                locations.name
+            FROM
+                properties
+                INNER JOIN locations
+            WHERE
+                properties.location_id = locations.id
+                group by locations.name");
+        return response()->json([
+            'success'=>true,
+            'message' => 'Successfully Saved',
+            'data' => $data
+        ]);
+  }
   public function propertyAvailable(Request  $request){
       $property_id = $request->property_id;
       $check_in    = Carbon::parse($request->check_in);
@@ -498,6 +515,4 @@ class PropertyController extends Controller
 
 	    return $n_format . $suffix;
     }
-
-
 }

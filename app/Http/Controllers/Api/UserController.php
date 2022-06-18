@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendGenericEmail;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -28,6 +29,11 @@ class UserController extends Controller
        ];
        $userResp = User::create($data);
        $userResp->assignRole('user');
+
+       //welcome mail trigger
+       $details = ['email' => $request->email,'mailbtnLink' => '', 'mailBtnText' => '',
+        'mailTitle' => 'Welcome!', 'mailSubTitle' => 'We are excited to have you get started.', 'mailBody' => 'We are so happy you are here. Start a journey with us'];
+       SendGenericEmail::dispatch($details);
 
        return response()->json([
            'success' => true,

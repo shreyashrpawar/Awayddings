@@ -171,7 +171,7 @@
                             <label for="">
                                 No Of Installment
                             </label>
-                            <select name="installments" id="installments" class="form-control">
+                            <select name="installments" id="installments" class="form-control" required>
                                 <option value="">Select Installments</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>

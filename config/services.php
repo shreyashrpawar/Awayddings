@@ -13,6 +13,7 @@ return [
     | a conventional file to locate the various service credentials.
     |
     */
+    'default' => env('MAIL_MAILER', 'ses'),
 
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),
@@ -25,9 +26,9 @@ return [
     ],
 
     'ses' => [
-        'key' => env('AWS_ACCESS_KEY_ID'),
-        'secret' => env('AWS_SECRET_ACCESS_KEY'),
-        'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
+        'key' => env('MAIL_AWS_ACCESS_KEY_ID'),
+        'secret' => env('MAIL_AWS_SECRET_ACCESS_KEY'),
+        'region' => env('AWS_DEFAULT_REGION', 'ap-south-1'),
     ],
 
 ];

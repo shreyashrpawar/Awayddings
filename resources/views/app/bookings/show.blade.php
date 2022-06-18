@@ -1,51 +1,132 @@
 @extends('layouts.app')
 @section('title','Home Page')
+@section('css')
+    <style>
+        .form-group.row {
+            margin-bottom: auto!important;
+        }
+    </style>
+@endsection
 @section('contents')
-    <div class="card">
+    <div class="card" style="background-color: #FFFFFF;">
+        <div class="card-header ">
+            <h1 class="card-title text-uppercase text-black">Booking: {{ $bookings->user->name }} || {{ $bookings->property->name }}</h1>
+        </div>
         <div class="card-body">
             <div class="row ">
-                <div class="col-md-6 mb-4">
-                    <h4 class="card-title text-uppercase">Booking Details
 
-                    </h4>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-primary">
+                        <h5 class="card-title text-center text-white">User details</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Name</label>
+                                <div class="col-sm-9">
+                                  <input type="text" class="form-control" value="{{ $bookings->user->name }}" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Email</label>
+                                <div class="col-sm-9">
+                                  <input type="text" class="form-control" value="{{ $bookings->user->email }}" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Phone No</label>
+                                <div class="col-sm-9">
+                                  <input type="text" class="form-control" value="{{ $bookings->user->phone }}" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Property Name</label>
+                                <div class="col-sm-9">
+                                  <input type="text" class="form-control" value="{{ $bookings->property->name }}" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Check In</label>
+                                <div class="col-sm-9">
+                                  <input type="text" class="form-control" value="{{ $bookings->check_in->format('d-m-Y') }}" readonly>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Check Out</label>
+                                <div class="col-sm-9">
+                                  <input type="text" class="form-control" value="{{ $bookings->check_out->format('d-m-Y') }}" readonly>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Adult</label>
+                                <div class="col-sm-9">
+                                  <input type="text" class="form-control" value="{{ $bookings->pax ?? '' }}" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-warning">
+                        <h5 class="card-title text-center text-white align-items-center">Amount details</h5>
+                        </div>
+                        <div class="card-body">
+
+                        <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">User remark</label>
+                                <div class="col-sm-9">
+                                  <input type="text" class="form-control" value="{{ $bookings->user_remarks ?? '' }}" readonly>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Total Amount</label>
+                                <div class="col-sm-9">
+                                  <input type="text" class="form-control" value="{{ number_format($bookings->amount ?? '', 2, '.', ',') }}" readonly>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Discount</label>
+                                <div class="col-sm-9">
+                                  <input type="text" class="form-control" value="{{ $bookings->booking_payment_summary->discount }}" readonly>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Amount</label>
+                                <div class="col-sm-9">
+                                  <input type="text" class="form-control" value="{{ number_format($bookings->booking_payment_summary->amount, 2, '.', ',') }}" readonly>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Paid</label>
+                                <div class="col-sm-9">
+                                  <input type="text" class="form-control" value="{{ number_format($bookings->booking_payment_summary->paid, 1, '.', ',') }}" readonly>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Due</label>
+                                <div class="col-sm-9">
+                                  <input type="text" class="form-control" value="{{ number_format($bookings->booking_payment_summary->due, 1, '.', ',') }}" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr style="border: 2px #ffffff solid; width: 100%;">
+
+                
                 <div class="col-md-12">
-                    <table class="table table-sm">
-                        <tr>
-                            <th>Name</th>
-                            <td> {{ $bookings->user->name }}</td>
-                            <th>Property Name</th>
-                            <td> {{ $bookings->property->name }}</td>
-                        </tr>
-                        <tr>
-                            <th>Check In</th>
-                            <td> {{ $bookings->check_in->format('d-m-Y') }}</td>
-                            <th>Check Out</th>
-                            <td> {{ $bookings->check_out->format('d-m-Y') }}</td>
-                        </tr>
-                        <tr>
-                            <th>Adult</th>
-                            <td> {{ $bookings->pax }}</td>
-
-                        </tr>
-                        <tr>
-                            <th>Total Amount</th>
-                            <td> {{ $bookings->amount }}</td>
-                            <th>Discount</th>
-                            <td> {{ $bookings->booking_payment_summary->discount }}</td>
-                            <th>Amount</th>
-                            <td> {{ $bookings->booking_payment_summary->amount }}</td>
-                            <th>Paid</th>
-                            <td> {{ $bookings->booking_payment_summary->paid }}</td>
-                            <th>Due</th>
-                            <td> {{ $bookings->booking_payment_summary->due }}</td>
-                        </tr>
-                    </table>
-
-                </div>
-                <div class="col-md-12 mt-4">
-                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                    <ul class="nav nav-pills" id="pills-tab" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Booking Details</a>
                         </li>
@@ -142,17 +223,21 @@
                                     <th>Status</th>
                                     <th>Payment Mode</th>
                                     <th>Remarks</th>
+                                    <th>Actions</th>
                                 </tr>
                                 </thead>
                                 <tbody>
 
-
+                                @php
+                                    $count = 1;
+                                @endphp
                                 @foreach($bookings->booking_payment_summary->booking_payment_details as $key => $val)
+                                
                                     <tr>
                                         <th>{{ 1+ $loop->index }}</th>
-                                        <td>{{ $val->date }}</td>
+                                        <td id="installment_date{{ $val->installment_no }}" data-installment_date="{{ $val->date }}">{{ $val->date }}</td>
                                         <td>{{ $val->installment_no }}</td>
-                                        <td>{{ $val->amount }}</td>
+                                        <td>{{ number_format($val->amount, 2, '.', ',') }}</td>
                                         <td>
                                             @if($val->status == 1)
                                                 PENDING
@@ -163,6 +248,17 @@
                                            </td>
                                         <td>{{ $val->payment_mode }}</td>
                                         <td>{{ $val->remarks }}</td>
+                                        <td>
+                                            @if ($count == 1+ $loop->index)
+                                                <button class="btn btn-sm btn-outline-primary installmentStatus" data-id="{{ $val->id }}" data-installment_no="{{ $val->installment_no }}" data-payment_mode="{{ $val->payment_mode ?? '' }}" data-status="{{ $val->status ?? '' }}" data-remarks="{{ $val->remarks ?? '' }}">Edit</button>
+                                                @if ($val->status == 2)
+                                                    @php
+                                                        $count ++;
+                                                    @endphp
+                                                @endif
+                                            @endif
+                                        </td>
+                                        
                                     </tr>
                                 @endforeach
 
@@ -175,21 +271,96 @@
 
                     </div>
                 </div>
-
-
-
-
-
-
-
             </div>
 
+        </div>
+    </div>
+
+    {{-- Status modal --}}
+    <div class="modal" id="installmentStatusModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Installment Status</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form action="#" id="installmentStatusForm" method="POST">
+                        @csrf
+                        @method('put')
+                        <input type="hidden" name="booking_payment_details_id" id="booking_payment_details_id">
+                        <input type="hidden" name="installment_no" id="installment_no">
+                        <input type="hidden" name="user_email" id="user_email" value="{{ $bookings->user->email }}">
+
+                        <input type="hidden" name="total_amount" value="{{ $bookings->booking_payment_summary->amount }}">
+
+                        <input type="hidden" id="next_installment_date" name="next_installment_date">
+
+                        <div class="form-group">
+                            <label for="Status">Status</label>
+                            <select name="status" id="status" class="form-control" required>
+                                <option value="" disabled selected>Select Status</option>
+                                {{-- <option value="1">Pending</option> --}}
+                                <option value="2">Paid</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="payment_mode">Payment Mode</label>
+                            <select name="payment_mode" id="payment_mode" class="form-control" required>
+                                <option value="">Select Payment Mode</option>
+                                <option value="Cash">Cash</option>
+                                <option value="Online">Online</option>
+                                <option value="Cheque">Cheque</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="remark">Remarks</label>
+                            <textarea name="remarks" id="remarks"  class="form-control"  cols="30" rows="5"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-sm btn-success btn-block">Save Changes</button>
+                    </form>
+                </div>
+                <!-- Modal footer -->
+            </div>
         </div>
     </div>
 
 @endsection
 @section('js')
     <script>
-
+        let formModal = $('#installmentStatusModal');
+        let $form = $('#installmentStatusForm');
+        $('.installmentStatus').click(function(){
+            let id = $(this).data('id');
+            let installment_no = $(this).data('installment_no');
+            let next_installment_no = installment_no + 1;
+            
+            let next_installment_date = $('#installment_date'+next_installment_no).data('installment_date');
+            let payment_mode = $(this).data('payment_mode');
+            let remarks = $(this).data('remarks');
+            let status = $(this).data('status');
+            let updateUrl = `{{ url('bookings') }}`+'/'+id;
+            
+            if(status == 2){       
+                formModal.find('.modal-body #status').val(status);         
+                formModal.find('.modal-body #status').attr("disabled", "disabled");
+            }else{
+                formModal.find('.modal-body #status').val('');
+                formModal.find('.modal-body #status').attr("disabled", false);
+            }
+           
+            formModal.find('.modal-body #booking_payment_details_id').val(id);
+            formModal.find('.modal-body #installment_no').val(installment_no);
+            formModal.find('.modal-body #payment_mode').val(payment_mode);
+            formModal.find('.modal-body #remarks').val(remarks);
+            formModal.find('.modal-body #next_installment_date').val(next_installment_date);
+            $form.attr('action', updateUrl);
+            formModal.modal('show');
+        });
     </script>
 @endsection
