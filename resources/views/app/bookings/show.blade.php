@@ -245,7 +245,7 @@
                                                 PAID
                                             @endif
 
-                                           </td>
+                                        </td>
                                         <td>{{ $val->payment_mode }}</td>
                                         <td>{{ $val->remarks }}</td>
                                         <td>
