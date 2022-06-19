@@ -16,7 +16,6 @@ class GenericMail extends Mailable
     protected $mailTitle;
     protected $mailSubTitle;
     protected $mailBody;
-    protected $mailSubTitle;
 
 
     /**
@@ -25,7 +24,7 @@ class GenericMail extends Mailable
      * @return void
      */
     public function __construct($email,$mailSubTitle, $mailbtnLink,$mailBtnText,$mailTitle,$mailBody)
-        {
+    {
         //
         $this->email = $email;
         $this->mailbtnLink = $mailbtnLink;
@@ -33,7 +32,6 @@ class GenericMail extends Mailable
         $this->mailTitle = $mailTitle;
         $this->mailSubTitle = $mailSubTitle;
         $this->mailBody = $mailBody;
-        $this->mailSubTitle = $mailSubTitle;
     }
 
     /**
