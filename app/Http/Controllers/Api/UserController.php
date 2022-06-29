@@ -69,13 +69,5 @@ class UserController extends Controller
            'message' => 'success',
            'data' => $user
        ],200);
-
-       $user = User::find(auth()->user()->id);
-
-        return response()->json([
-                'hasError' => false,
-                'message' => 'success',
-                'data' => $user
-            ],200);
    }
 }
