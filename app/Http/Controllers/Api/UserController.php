@@ -60,4 +60,22 @@ class UserController extends Controller
           ],401);
       }
    }
+
+   public function userInformation(Request  $request){
+
+       $user = auth()->user();
+       return response()->json([
+           'hasError' => false,
+           'message' => 'success',
+           'data' => $user
+       ],200);
+
+       $user = User::find(auth()->user()->id);
+
+        return response()->json([
+                'hasError' => false,
+                'message' => 'success',
+                'data' => $user
+            ],200);
+   }
 }
