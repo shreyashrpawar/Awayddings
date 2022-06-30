@@ -13,7 +13,7 @@ class CreateCustomerBookingInvoiceTable extends Migration
      */
     public function up()
     {
-        Schema::create('customer_booking_invoice', function (Blueprint $table) {
+        Schema::create('customer_booking_invoices', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('booking_summary_id');
             $table->string('invoice_url');
