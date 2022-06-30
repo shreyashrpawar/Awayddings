@@ -89,9 +89,35 @@
                                                 
                                                 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%"><tr><td height="20" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td></tr></table>
 
-
+                                                @if ($mailBtnText !='')
+                                                    <!-- Button -->
+                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                        <tr>
+                                                            <td align="center">
+                                                                <table width="210" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td align="center" bgcolor="#fff">
+                                                                            <table border="0" cellspacing="0" cellpadding="0">
+                                                                                <tr>
+                                                                                    <td class="img" style="font-size:0pt; line-height:0pt; text-align:left" width="15"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%"><tr><td height="50" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td></tr></table>
+                                                                                    </td>
+                                                                                    <td bgcolor="#fc3333">
+                                                                                        <div class="text-btn" style="color:#fc3333; font-family:Arial, sans-serif; min-width:auto !important; font-size:16px; line-height:20px; text-align:center">
+                                                                                            <a href="{{ $mailBtnUrl ?? '' }}" target="_blank" class="link-white" style="padding:20px;color:#ffffff; text-decoration:none"><span class="link-white" style="color:#fff; text-decoration:none">{{ $mailBtnText ?? ''}}</span></a>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                    <td class="img" style="font-size:0pt; line-height:0pt; text-align:left" width="15"></td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                @endif
+                                                
                                                 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%"><tr><td height="35" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td></tr></table>
-
                                             </td>
                                             <td class="content-spacing" style="font-size:0pt; line-height:0pt; text-align:left" width="20"></td>
                                         </tr>

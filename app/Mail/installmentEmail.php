@@ -16,15 +16,16 @@ class installmentEmail extends Mailable
     protected $installment_amount;
     protected $next_installment_date;
     protected $remarks;
-
-
+    protected $mailbtnLink;
+    protected $mailBtnText;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($installment_no,$total_paid,$total_due,$installment_amount,$next_installment_date,$remarks)
+    public function __construct($installment_no,$total_paid,$total_due,$installment_amount,
+    $next_installment_date,$remarks,$mailbtnLink,$mailBtnText)
     {
         //
         $this->installment_no = $installment_no;
@@ -33,6 +34,8 @@ class installmentEmail extends Mailable
         $this->installment_amount = $installment_amount;
         $this->next_installment_date = $next_installment_date;
         $this->remarks = $remarks;
+        $this->mailbtnLink = $mailbtnLink??"";
+        $this->mailBtnText = $mailBtnText??"";
     }
 
     /**
@@ -50,6 +53,9 @@ class installmentEmail extends Mailable
         $data['installment_amount'] = $this->installment_amount;
         $data['next_installment_date'] = $this->next_installment_date;
         $data['remarks'] = $this->remarks;
+        $data['mailBtnText'] =  $this->mailBtnText;
+        $data['mailBtnUrl'] = $this->mailbtnLink;
+
         return $this->from(env('MAIL_FROM_ADDRESS'), 'Awayddings')
             ->subject('Installment Payment')
             ->view('emails.installment-payment',$data);

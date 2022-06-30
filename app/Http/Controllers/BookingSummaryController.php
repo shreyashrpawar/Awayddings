@@ -98,13 +98,15 @@ class BookingSummaryController extends Controller
                 $installment_no = $request->installment_no;
 
                 $installment_amount = $bookingPaymentDetail->amount;
-                $this->installmentMail($request->user_email, $installment_no, $total_paid, $total_due, $installment_amount, $next_installment_date, $remarks);
+                $mailDetails = ['email' => $request->user_email, 'installment_no' => $installment_no, 'total_paid' => $total_paid, 'total_due' => $total_due, 'installment_amount' => $installment_amount, 'next_installment_date' => $next_installment_date, 'remarks' => $remarks];
 
                 if ($next_installment_date == null) {
                     $bookings = BookingSummary::find($bookingPaymentSummary->booking_summaries_id);
-                    $details = ['data' => $bookings];
+                    $details = ['data' => $bookings,'mailData' => $mailDetails];
                     GeneratePDF::dispatch($details);
                     //$pdf = $this->generateInvoicePDF($bookingPaymentSummary->booking_summaries_id);
+                }else{
+                    $this->installmentMail($mailDetails);
                 }
             }
             $bookingPaymentDetail->payment_mode = $request->payment_mode;
@@ -128,9 +130,8 @@ class BookingSummaryController extends Controller
         //
     }
 
-    private function installmentMail($user_email, $installment_no, $total_paid, $total_due, $installment_amount, $next_installment_date, $remarks)
+    private function installmentMail($details)
     {
-        $details = ['email' => $user_email, 'installment_no' => $installment_no, 'total_paid' => $total_paid, 'total_due' => $total_due, 'installment_amount' => $installment_amount, 'next_installment_date' => $next_installment_date, 'remarks' => $remarks];
         SendInstallmentEmail::dispatch($details);
         return true;
     }
