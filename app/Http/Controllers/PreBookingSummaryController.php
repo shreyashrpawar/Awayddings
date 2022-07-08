@@ -8,6 +8,8 @@ use App\Models\BookingPaymentSummary;
 use App\Models\BookingSummary;
 use App\Models\PreBookingSummary;
 use App\Models\PreBookingSummaryStatus;
+use App\Models\UserVendorAlignment;
+use App\Models\VendorPropertyAlignment;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -18,9 +20,21 @@ class PreBookingSummaryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request  $request)
     {
-        $booking_summary = PreBookingSummary::orderby('id','DESC')->paginate(50);
+        $user = $request->user();
+        $roles = $user->getRoleNames();
+        
+        $q = PreBookingSummary::orderBy('id', 'DESC');
+        if (in_array("vendor", $roles->toArray())){
+            $userVendor = UserVendorAlignment::where('user_id',$user->id)->first();
+            $vendor_id =  $userVendor->vendor_id;
+            $property_id =  VendorPropertyAlignment::where('vendor_id',$vendor_id)->pluck('property_id')->all();
+            $q->whereIn('property_id',$property_id);
+        }
+
+        
+        $booking_summary = $q->get();
         return view('app.prebooking.index',compact('booking_summary'));
     }
 

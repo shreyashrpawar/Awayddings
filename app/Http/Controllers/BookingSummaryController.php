@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use PDF;
 use Storage;
 use App\Jobs\GeneratePDF;
+use App\Models\UserVendorAlignment;
+use App\Models\VendorPropertyAlignment;
 
 
 class BookingSummaryController extends Controller
@@ -19,9 +21,20 @@ class BookingSummaryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request  $request)
     {
-        $bookings = BookingSummary::get();
+        $user = $request->user();
+        $roles = $user->getRoleNames();
+        
+        $q = BookingSummary::orderBy('id', 'DESC');
+        if (in_array("vendor", $roles->toArray())){
+            $userVendor = UserVendorAlignment::where('user_id',$user->id)->first();
+            $vendor_id =  $userVendor->vendor_id;
+            $property_id =  VendorPropertyAlignment::where('vendor_id',$vendor_id)->pluck('property_id')->all();
+            $q->whereIn('property_id',$property_id);
+        }
+
+        $bookings = $q->get();
         return view('app.bookings.index', compact('bookings'));
     }
 

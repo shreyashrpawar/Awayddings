@@ -40,6 +40,17 @@ class RolePermissionSeeder extends Seeder
                         'role' => 'vendor',
                         'permission' => 'property show'
                     ],
+
+                    [
+                        'role' => 'vendor',
+                        'permission' =>  'pre-booking show',
+                    ],
+                    [
+                        'role' => 'vendor',
+                        'permission' =>   'booking show',
+                    ],
+
+
                     [
                         'role' => 'vendor',
                         'permission' => 'property update'
@@ -127,6 +138,10 @@ class RolePermissionSeeder extends Seeder
                     [
                         'role' => 'admin',
                         'permission' =>   'booking show',
+                    ],
+                    [
+                        'role' => 'admin',
+                        'permission' =>   'booking update',
                     ]
 
 

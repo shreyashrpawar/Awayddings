@@ -51,10 +51,10 @@ class GeneratePDF implements ShouldQueue
        
         Mail::to($this->details['mailData']['email'])->send($email);
 
-          $data = [
-             'booking_summary_id' =>  $bookings->id,
-             'invoice_url' => $pdfLink
-         ];
-         CustomerBookingInvoice::create($data);
+        $invoice = CustomerBookingInvoice::updateOrCreate([
+            'booking_summary_id'   => $bookings->id
+        ],[
+            'invoice_url' => $pdfLink            
+        ]);
     }
 }

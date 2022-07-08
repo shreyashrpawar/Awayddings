@@ -20,7 +20,7 @@ class VendorController extends Controller
     public function index()
     {
         $properties = Property::pluck('name','id')->all();
-        $vendors    = Vendor::paginate(50);
+        $vendors    = Vendor::get();
         return view('app.property.vendors.vendor_list',compact('properties','vendors'));
     }
 

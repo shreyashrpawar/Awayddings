@@ -39,7 +39,7 @@ class PropertyController extends Controller
             $property_id =  VendorPropertyAlignment::where('vendor_id',$vendor_id)->pluck('property_id')->all();
             $q->whereIn('id',$property_id);
         }
-        $properties = $q->paginate(50);
+        $properties = $q->get();
         return view('app.property.list', compact('properties'));
     }
 

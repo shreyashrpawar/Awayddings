@@ -1,5 +1,17 @@
 @extends('layouts.app')
 @section('title','Home Page')
+
+@section('css')
+    <link rel="stylesheet" href="{{ asset('datatable/datatables-bs4/css/dataTables.bootstrap4.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('datatable/datatables-responsive/css/responsive.bootstrap4.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('datatable/datatables-buttons/css/buttons.bootstrap4.min.css')}}">
+    <style>
+        thead.thead-dark {
+            color: white;
+        }
+    </style>
+@endsection
+
 @section('contents')
     <div class="card">
         <div class="card-body">
@@ -14,7 +26,7 @@
 
 
             <div class="table-responsive">
-                <table class="table table-sm">
+                <table class="table table-sm" id="example1">
                     <thead class="thead-dark">
                     <tr>
                         <th width="5%">#</th>
@@ -61,4 +73,37 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('js')
+    <script src="{{ asset('datatable/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('datatable/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('datatable/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('datatable/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('datatable/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('datatable/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('datatable/jszip/jszip.min.js') }}"></script>
+    <script src="{{ asset('datatable/pdfmake/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('datatable/pdfmake/vfs_fonts.js') }}"></script>
+    <script src="{{ asset('datatable/datatables-buttons/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('datatable/datatables-buttons/js/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('datatable/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+
+    <script>
+        $(function () {
+          $("#example1").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+            "buttons": ["csv", "pdf", "print"]
+          }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+          $('#example2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+          });
+        });
+    </script>
 @endsection
