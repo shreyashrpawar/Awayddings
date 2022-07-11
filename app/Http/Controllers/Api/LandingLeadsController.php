@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use App\Jobs\SendGenericEmail;
+use App\Jobs\SendLeadGenerationEmail;
+use App\Models\User;
+use Illuminate\Http\Request;
+
+use Tymon\JWTAuth\Facades\JWTAuth;
+
+
+class LandingLeadsController extends Controller
+{
+
+   public function store(Request  $request){
+
+       $data = [
+           'customer_name' => $request->customer_name,
+           'customer_email' => $request->customer_email,
+           'customer_mobile' => $request->customer_mobile,
+           'customer_location' => $request->customer_location,
+           'customer_date' => $request->customer_date,
+           'customer_pax' => $request->customer_pax,
+       ];
+
+       SendLeadGenerationEmail::dispatch($data);
+
+       return response()->json([
+           'success' => true,
+           'message' => 'Successfully Saved',
+       ]);
+   }
+}
