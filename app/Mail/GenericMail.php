@@ -18,7 +18,6 @@ class GenericMail extends Mailable
     protected $mailBody;
 
 
-
     /**
      * Create a new message instance.
      *
@@ -33,7 +32,6 @@ class GenericMail extends Mailable
         $this->mailTitle = $mailTitle;
         $this->mailSubTitle = $mailSubTitle;
         $this->mailBody = $mailBody;
-
     }
 
     /**

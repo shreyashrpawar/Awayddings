@@ -134,6 +134,13 @@
                             <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Payment Details</a>
                         </li>
 
+                        @if ($bookings->booking_invoice)
+                            <li>
+                                <a class="nav-link btn btn-success bg-success" href="{{ $bookings->booking_invoice->invoice_url ?? '' }}" style="color: #FFFFFF;">Invoice Download</a>
+                            </li>
+                        @endif
+                        
+
                     </ul>
                     <div class="tab-content" id="pills-tabContent">
                         <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
@@ -223,7 +230,9 @@
                                     <th>Status</th>
                                     <th>Payment Mode</th>
                                     <th>Remarks</th>
-                                    <th>Actions</th>
+                                    @can('booking update')
+                                        <th>Actions</th>
+                                    @endcan
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -245,19 +254,21 @@
                                                 PAID
                                             @endif
 
-                                           </td>
+                                        </td>
                                         <td>{{ $val->payment_mode }}</td>
                                         <td>{{ $val->remarks }}</td>
-                                        <td>
-                                            @if ($count == 1+ $loop->index)
-                                                <button class="btn btn-sm btn-outline-primary installmentStatus" data-id="{{ $val->id }}" data-installment_no="{{ $val->installment_no }}" data-payment_mode="{{ $val->payment_mode ?? '' }}" data-status="{{ $val->status ?? '' }}" data-remarks="{{ $val->remarks ?? '' }}">Edit</button>
-                                                @if ($val->status == 2)
-                                                    @php
-                                                        $count ++;
-                                                    @endphp
+                                        @can('booking update')
+                                            <td>
+                                                @if ($count == 1+ $loop->index)
+                                                    <button class="btn btn-sm btn-outline-primary installmentStatus" data-id="{{ $val->id }}" data-installment_no="{{ $val->installment_no }}" data-payment_mode="{{ $val->payment_mode ?? '' }}" data-status="{{ $val->status ?? '' }}" data-remarks="{{ $val->remarks ?? '' }}">Edit</button>
+                                                    @if ($val->status == 2)
+                                                        @php
+                                                            $count ++;
+                                                        @endphp
+                                                    @endif
                                                 @endif
-                                            @endif
-                                        </td>
+                                            </td>
+                                        @endcan
                                         
                                     </tr>
                                 @endforeach

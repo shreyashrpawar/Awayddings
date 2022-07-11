@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class LocationController extends Controller
 {
    public function index(){
-       $locations = Location::paginate(50);
+       $locations = Location::all();
        return view('app.settings.locations.list',compact('locations'));
    }
     public function show($id,Request  $request){

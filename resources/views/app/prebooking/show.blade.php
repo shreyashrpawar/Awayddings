@@ -9,14 +9,19 @@
                         <span class="badge badge-pill badge-info">{{ $summary->pre_booking_summary_status->name }}</span>
                     </h4>
                 </div>
-                <div class="offset-3 col-md-3 mb-4 form-inline">
-                    <label for="" class="font-weight-bold text-uppercase">Current status &nbsp;</label>
-                    <select name="new_status" id="new_status" class="form-control form-control-sm">
-                        @foreach($pre_booking_summary_status as $key => $val)
-                        <option value="{{ $key }}" @if($key == $summary->pre_booking_summary_status_id) selected @endif> {{ strtoupper( $val) }}</option>
-                        @endforeach
-                    </select>
-                </div>
+                
+                @can('pre-booking update')
+                    <div class="offset-3 col-md-3 mb-4 form-inline">
+                        <label for="" class="font-weight-bold text-uppercase">Current status &nbsp;</label>
+                        <select name="new_status" id="new_status" class="form-control form-control-sm">
+                            @foreach($pre_booking_summary_status as $key => $val)
+                            <option value="{{ $key }}" @if($key == $summary->pre_booking_summary_status_id) selected @endif> {{ strtoupper( $val) }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                @endcan
+                
+
                 <div class="col-md-12">
                     <table class="table table-sm">
                         <tr>

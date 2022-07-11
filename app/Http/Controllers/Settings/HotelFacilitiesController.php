@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class HotelFacilitiesController extends Controller
 {
     public function index(){
-        $locations = RoomInclusion::paginate(50);
+        $locations = RoomInclusion::all();
         return view('app.settings.room_inclusion.list',compact('locations'));
     }
 

@@ -89,7 +89,7 @@ class PropertyController extends Controller
                                 ->select('properties.id','properties.name','properties.address','properties.featured_image','properties.description','locations.name as location',
                                     'property_default_rates.amount','property_default_rates.qty')
                                  ->orderBy('property_default_rates.amount','ASC')
-                                ->simplePaginate(20);
+                                ->simplePaginate(15);
         // get double occupancy price for today
         // room availability
         foreach($properties as $key => $property)

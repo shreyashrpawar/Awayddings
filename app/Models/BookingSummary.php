@@ -38,5 +38,9 @@ class BookingSummary extends Model
         return $this->hasOne('App\Models\BookingPaymentSummary','booking_summaries_id','id');
     }
 
+    public function booking_invoice(){
+        return $this->belongsTo('App\Models\CustomerBookingInvoice','id','booking_summary_id');
+    }
+
     protected $dates = ['check_in','check_out'];
 }
