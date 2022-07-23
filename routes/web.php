@@ -26,6 +26,7 @@ Route::middleware(['guest'])->group(function () {
 
 Auth::routes(['register' => false]);
 Route::resource('users',\App\Http\Controllers\UserController::class);
+Route::resource('leads',\App\Http\Controllers\LeadController::class);
 Route::middleware(['auth'])->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/change-password', [App\Http\Controllers\ChangePasswordController::class, 'index'])->name('change-password');
