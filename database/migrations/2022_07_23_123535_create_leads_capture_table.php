@@ -20,7 +20,7 @@ class CreateLeadsCaptureTable extends Migration
             $table->string('mobile');
             $table->date('wedding_date');
             $table->string('pax');
-            $table->string('bride_groom');
+            $table->string('bride_groom')->nullable();
             $table->string('origin');
             $table->string('status');
             $table->timestamps();

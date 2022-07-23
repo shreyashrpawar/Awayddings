@@ -35,7 +35,7 @@
                         <th>Phone</th>
                         <th>Roles</th>
                         <th>Status</th>
-{{--                        <th width="10%">Actions</th>--}}
+                        <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -58,19 +58,23 @@
                                     <span class="badge badge-success">Active</span>
                                 @endif
                             </td>
-{{--                            <td>--}}
-{{--                                <div class="btn-group">--}}
-{{--                                    <a href="{{ route('property.show',$val->id) }}" class="btn btn-sm btn-outline-primary">View</a>--}}
-{{--                                    <a href="{{ route('property.edit',$val->id) }}" class="btn btn-sm btn-outline-warning">Edit</a>--}}
-{{--                                </div>--}}
+                            <td>
+                                <div class="btn-group">
+                                    @if(request()->has('trashed'))
+                                        <a href="{{ route('users.restore', $val->id) }}" class="btn btn-success">Restore</a>
+                                    @else
+                                        <form method="POST" action="{{ route('users.destroy', $val->id) }}">
+                                            @csrf
+                                            <input name="_method" type="hidden" value="DELETE">
+                                            <button type="submit" class="btn btn-danger delete" title='Delete'>Delete</button>
+                                        </form>
+                                    @endif
+                                </div>
 
-{{--                            </td>--}}
+                            </td>
                         </tr>
 
                     @endforeach
-
-
-
                     </tbody>
                 </table>
             </div>
@@ -106,6 +110,15 @@
             "autoWidth": false,
             "responsive": true,
           });
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.delete').click(function(e) {
+                if(!confirm('Are you sure you want to delete this user?')) {
+                    e.preventDefault();
+                }
+            });
         });
     </script>
 @endsection
