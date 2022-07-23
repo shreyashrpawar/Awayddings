@@ -115,7 +115,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $('.delete').click(function(e) {
-                if(!confirm('Are you sure you want to delete this post?')) {
+                if(!confirm('Are you sure you want to delete this user?')) {
                     e.preventDefault();
                 }
             });
