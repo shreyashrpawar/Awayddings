@@ -16,7 +16,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users = User::withoutTrashed()->get();
 
         return view('app.users.user_list',compact('users'));
     }
@@ -100,6 +100,7 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        User::find($id)->delete();
+        return back()->with('success','User deleted successfully!');
     }
 }
