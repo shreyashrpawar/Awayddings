@@ -68,59 +68,60 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header bg-warning">
-                        <h5 class="card-title text-center text-white align-items-center">Amount details</h5>
-                        </div>
-                        <div class="card-body">
-
-                        <div class="form-group row">
-                                <label class="col-sm-3 col-form-label">User remark</label>
-                                <div class="col-sm-9">
-                                  <input type="text" class="form-control" value="{{ $bookings->user_remarks ?? '' }}" readonly>
-                                </div>
+                @can('booking update')
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header bg-warning">
+                            <h5 class="card-title text-center text-white align-items-center">Amount details</h5>
                             </div>
-
+                            <div class="card-body">
 
                             <div class="form-group row">
-                                <label class="col-sm-3 col-form-label">Total Amount</label>
-                                <div class="col-sm-9">
-                                  <input type="text" class="form-control" value="{{ number_format($bookings->amount ?? '', 2, '.', ',') }}" readonly>
+                                    <label class="col-sm-3 col-form-label">User remark</label>
+                                    <div class="col-sm-9">
+                                    <input type="text" class="form-control" value="{{ $bookings->user_remarks ?? '' }}" readonly>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="form-group row">
-                                <label class="col-sm-3 col-form-label">Discount</label>
-                                <div class="col-sm-9">
-                                  <input type="text" class="form-control" value="{{ $bookings->booking_payment_summary->discount }}" readonly>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Total Amount</label>
+                                    <div class="col-sm-9">
+                                    <input type="text" class="form-control" value="{{ number_format($bookings->amount ?? '', 2, '.', ',') }}" readonly>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="form-group row">
-                                <label class="col-sm-3 col-form-label">Amount</label>
-                                <div class="col-sm-9">
-                                  <input type="text" class="form-control" value="{{ number_format($bookings->booking_payment_summary->amount, 2, '.', ',') }}" readonly>
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Discount</label>
+                                    <div class="col-sm-9">
+                                    <input type="text" class="form-control" value="{{ $bookings->booking_payment_summary->discount }}" readonly>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="form-group row">
-                                <label class="col-sm-3 col-form-label">Paid</label>
-                                <div class="col-sm-9">
-                                  <input type="text" class="form-control" value="{{ number_format($bookings->booking_payment_summary->paid, 1, '.', ',') }}" readonly>
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Amount</label>
+                                    <div class="col-sm-9">
+                                    <input type="text" class="form-control" value="{{ number_format($bookings->booking_payment_summary->amount, 2, '.', ',') }}" readonly>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="form-group row">
-                                <label class="col-sm-3 col-form-label">Due</label>
-                                <div class="col-sm-9">
-                                  <input type="text" class="form-control" value="{{ number_format($bookings->booking_payment_summary->due, 1, '.', ',') }}" readonly>
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Paid</label>
+                                    <div class="col-sm-9">
+                                    <input type="text" class="form-control" value="{{ number_format($bookings->booking_payment_summary->paid, 1, '.', ',') }}" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Due</label>
+                                    <div class="col-sm-9">
+                                    <input type="text" class="form-control" value="{{ number_format($bookings->booking_payment_summary->due, 1, '.', ',') }}" readonly>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                @endcan
 
                 <hr style="border: 2px #ffffff solid; width: 100%;">
 
@@ -130,9 +131,11 @@
                         <li class="nav-item">
                             <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Booking Details</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Payment Details</a>
-                        </li>
+                        @can('booking update')
+                            <li class="nav-item">
+                                <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Payment Details</a>
+                            </li>
+                        @endcan
 
                         @if ($bookings->booking_invoice)
                             <li>

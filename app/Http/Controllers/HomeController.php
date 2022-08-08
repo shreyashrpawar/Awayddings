@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BookingSummary;
+use App\Models\PreBookingSummary;
 use Illuminate\Http\Request;
+use App\Models\Property;
+use App\Models\UserVendorAlignment;
+use App\Models\VendorPropertyAlignment;
 
 class HomeController extends Controller
 {
@@ -23,6 +28,36 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        return view('home');
+        $user = $request->user();
+        $roles = $user->getRoleNames();
+        $q = Property::orderBy('id', 'DESC');
+        if (in_array("vendor", $roles->toArray())){
+            $userVendor = UserVendorAlignment::where('user_id',$user->id)->first();
+            $vendor_id =  $userVendor->vendor_id;
+            $property_id =  VendorPropertyAlignment::where('vendor_id',$vendor_id)->pluck('property_id')->all();
+            $q->whereIn('id',$property_id);
+        }
+        $properties_count = $q->count();
+        
+        $pre_bookings = PreBookingSummary::orderBy('id', 'DESC');
+        if (in_array("vendor", $roles->toArray())){
+            $userVendor = UserVendorAlignment::where('user_id',$user->id)->first();
+            $vendor_id =  $userVendor->vendor_id;
+            $property_id =  VendorPropertyAlignment::where('vendor_id',$vendor_id)->pluck('property_id')->all();
+            $pre_bookings->whereIn('property_id',$property_id);
+        }        
+        $pre_bookings_count = $pre_bookings->count();
+
+        $bookings = BookingSummary::orderBy('id', 'DESC');
+        if (in_array("vendor", $roles->toArray())){
+            $userVendor = UserVendorAlignment::where('user_id',$user->id)->first();
+            $vendor_id =  $userVendor->vendor_id;
+            $property_id =  VendorPropertyAlignment::where('vendor_id',$vendor_id)->pluck('property_id')->all();
+            $bookings->whereIn('property_id',$property_id);
+        }
+
+        $bookings_count = $bookings->count();
+
+        return view('home', compact('properties_count','pre_bookings_count','bookings_count'));
     }
 }
