@@ -1,59 +1,87 @@
 @extends('layouts.app')
 @section('title','Home Page')
 @section('css')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
-        .small-box.bg-info.dashboard-box {
-            padding: 15px 0px 15px 0px;
+        /* ======================= Cards ====================== */
+        .cardBox {
+            position: relative;
+            width: 100%;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 30px;
+        }
+
+        .cardBox .card {
+            position: relative;
+            background: var(--white);
+            padding: 30px;
+            border-radius: 20px;
+            display: flex;
+            justify-content: space-between;
+            cursor: pointer;
+            box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .cardBox .card .numbers {
+            position: relative;
+            font-weight: 500;
+            font-size: 2.5rem;
+            color: var(--blue);
+        }
+
+        .cardBox .card .cardName {
+            color: var(--black2);
+            font-size: 1.1rem;
+            margin-top: 5px;
+        }
+
+        .cardBox .card .iconBx {
+            font-size: 3.5rem;
+            color: var(--black2);
+        }
+
+        .cardBox .card:hover {
+            background: var(--blue);
+        }
+        .cardBox .card:hover .numbers,
+        .cardBox .card:hover .cardName,
+        .cardBox .card:hover .iconBx {
+            color: var(--white);
         }
     </style>
 @endsection
 @section('contents')
 
 <div class="row">
-    <div class="col-lg-4 col-6">
-        <center>
-            <div class="small-box bg-info dashboard-box">
-                <div class="inner">
-                    <h3>{{ $properties_count ?? '0' }}</h3>
-                    <p>Total Properties</p>
-                </div>
-                <div>
-                    <a href="{{ route('property.index') }}" class="btn btn-sm btn-primary">More info <i class="fas fa-arrow-circle-right"></i></a>
-                </div>
+    <div class="cardBox">
+        <div class="card">
+            <div>
+                <div class="numbers">{{ $properties_count ?? '0' }}</div>
+                <div class="cardName">Listed Properties</div>
             </div>
-        </center>
-    </div>
+            <a href="{{ route('property.index') }}" class="btn btn-sm btn-primary mt-2 rounded-pill">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
 
-    <div class="col-lg-4 col-6">
-      <!-- small box -->
-      <div class="small-box bg-success">
-        <div class="inner">
-          <h3>{{ $pre_bookings_count ?? '0' }}</h3>
+        <div class="card">
+            <div>
+                <div class="numbers">{{ $pre_bookings_count ?? '0' }}</div>
+                <div class="cardName">Total Pre Bookings</div>
+            </div>
+            <a href="{{ route('pre-bookings.index') }}" class="btn btn-sm btn-success mt-2 rounded-pill">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
 
-          <p>Total Pre Bookings</p>
-        </div>
-        <div class="icon">
-          <i class="ion ion-stats-bars"></i>
-        </div>
-        <a href="{{ route('pre-bookings.index') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-      </div>
-    </div>
-    <!-- ./col -->
-    <div class="col-lg-4 col-6">
-      <!-- small box -->
-      <div class="small-box bg-warning">
-        <div class="inner">
-            <h3>{{ $bookings_count ?? '0' }}</h3>
+        <div class="card">
+            <div>
+                <div class="numbers">{{ $bookings_count ?? '0' }}</div>
+                <div class="cardName">Confirmed Bookings</div>
+            </div>
 
-          <p>Total Bookings</p>
+            <a href="{{ route('bookings.index') }}" class="btn btn-sm btn-success mt-2 rounded-pill">More info <i class="fas fa-arrow-circle-right"></i></a>
         </div>
-        <div class="icon">
-          <i class="ion ion-person-add"></i>
-        </div>
-        <a href="{{ route('bookings.index') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-      </div>
     </div>
 
   </div>
-  
+
 @endsection
