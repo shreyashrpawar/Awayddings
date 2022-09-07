@@ -30,7 +30,7 @@
                 <tbody>
                 @foreach($leads as $key => $val)
                 <tr>
-                    <th>{{ 1+ $key }}</th>
+                    <th>{{ $leads->firstItem() + $loop->index }}</th>
                     <td>{{ $val->name }}</td>
                     <td>{{ $val->email }}</td>
                     <td>{{ $val->mobile }}</td>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\BookingSummary;
 use App\Models\HotelChargableType;
 use App\Models\Property;
 use App\Models\PropertyAmenities;
@@ -46,12 +47,14 @@ class PropertyController extends Controller
                 ->whereDate('date', $now)
                 ->where('hotel_chargable_type_id', $double_occupancy_details->id)->first();
             if (!$custom_rate_double_occupancy) {
-                $property->amount = $property->amount * $double_room_count;
+                $property->amount = $property->amount * $double_room_count * $nights;
+                $property->flag = true;
                 $property->night = $nights;
                 $property->pax = $adults;
             } else {
-                $property->amount = $custom_rate_double_occupancy->amount * $double_room_count;
+                $property->amount = $custom_rate_double_occupancy->amount * $double_room_count * $nights;
                 $property->night = $nights;
+                $property->flag = false;
                 $property->pax = $adults;
             }
 
@@ -97,12 +100,12 @@ class PropertyController extends Controller
                 ->where('hotel_chargable_type_id', $double_occupancy_details->id)
                 ->first();
             if (!$custom_rate_double_occupancy) {
-                $property->amount = $property->amount * $double_room_count;
+                $property->amount = $property->amount * $double_room_count * $nights;
                 $property->nights = $nights;
                 $property->days = $days;
                 $property->pax = $adults;
             } else {
-                $property->amount = $custom_rate_double_occupancy->amount * $double_room_count;
+                $property->amount = $custom_rate_double_occupancy->amount * $double_room_count * $nights;
                 $property->nights = $nights;
                 $property->days = $days;
                 $property->pax = $adults;
@@ -396,19 +399,34 @@ class PropertyController extends Controller
     public function propertyAvailable(Request $request)
     {
         $property_id = $request->property_id;
-        $check_in = Carbon::parse($request->check_in);
-        $check_out = Carbon::parse($request->check_out);
-        $adults = $request->adults;
+        $check_in = Carbon::parse($request->start_date);
+        $check_out = Carbon::parse($request->end_date);
+        $adults = $request->adult;
+        $rooms_required = $adults / 2;
+        $propertyDetails = Property::find($property_id);
 
-        $rooms = $adults / 2;
-        $dateRange = CarbonPeriod::create($check_in, $check_out);
+        if ($propertyDetails->total_rooms < $rooms_required)
+            return response()->json([
+                'success' => false,
+                'message' => 'Requirement is more than the rooms available',
+            ]);
+
+        $hasBooking = BookingSummary::where('property_id', '=', $property_id)
+            ->where('check_out', '>=', $check_in)
+            ->where('check_in', '<=', $check_out)
+            ->count();
+
+        if ($hasBooking)
+            return response()->json([
+                'success' => false,
+                'message' => 'Rooms not available for following dates',
+            ]);
 
 
         return response()->json([
             'success' => true,
-            'message' => 'SUCCESS'
+            'message' => 'Rooms are available'
         ]);
-
 
     }
 
