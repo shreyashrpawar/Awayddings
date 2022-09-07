@@ -22,7 +22,7 @@
         <ul class="navbar-nav navbar-nav-right">
             @auth
             <li class="nav-item nav-profile dropdown">
-                <a class="nav-link" href="#" data-toggle="dropdown" id="profileDropdown"><img src="https://via.placeholder.com/30x30" alt="profile"/>
+                <a class="nav-link" href="#" data-toggle="dropdown" id="profileDropdown"> <i class="mdi mdi-account-circle menu-icon mdi-48px"></i>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
                     <a class="dropdown-item">
