@@ -54,7 +54,7 @@
         <li class="nav-item">
             <a class="nav-link" href="{{ route('leads.index') }}">
                 <i class="mdi mdi-account-group-outline menu-icon"></i>
-                <span class="menu-title">Leads</span>
+                <span class="menu-title">Ads Leads</span>
             </a>
         </li>
         @endrole

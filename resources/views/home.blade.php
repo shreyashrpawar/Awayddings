@@ -61,7 +61,7 @@
                 <div class="numbers">{{ $properties_count ?? '0' }}</div>
                 <div class="cardName">Listed Properties</div>
             </div>
-            <a href="{{ route('property.index') }}" class="btn btn-sm btn-primary mt-2 rounded-pill">More info <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="{{ route('property.index') }}" class="btn btn-sm btn-success mt-2 rounded-pill">More info <i class="fas fa-arrow-circle-right"></i></a>
         </div>
 
         <div class="card">
@@ -83,5 +83,53 @@
     </div>
 
   </div>
+<div class="row ml-2">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Lead Report</h4>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th class="pt-1">
 
+                        </th>
+                        <th class="pt-1 pl-0">
+                            Status
+                        </th>
+                        <th class="pt-1">
+                            Count
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($leads_count as $lead)
+                    <tr>
+                        <td class="py-1 pl-0">
+                            @if($lead['status'] == 'new')
+                                <label class="badge badge-light"> </label>
+                            @elseif( $lead['status'] == 'recce_planned' or $lead['status'] == 'potential_recce' or $lead['status'] == 'recce_done')
+                                <label class="badge badge-info"> </label>
+                            @elseif( $lead['status'] == 'lost_general_inquiry')
+                                <label class="badge badge-danger"> </label>
+                            @elseif( $lead['status'] == 'under_discussion')
+                                <label class="badge badge-warning"> </label>
+                            @else
+                                <label class="badge badge-success"> </label>
+                            @endif
+                        </td>
+                        <td>
+                            {{str_replace('_', ' ', $lead['status'])}}
+                        </td>
+                        <td>
+                            {{$lead['count']}}
+                        </td>
+                    </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection

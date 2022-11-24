@@ -19,6 +19,8 @@
 {{--                </div>--}}
 {{--            </li>--}}
 {{--        </ul>--}}
+        <div class="ml-4"> Welcome <b>{{ Auth::user()->name }}</b>, have a great day!</div>
+
         <ul class="navbar-nav navbar-nav-right">
             @auth
             <li class="nav-item nav-profile dropdown">

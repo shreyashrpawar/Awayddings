@@ -1,5 +1,15 @@
 @extends('layouts.app')
 @section('title','Home Page')
+@section('css')
+    <link rel="stylesheet" href="{{ asset('datatable/datatables-bs4/css/dataTables.bootstrap4.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('datatable/datatables-responsive/css/responsive.bootstrap4.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('datatable/datatables-buttons/css/buttons.bootstrap4.min.css')}}">
+    <style>
+        thead.thead-dark {
+            color: white;
+        }
+    </style>
+@endsection
 @section('contents')
     <div class="card">
         <div class="card-body">
@@ -30,15 +40,15 @@
                     <tbody>
                     @foreach($leads as $key => $val)
                         @if($val->status == 'new')
+                            <tr style="background: whitesmoke">
+                        @elseif( $val->status == 'recce_planned' or $val->status == 'potential_recce' or $val->status == 'recce_done')
                             <tr style="background: #7cfffc">
-                        @elseif($val->status == 'booked')
-                            <tr style="background: #bdff7c">
-                        @elseif($val->status == 'lost')
-                            <tr style="background: #ff5959">
-                        @elseif($val->status == 'recce' or $val->status == 'potential_recce' or $val->status == 'recce_done')
-                            <tr style="background: #fff389">
+                        @elseif( $val->status == 'lost_general_inquiry')
+                            <tr style="background: #ff8989">
+                        @elseif( $val->status == 'under_discussion')
+                            <tr style="background: #ffea99">
                         @else
-                            <tr>
+                            <tr style="background: #b9fd84">
                                 @endif
                                 <th>{{ $leads->firstItem() + $loop->index }}</th>
                                 <td>{{ $val->name }}</td>
@@ -51,28 +61,32 @@
                                 <td>{{ date('d-m-Y', strtotime($val->created_at))}}</td>
                                 <td>
                                     @if($val->status == 'new')
+                                        <span class="badge badge-light">{{ $val->status }}</span>
+                                    @elseif( $val->status == 'recce_planned' or $val->status == 'potential_recce' or $val->status == 'recce_done')
                                         <span class="badge badge-info">{{ $val->status }}</span>
-                                    @elseif($val->status == 'lost')
+                                    @elseif( $val->status == 'lost_general_inquiry')
                                         <span class="badge badge-danger">{{ $val->status }}</span>
-                                    @elseif( $val->status == 'recce' or $val->status == 'potential_recce' or $val->status == 'recce_done')
+                                    @elseif( $val->status == 'under_discussion')
                                         <span class="badge badge-warning">{{ $val->status }}</span>
                                     @else
                                         <span class="badge badge-success">{{ $val->status }}</span>
                                     @endif
                                 </td>
                                 <td>
-                                    @if($val->status != 'lost')
-                                        <button type="button" class="btn btn-sm btn-outline-primary"
+                                    <div class="btn-group">
+                                        @if($val->status != 'lost_general_inquiry')
+                                            <button type="button" class="btn btn-sm btn-outline-primary"
+                                                    data-toggle="modal"
+                                                    data-target="#editLead-{{$val->id}}">Action<i
+                                                    class="mdi mdi-pencil ml-1"></i>
+                                            </button>
+                                        @endif
+                                        <button type="button" class="btn btn-sm btn-primary"
                                                 data-toggle="modal"
-                                                data-target="#editLead-{{$val->id}}">Action<i
-                                                class="mdi mdi-pencil ml-1"></i>
+                                                data-target="#viewRemark-{{$val->id}}">View<i
+                                                class="mdi mdi-eye ml-1"></i>
                                         </button>
-                                    @endif
-                                    <button type="button" class="btn btn-sm btn-primary"
-                                            data-toggle="modal"
-                                            data-target="#viewRemark-{{$val->id}}">View<i
-                                            class="mdi mdi-eye ml-1"></i>
-                                    </button>
+                                        <div class="btn-group">
                             </tr>
 
                             @endforeach
@@ -117,7 +131,8 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form id="edit-lead-form-{{$val->id}}" action="{{ route('leads.update', ['lead' => $val->id]) }}"
+                        <form id="edit-lead-form-{{$val->id}}"
+                              action="{{ route('leads.update', ['lead' => $val->id]) }}"
                               method="post">
                             {{ method_field('PATCH') }}
                             {{ csrf_field() }}
@@ -125,17 +140,14 @@
                             <div class="form-group">
                                 <label>Update Status to</label>
                                 <select name="lead_status" id="lead_status" class="form-control">
-                                    <option value="contacted">
-                                        Contacted
+                                    <option value="recce_planned">
+                                        Recce Planned
                                     </option>
-                                    <option value="potential_recce">Potential Recce
+                                    <option value="recce_done">Recce Done
                                     </option>
-                                    <option value="recce">Recce</option>
-                                    <option value="recce_done">Recce
-                                        Done
-                                    </option>
+                                    <option value="under_discussion">Under Discussion</option>
                                     <option value="booked">Booked</option>
-                                    <option value="lost">Lost</option>
+                                    <option value="lost_general_inquiry">Lost General Inquiry</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -153,4 +165,37 @@
             </div>
         </div>
     @endforeach
+@endsection
+
+@section('js')
+    <script src="{{ asset('datatable/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('datatable/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('datatable/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('datatable/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('datatable/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('datatable/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('datatable/jszip/jszip.min.js') }}"></script>
+    <script src="{{ asset('datatable/pdfmake/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('datatable/pdfmake/vfs_fonts.js') }}"></script>
+    <script src="{{ asset('datatable/datatables-buttons/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('datatable/datatables-buttons/js/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('datatable/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+
+    <script>
+        $(function () {
+            $("#example1").DataTable({
+                "responsive": true, "lengthChange": false, "autoWidth": false,
+                "buttons": ["csv", "pdf", "print"]
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+            $('#example2').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+            });
+        });
+    </script>
 @endsection
