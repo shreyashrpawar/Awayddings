@@ -8,6 +8,10 @@
         thead.thead-dark {
             color: white;
         }
+
+        .custom-select {
+            width: 55px !important;
+        }
     </style>
 @endsection
 @section('contents')
@@ -50,7 +54,7 @@
                         @else
                             <tr style="background: #b9fd84">
                                 @endif
-                                <th>{{ $leads->firstItem() + $loop->index }}</th>
+                                <th>{{ $loop->index + 1}}</th>
                                 <td>{{ $val->name }}</td>
                                 <td>{{ $val->email }}</td>
                                 <td>{{ $val->mobile }}</td>
@@ -86,13 +90,12 @@
                                                 data-target="#viewRemark-{{$val->id}}">View<i
                                                 class="mdi mdi-eye ml-1"></i>
                                         </button>
-                                        <div class="btn-group">
+                                        </div>
+                                </td>
                             </tr>
-
                             @endforeach
                     </tbody>
                 </table>
-                {!! $leads->render() !!}
             </div>
         </div>
     </div>
@@ -184,18 +187,15 @@
     <script>
         $(function () {
             $("#example1").DataTable({
-                "responsive": true, "lengthChange": false, "autoWidth": false,
-                "buttons": ["csv", "pdf", "print"]
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-            $('#example2').DataTable({
+                "responsive": true,
+                "lengthChange": true,
+                "autoWidth": false,
                 "paging": true,
-                "lengthChange": false,
                 "searching": true,
                 "ordering": true,
                 "info": true,
-                "autoWidth": false,
-                "responsive": true,
-            });
+                "buttons": ["csv", "pdf", "print"]
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
         });
     </script>
 @endsection
