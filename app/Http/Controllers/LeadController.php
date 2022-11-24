@@ -31,6 +31,7 @@ class LeadController extends Controller
      */
     public function index(Request $request)
     {
+
        $leads = Leads::orderBy('id', 'desc')->get();
        $leads_statuses = Leads::distinct('status')->get(['status'])->toArray();
        return view('app.leads.index', compact('leads', 'leads_statuses'));
