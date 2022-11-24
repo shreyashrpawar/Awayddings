@@ -31,14 +31,16 @@ class LeadController extends Controller
      */
     public function index(Request $request)
     {
-       $leads = Leads::orderBy('id', 'desc')->paginate(15);
-       return view('app.leads.index', compact('leads'));
+       $leads = Leads::orderBy('id', 'desc')->paginate(20);
+       $leads_statuses = Leads::distinct('status')->get(['status'])->toArray();
+       return view('app.leads.index', compact('leads', 'leads_statuses'));
     }
 
     public function update(Request $request, $lead_id)
     {
         $lead = Leads::findOrFail($lead_id);
-        $lead->status = 'contacted';
+        $lead->status = $request->lead_status;
+        $lead->remarks = $request->lead_remarks;
         $lead->save();
         return back()->with('success','Lead updated successfully!');
     }
