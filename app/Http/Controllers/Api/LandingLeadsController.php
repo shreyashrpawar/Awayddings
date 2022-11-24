@@ -34,7 +34,7 @@ class LandingLeadsController extends Controller
            'wedding_date' => $request->customer_date,
            'pax' => $request->customer_pax,
            'status' => 'new',
-           'origin' => 'ads'
+           'origin' => 'google_ads'
        );
 
        Leads::create($db_data);

@@ -38,7 +38,8 @@ class LeadController extends Controller
     public function update(Request $request, $lead_id)
     {
         $lead = Leads::findOrFail($lead_id);
-        $lead->status = 'contacted';
+        $lead->status = $request->lead_status;
+        $lead->remarks = $request->lead_remarks;
         $lead->save();
         return back()->with('success','Lead updated successfully!');
     }

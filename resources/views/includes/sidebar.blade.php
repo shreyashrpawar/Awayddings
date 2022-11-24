@@ -45,7 +45,7 @@
         <li class="nav-item">
             <a class="nav-link" href="{{ route('users.index') }}">
                 <i class="mdi mdi-account-group-outline menu-icon"></i>
-                <span class="menu-title">Users</span>
+                <span class="menu-title">Registered Users</span>
             </a>
         </li>
         @endcan
