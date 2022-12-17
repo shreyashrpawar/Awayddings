@@ -59,7 +59,7 @@ class LoginController extends Controller
         $messages    = ["{$this->username()}.exists" => 'The account you are trying to login is not registered or it has been disabled.'];
         $user        = User::where($field, $request->email)->where('status',1)->first();
         if($user){
-            $currentRole =  $user->hasAnyRole(['vendor','admin']);
+            $currentRole =  $user->hasAnyRole(['vendor','admin', 'superAdmin']);
             if ($currentRole)
             {
                 $this->validate($request,[

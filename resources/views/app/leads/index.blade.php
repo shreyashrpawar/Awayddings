@@ -21,6 +21,13 @@
                 <div class="col-md-6">
                     <h4 class="card-title text-uppercase">Leads List</h4>
                 </div>
+                <div class="col-md-6 text-right">
+                    <button type="button" class="btn btn-sm btn-primary"
+                            data-toggle="modal"
+                            data-target="#addNewLead">Add<i
+                            class="mdi mdi-plus ml-1"></i>
+                    </button>
+                </div>
             </div>
 
 
@@ -35,7 +42,7 @@
                         <th>Bride & Groom</th>
                         <th>Wedding Date</th>
                         <th>Pax</th>
-                        {{--                    <th>Origin</th>--}}
+                        <th>Remark</th>
                         <th>Created On</th>
                         <th>Status</th>
                         <th>Actions</th>
@@ -61,7 +68,7 @@
                                 <td>{{ $val->bride_groom }}</td>
                                 <td>{{ $val->wedding_date }}</td>
                                 <td>{{ $val->pax }}</td>
-                                {{--                    <td>{{ $val->origin }}</td>--}}
+                                <td>{{ strlen($val->remarks) > 0 ? 'Yes': 'No'}}</td>
                                 <td>{{ date('d-m-Y', strtotime($val->created_at))}}</td>
                                 <td>
                                     @if($val->status == 'new')
@@ -90,7 +97,21 @@
                                                 data-target="#viewRemark-{{$val->id}}">View<i
                                                 class="mdi mdi-eye ml-1"></i>
                                         </button>
-                                        </div>
+                                        @can('delete leads')
+                                            @if(request()->has('trashed'))
+                                                <a href="{{ route('leads.restore', $val->id) }}"
+                                                   class="btn btn-success">Restore</a>
+                                            @else
+                                                <form method="POST" action="{{ route('leads.destroy', $val->id) }}">
+                                                    @csrf
+                                                    <input name="_method" type="hidden" value="DELETE">
+                                                    <button type="submit" class="btn btn-danger delete" title='Delete'>
+                                                        Delete
+                                                    </button>
+                                                </form>
+                                            @endif
+                                        @endcan
+                                    </div>
                                 </td>
                             </tr>
                             @endforeach
@@ -168,6 +189,72 @@
             </div>
         </div>
     @endforeach
+
+
+
+
+
+    <div class="modal fade" id="addNewLead" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+         style="display: none;" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ModalLabel">Add New Lead</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="add-new-lead-form"
+                          action="{{ route('leads.store') }}"
+                          method="post">
+                        {{ method_field('POST') }}
+                        {{ csrf_field() }}
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="customer_name">Customer Name</label>
+                                <input type="text" class="form-control" id="customer_name" name="customer_name"
+                                       placeholder="Customer Name" required/>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="customer_email">Email</label>
+                                <input type="email" class="form-control" id="customer_email" name="customer_email"
+                                       placeholder="Email" required/>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="customer_mobile">Mobile Number</label>
+                                <input type="number" class="form-control" maxlength="10" id="customer_mobile"
+                                       name="customer_mobile" placeholder="Customer Phone" required/>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="customer_date">Wedding Date</label>
+                                <input type="date" class="form-control" id="wedding_date" name="customer_date"
+                                       placeholder="Wedding Date" required/>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="bride_groom">Couple Name</label>
+                                <input type="text" class="form-control" id="bride_groom" name="bride_groom"
+                                       placeholder="Couple Name"/>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="customer_pax">Total Pax</label>
+                                <input type="number" class="form-control" name="customer_pax" id="customer_pax"
+                                       placeholder="Total Guests" required>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" class="btn btn-success" value="Add New" form="add-new-lead-form">
+                    <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('js')
