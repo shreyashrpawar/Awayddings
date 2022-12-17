@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Jobs\SendEmail;
 use App\Models\User;
 use Illuminate\Http\Request;
-use DB; 
-use Carbon\Carbon; 
+use DB;
+use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Hash;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -34,7 +34,7 @@ class ForgotPasswordController extends Controller
         $messages    = ["{$this->username()}.exists" => 'The account you are trying to login is not registered or it has been disabled.'];
         $user        = User::where($field, $request->email)->where('status',1)->first();
         if($user){
-            $currentRole =  $user->hasAnyRole(['vendor','admin']);
+            $currentRole =  $user->hasAnyRole(['vendor','admin', 'superAdmin']);
             if ($currentRole)
             {
                 $this->validate($request,[
@@ -59,19 +59,19 @@ class ForgotPasswordController extends Controller
 
         $token = Str::random(64);
         DB::table('password_resets')->insert([
-            'email' => $request->email, 
-            'token' => $token, 
+            'email' => $request->email,
+            'token' => $token,
             'created_at' => Carbon::now()
         ]);
 
         $details = ['email' => $request->email,'token' => $token, 'link' => url('reset-password/'.$token)];
         SendEmail::dispatch($details);
-        return back()->with('message', 'We have e-mailed your password reset link!');        
-        
+        return back()->with('message', 'We have e-mailed your password reset link!');
+
     }
 
 
-    public function showResetPasswordForm($token) { 
+    public function showResetPasswordForm($token) {
         $tokenModel = DB::table('password_resets')
                             ->where(['token' => $token])
                             ->first();
@@ -96,7 +96,7 @@ class ForgotPasswordController extends Controller
 
         $tokenModel = DB::table('password_resets')
                             ->where([
-                            'email' => $request->email, 
+                            'email' => $request->email,
                             'token' => $request->token
                             ])
                             ->first();

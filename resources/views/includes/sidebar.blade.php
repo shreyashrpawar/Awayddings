@@ -50,7 +50,7 @@
         </li>
         @endcan
 
-        @hasrole('admin')
+        @hasrole('admin|superAdmin')
         <li class="nav-item">
             <a class="nav-link" href="{{ route('leads.index') }}">
                 <i class="mdi mdi-account-group-outline menu-icon"></i>
@@ -58,7 +58,7 @@
             </a>
         </li>
         @endrole
-        @hasrole('admin')
+        @hasrole('admin|superAdmin')
         <li class="nav-item">
             <a class="nav-link collapsed" data-toggle="collapse" href="#ui-basic1" aria-expanded="false" aria-controls="ui-basic1">
                 <i class="mdi mdi-settings menu-icon"></i>
