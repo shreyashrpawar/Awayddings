@@ -238,7 +238,7 @@ class PropertyController extends Controller
             ->first()->amount;
 
 
-        $other_properties = Property::select('id', 'name', 'featured_image')->whereNotIn('id', [$id])
+        $other_properties = Property::select('id', 'name', 'featured_image')->where('status', '=', '1')->whereNotIn('id', [$id])
             ->inRandomOrder()
             ->limit(3)
             ->where('location_id', $properties->location_id)->get();
