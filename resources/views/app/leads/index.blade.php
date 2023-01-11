@@ -58,6 +58,8 @@
                             <tr style="background: #ff8989">
                         @elseif( $val->status == 'under_discussion')
                             <tr style="background: #ffea99">
+                        @elseif( $val->status == 'call_not_picked')
+                            <tr style="background: lightsteelblue">
                         @else
                             <tr style="background: #b9fd84">
                                 @endif
@@ -79,6 +81,8 @@
                                         <span class="badge badge-danger">{{ $val->status }}</span>
                                     @elseif( $val->status == 'under_discussion')
                                         <span class="badge badge-warning">{{ $val->status }}</span>
+                                    @elseif( $val->status == 'call_not_picked')
+                                        <span class="badge badge-secondary">{{ $val->status }}</span>
                                     @else
                                         <span class="badge badge-success">{{ $val->status }}</span>
                                     @endif
@@ -172,6 +176,7 @@
                                     <option value="under_discussion">Under Discussion</option>
                                     <option value="booked">Booked</option>
                                     <option value="lost_general_inquiry">Lost General Inquiry</option>
+                                    <option value="call_not_picked">Call Not Picked</option>
                                 </select>
                             </div>
                             <div class="form-group">

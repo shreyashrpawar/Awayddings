@@ -114,6 +114,8 @@
                                 <label class="badge badge-danger"> </label>
                             @elseif( $lead['status'] == 'under_discussion')
                                 <label class="badge badge-warning"> </label>
+                            @elseif( $lead['status'] == 'call_not_picked')
+                                <label class="badge badge-secondary"> </label>
                             @else
                                 <label class="badge badge-success"> </label>
                             @endif
