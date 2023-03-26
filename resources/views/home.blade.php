@@ -110,6 +110,8 @@
                                 <label class="badge badge-light"> </label>
                             @elseif( $lead['status'] == 'recce_planned' or $lead['status'] == 'potential_recce' or $lead['status'] == 'recce_done')
                                 <label class="badge badge-info"> </label>
+                            @elseif( $lead['status'] == 'call_back' or $lead['status'] == 'send_to_decor')
+                                <label class="badge badge-primary"> </label>
                             @elseif( $lead['status'] == 'lost_general_inquiry')
                                 <label class="badge badge-danger"> </label>
                             @elseif( $lead['status'] == 'under_discussion')
