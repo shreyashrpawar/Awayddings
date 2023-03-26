@@ -60,6 +60,8 @@
                             <tr style="background: #ffea99">
                         @elseif( $val->status == 'call_not_picked')
                             <tr style="background: lightsteelblue">
+                        @elseif( $val->status == 'call_back' or  $val->status == 'send_to_decor')
+                            <tr style="background: lightgreen">
                         @else
                             <tr style="background: #b9fd84">
                                 @endif
@@ -177,6 +179,8 @@
                                     <option value="booked">Booked</option>
                                     <option value="lost_general_inquiry">Lost General Inquiry</option>
                                     <option value="call_not_picked">Call Not Picked</option>
+                                    <option value="call_back">Call Back</option>
+                                    <option value="send_to_decor">Send To Decor Team</option>
                                 </select>
                             </div>
                             <div class="form-group">
