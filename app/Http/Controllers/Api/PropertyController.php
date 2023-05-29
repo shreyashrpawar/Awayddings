@@ -382,7 +382,8 @@ class PropertyController extends Controller
     {
         $data = DB::select("SELECT
                 count(locations.name) as count,
-                locations.name
+                locations.name,
+                locations.status
             FROM
                 properties
                 INNER JOIN locations
