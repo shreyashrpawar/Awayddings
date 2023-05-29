@@ -389,7 +389,7 @@ class PropertyController extends Controller
                 INNER JOIN locations
             WHERE
                 properties.location_id = locations.id
-                group by locations.name");
+                group by locations.name, locations.status");
         return response()->json([
             'success' => true,
             'message' => 'Successfully Saved',
