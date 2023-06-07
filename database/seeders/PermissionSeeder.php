@@ -39,6 +39,7 @@ class PermissionSeeder extends Seeder
             'pre-booking show',
             'pre-booking update',
             'booking show',
+            'booking update'
         ];
         foreach($data as $val){
             $media = Permission::create([
