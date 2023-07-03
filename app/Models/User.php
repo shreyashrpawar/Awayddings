@@ -10,6 +10,8 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\URL;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -45,6 +47,7 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'email_verification_token_expires_at' => 'datetime',
     ];
 
     public function getJWTIdentifier()
@@ -58,5 +61,31 @@ class User extends Authenticatable implements JWTSubject
     public function products()
     {
         return $this->hasMany(Product::class);
+    }
+
+    //verified email
+    public function generateEmailVerificationToken()
+    {
+        $this->email_verification_token = bin2hex(random_bytes(32));
+        $this->email_verification_token_expires_at = Carbon::now()->addDay();
+        $this->save();
+    }
+
+    public function getEmailVerificationUrl()
+    {
+        return URL::temporarySignedRoute(
+            'email.verify',
+            $this->email_verification_token_expires_at,
+            ['user' => $this->id]
+        );
+    }
+
+    public function markEmailAsVerified()
+    {
+        $this->is_verified = true;
+        // $this->email_verification_token = null;
+        // $this->email_verification_token_expires_at = null;
+        $this->email_verified_at = Carbon::now();
+        $this->save();
     }
 }

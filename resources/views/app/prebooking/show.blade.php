@@ -11,7 +11,7 @@
                 </div>
                 
                 @can('pre-booking update')
-                    <div class="offset-3 col-md-3 mb-4 form-inline">
+                    <div class="col-md-3 mb-4 form-inline">
                         <label for="" class="font-weight-bold text-uppercase">Current status &nbsp;</label>
                         <select name="new_status" id="new_status" class="form-control form-control-sm">
                             @foreach($pre_booking_summary_status as $key => $val)
@@ -20,10 +20,13 @@
                         </select>
                     </div>
                 @endcan
+                <div class="col-md-3 mb-4 form-inline text-right">
+                    <a href="{{ route('pre-bookings.edit',$summary->id) }}{{-- url('pre-bookings.edit', ['id' => $summary->id]) --}}" class="btn btn-sm btn-primary">Edit</a>
+                </div>
                 
 
                 <div class="col-md-12">
-                    <table class="table table-sm">
+                    <table class="table table-sm" id="pre_booking_details_table">
                         <tr>
                             <th>Name</th>
                             <td> {{ $summary->user->name }}</td>
@@ -44,8 +47,14 @@
                             <th>Budget</th>
                             <td> {{ $summary->budget }}</td>
                         </tr>
+                        <tr>
+                            <th>Bride Name</th>
+                            <td> {{ $summary->bride_name }}</td>
+                            <th>Groom Name</th>
+                            <td> {{ $summary->groom_name }}</td>
+                        </tr>
                     </table>
-                    <table class="table table-sm">
+                    <table class="table table-sm" id="preBookingDetails_table">
                         <thead class="thead-dark">
                             <tr>
                                 <th>#</th>
@@ -61,7 +70,7 @@
                             $total = 0;
                             $old_date = '';
                             $total_room = $summary->property->total_rooms;
-
+                    
                         @endphp
                         @foreach($summary->pre_booking_details as $key => $val)
                             @php
@@ -101,18 +110,19 @@
                                 </td>
                                 <td>{{ $val->hotel_chargable_type->name }}</td>
                                 <td>
-
-                                    {{ $val->qty }}
+                                    <a href="" class="update" data-name="qty" data-type="text" data-pk="{{ $val->id }}" data-title="Enter quantity">{{ $val->qty }}</a>
                                 </td>
-                                <td>{{ $val->rate }}</td>
+                                <td>
+                                    <a href="" class="update" data-name="rate" data-type="text" data-pk="{{ $val->id }}" data-title="Enter rate">{{ $val->rate }}</a>
+                                </td>
 
-                                <td>{{ $val->qty * $val->rate }}</td>
+                                <td id="amount_{{ $val->id }}">{{ $val->qty * $val->rate }}</td>
 
                             </tr>
                         @endforeach
                         <tr>
                             <th colspan="5" class="text-right" >Total</th>
-                            <th >{{ $total }}</th>
+                            <th id="total_amount_th">{{ $total }}</th>
                         </tr>
                         </tbody>
 
@@ -290,7 +300,34 @@
     </div>
 @endsection
 @section('js')
+<link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jquery-editable/css/jquery-editable.css" rel="stylesheet"/>
+    <script>$.fn.poshytip={defaults:null}</script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jquery-editable/js/jquery-editable-poshytip.min.js"></script>
     <script>
+        $.fn.editable.defaults.mode = 'inline';
+  
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': '{{csrf_token()}}'
+            }
+        }); 
+
+        $('.update').editable({
+                url: "{{ route('pre_booking_qty_details.update') }}",
+                type: 'text',
+                pk: 1,
+                name: 'name',
+                title: 'Enter name',
+                success: function(response, newValue) {
+                    // Handle the successful response here
+                    console.log('Success:', response);
+                    console.log('New value:', newValue);
+                    $("#total_amount_th").html(response.total_amount);
+                    $("#amount_"+response.this_id).html(response.amount);
+
+                }
+        });
+
         $('#new_status').change(function(){
             let current_val = parseInt($(this).val());
             let old_val = {{ $summary->pre_booking_summary_status_id  }};

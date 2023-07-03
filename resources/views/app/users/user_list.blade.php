@@ -35,6 +35,7 @@
                         <th>Phone</th>
                         <th>Roles</th>
                         <th>Status</th>
+                        <th>Verified</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
@@ -56,6 +57,13 @@
                                     <span class="badge badge-warning">In Active</span>
                                 @elseif($val->status == 1)
                                     <span class="badge badge-success">Active</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if($val->is_verified == false)
+                                    <span class="badge badge-info">No</span>
+                                @elseif($val->is_verified == true)
+                                    <span class="badge badge-info">Yes</span>
                                 @endif
                             </td>
                             <td>

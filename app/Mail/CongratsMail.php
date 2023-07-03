@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class GenericMail extends Mailable
+class CongratsMail extends Mailable
 {
     use Queueable, SerializesModels;
     protected $email;
@@ -16,7 +16,6 @@ class GenericMail extends Mailable
     protected $mailTitle;
     protected $mailSubTitle;
     protected $mailBody;
-
 
     /**
      * Create a new message instance.
@@ -46,16 +45,8 @@ class GenericMail extends Mailable
         $data['mailBody'] = $this->mailBody;
         $data['mailBtnText'] =  $this->mailBtnText;
         $data['mailBtnUrl'] = $this->mailbtnLink;
-
-        // $verificationUrl = route('email.verify', encrypt($this->mailbtnLink));
-
-        // return $this->markdown('emails.generic')
-        //     ->with($data);
-
         return $this->from(env('MAIL_FROM_ADDRESS'), 'Awayddings')
             ->subject($this->mailTitle)
-            ->view('emails.generic',$data);
-            // return $this->markdown('emails.email-verification')
-            // ->subject('Email Verification');
+            ->view('emails.congradulations',$data);
     }
 }

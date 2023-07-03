@@ -20,7 +20,9 @@ class PreBookingSummary extends Model
         'admin_remarks',
         'status',
         'pax',
-        'pre_booking_summary_status_id'
+        'pre_booking_summary_status_id',
+        'bride_name',
+        'groom_name'
     ];
     protected $dates = ['check_in','check_out'];
     public function user(){
@@ -35,6 +37,10 @@ class PreBookingSummary extends Model
     public function pre_booking_summary_status(){
         return $this->belongsTo('App\Models\PreBookingSummaryStatus','pre_booking_summary_status_id','id');
 
+    }
+    public function bookingSummary()
+    {
+        return $this->belongsTo(App\Models\BookingSummary::class,'booking_summary_id');
     }
 
 }

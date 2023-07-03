@@ -19,6 +19,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::prefix('v1')->group(function () {
     Route::post('register',[\App\Http\Controllers\Api\UserController::class,'register']);
+    Route::get('/email/verify/{user}', [EmailVerificationController::class, 'verify'])
+    ->name('email.verify')
+    ->middleware('signed');
     Route::post('login',[\App\Http\Controllers\Api\UserController::class,'login']);
     Route::post('leads/capture',[\App\Http\Controllers\Api\LandingLeadsController::class,'store']);
     Route::get('property/random',[\App\Http\Controllers\Api\PropertyController::class,'getRandomProperty']);

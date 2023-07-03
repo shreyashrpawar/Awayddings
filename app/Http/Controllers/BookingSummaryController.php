@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\SendInstallmentEmail;
+use App\Jobs\SendCongratsEmail;
+use App\Jobs\SendEmailToHotel;
 use App\Models\BookingPaymentDetail;
 use App\Models\BookingPaymentSummary;
 use App\Models\BookingSummary;
@@ -12,7 +14,7 @@ use Storage;
 use App\Jobs\GeneratePDF;
 use App\Models\UserVendorAlignment;
 use App\Models\VendorPropertyAlignment;
-
+use App\Models\User;
 
 class BookingSummaryController extends Controller
 {
@@ -112,6 +114,22 @@ class BookingSummaryController extends Controller
 
                 $installment_amount = $bookingPaymentDetail->amount;
                 $mailDetails = ['email' => $request->user_email, 'installment_no' => $installment_no, 'total_paid' => $total_paid, 'total_due' => $total_due, 'installment_amount' => $installment_amount, 'next_installment_date' => $next_installment_date, 'remarks' => $remarks];
+
+                if($installment_no == 1) {
+                    // SendCongratsEmail::dispatch($details);
+                    $details = ['email' => $request->user_email,'mailbtnLink' => '', 'mailBtnText' => '',
+                    'mailTitle' => 'Congrats!', 'mailSubTitle' => 'Hooray! Your booking is confirmed.', 'mailBody' => 'We are happy to inform you that your booking is confirmed! Get ready to create some unforgettable memories. All you need to do is show us this email on the day you arrive, and you’ll be good to go!'];
+                    // dd($details);
+                    SendCongratsEmail::dispatch($details);
+
+                    // $email_details = ['data' => $bookings,'mailData' => $mailDetails];
+
+                    $bookings = BookingSummary::find($bookingPaymentSummary->booking_summaries_id);
+                    $user = User::find($bookings->user_id);
+                    $emailDetails = ['email' => $request->user_email, 'name' => $user->name, 'phone' => $user->phone, 'check_in' => $bookings->check_in, 'check_out' => $bookings->check_out, 'adult' => $bookings->pax];
+                    // $details = ['data' => $bookings,'mailData' => $mailDetails];
+                    SendEmailToHotel::dispatch($emailDetails);
+                }
 
                 if ($next_installment_date == null) {
                     $bookings = BookingSummary::find($bookingPaymentSummary->booking_summaries_id);
