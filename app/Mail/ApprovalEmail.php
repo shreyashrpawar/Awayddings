@@ -37,7 +37,7 @@ class ApprovalEmail extends Mailable
         $data['mailBtnUrl'] = '';
         return $this->from(env('MAIL_FROM_ADDRESS'), 'Awayddings')
             ->subject($data['mailSubTitle'])
-            ->view('emails.approval')->with([
+            ->view('emails.approvals')->with([
                 'bookings' => $this->bookings,
                 'data' => $data,
               ]);
@@ -51,7 +51,7 @@ class ApprovalEmail extends Mailable
         // $bookings = $this->bookings;
         // // dd($this->bookings);
         // // return $this->view('view.name');
-        // return $this->view('emails.approval')->with([
+        // return $this->view('emails.approvals')->with([
         //     'bookings' => $bookings,
         //     'data' => $data,
         //   ])
