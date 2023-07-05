@@ -30,6 +30,7 @@ Route::resource('leads',\App\Http\Controllers\LeadController::class);
 Route::get('/email/verify/{user}', [\App\Http\Controllers\EmailVerificationController::class, 'verify'])
     ->name('email.verify')
     ->middleware('signed');
+    Route::get('redirect-to-frontend', [\App\Http\Controllers\EmailVerificationController::class, 'redirectToFrontend'])->name('redirect-to-frontend');
 Route::middleware(['auth'])->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 

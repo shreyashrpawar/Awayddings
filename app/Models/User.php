@@ -12,6 +12,8 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Config;
+
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -73,11 +75,17 @@ class User extends Authenticatable implements JWTSubject
 
     public function getEmailVerificationUrl()
     {
-        return URL::temporarySignedRoute(
+        $url = URL::temporarySignedRoute(
             'email.verify',
             $this->email_verification_token_expires_at,
             ['user' => $this->id]
         );
+
+        return $url;
+
+        // $frontend_url = Config::get('app.frontend_url');
+        // $updatedUrl = str_replace(url('/'), $frontend_url, $url);
+        // return $updatedUrl;
     }
 
     public function markEmailAsVerified()

@@ -15,6 +15,7 @@ use App\Jobs\GeneratePDF;
 use App\Models\UserVendorAlignment;
 use App\Models\VendorPropertyAlignment;
 use App\Models\User;
+use App\Models\Property;
 
 class BookingSummaryController extends Controller
 {
@@ -70,6 +71,7 @@ class BookingSummaryController extends Controller
     public function show($id)
     {
         $bookings = BookingSummary::find($id);
+        // dd($bookings);
 
         return view('app.bookings.show', compact('bookings'));
     }
@@ -126,9 +128,14 @@ class BookingSummaryController extends Controller
 
                     $bookings = BookingSummary::find($bookingPaymentSummary->booking_summaries_id);
                     $user = User::find($bookings->user_id);
-                    $emailDetails = ['email' => $request->user_email, 'name' => $user->name, 'phone' => $user->phone, 'check_in' => $bookings->check_in, 'check_out' => $bookings->check_out, 'adult' => $bookings->pax];
-                    // $details = ['data' => $bookings,'mailData' => $mailDetails];
-                    SendEmailToHotel::dispatch($emailDetails);
+                    $property_id =  VendorPropertyAlignment::where('property_id',$bookings->property_id)->pluck('vendor_id')->first();
+                    if ($property_id) { 
+
+                        $emailDetails = ['email' => $request->user_email, 'name' => $user->name, 'phone' => $user->phone, 'check_in' => $bookings->check_in, 'check_out' => $bookings->check_out, 'adult' => $bookings->pax];
+                        // $details = ['data' => $bookings,'mailData' => $mailDetails];
+                        SendEmailToHotel::dispatch($emailDetails);
+                    }
+                    // dd($property_id);
                 }
 
                 if ($next_installment_date == null) {

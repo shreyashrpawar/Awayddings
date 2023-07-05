@@ -339,10 +339,15 @@ class PreBookingSummaryController extends Controller
                 ->update([
                     $request->name => $request->value
                 ]);
-            // if($request->name == 'rate') {
+
                 $preBookingDetails = PreBookingDetails::find($request->pk);
+            if($request->name == 'rate') {
                 $qty = $preBookingDetails->qty;
                 $amount = $qty * $request->value;
+            } else {
+                $rate = $preBookingDetails->rate;
+                $amount = $rate * $request->value;
+            }
 
                 $preBookingSummary = PreBookingSummary::find($preBookingDetails->pre_booking_summaries_id);
                 // $preBookingDetails->update(['amount' => $result]);

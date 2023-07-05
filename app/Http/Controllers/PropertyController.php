@@ -229,6 +229,7 @@ class PropertyController extends Controller
         }
 
         $data = Property::find($id);
+        // dd($data);
         return view('app.property.show', compact('data'));
 
     }
@@ -261,6 +262,7 @@ class PropertyController extends Controller
             ->all();
         $hotel_chargable_type = HotelChargableType::where('status', 1)
             ->pluck('name', 'id')->all();
+            // dd($hotel_chargable_type);
 
         $locations = Location::where('status', 1)
             ->pluck('name', 'id')->all();

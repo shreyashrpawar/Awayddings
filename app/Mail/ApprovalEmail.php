@@ -32,7 +32,7 @@ class ApprovalEmail extends Mailable
     {
         $data['mailTitle'] = 'Congradulations';
         $data['mailSubTitle'] =  'Booking Approval mail';
-        // $data['mailBody'] = $this->mailBody;
+        $data['mailBody'] = 'Congradulations! Your booking has been approved.';
         $data['mailBtnText'] =  '';
         $data['mailBtnUrl'] = '';
         return $this->from(env('MAIL_FROM_ADDRESS'), 'Awayddings')
