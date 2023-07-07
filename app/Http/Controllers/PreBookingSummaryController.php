@@ -128,7 +128,7 @@ class PreBookingSummaryController extends Controller
 
         if($current_status->name == 'approved'){
             // create a record in the booking
-            $additional_discount = $request->additional_discount ?? '0';
+            $additional_discount = $request->additional_discount ?? 0;
             $installments        = $request->installments;
             $total_amount = $pre_booking_summary->total_amount - $additional_discount;
             $booking_data = [
