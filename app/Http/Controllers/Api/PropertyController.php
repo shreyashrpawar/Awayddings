@@ -472,6 +472,7 @@ class PropertyController extends Controller
                         'date' => $date->format('d-m-Y'),
                         'chargable_type_id' => $val->hotel_charagable_type_id,
                         'chargable_type_details' => $val->hotel_charagable_type->name,
+                        'chargable_type_is_starter' => $val->hotel_charagable_type->is_single_qty,
                         'rate' => $propertyRate->amount,
                         'qty' => $propertyRate->available,
                         'percentage_occupancy' => $propertyRate->occupancy_percentage
@@ -482,6 +483,7 @@ class PropertyController extends Controller
                         'date' => $date->format('d-m-Y'),
                         'chargable_type_id' => $val->hotel_charagable_type_id,
                         'chargable_type_details' => $val->hotel_charagable_type->name,
+                        'chargable_type_is_starter' => $val->hotel_charagable_type->is_single_qty,
                         'rate' => $val->amount,
                         'qty' => $val->qty,
                         'percentage_occupancy' => $val->chargable_percentage
@@ -492,6 +494,7 @@ class PropertyController extends Controller
             }
             array_push($property_rates, $temp_data);
         }
+        // echo '<pre>'; print_r($property_rates); exit;
 
         return response()->json([
             'success' => true,

@@ -20,7 +20,12 @@
                         </select>
                     </div>
                 @endcan
-                <div class="col-md-3 mb-4 form-inline text-right">
+                @php
+                    $display = ''; 
+                    if($summary->pre_booking_summary_status_id == 3 || $summary->pre_booking_summary_status_id == 4)
+                        $display = 'display:none';
+                @endphp
+                <div class="col-md-3 mb-4 form-inline text-right" style="@php echo $display; @endphp">
                     <a href="{{ route('pre-bookings.edit',$summary->id) }}{{-- url('pre-bookings.edit', ['id' => $summary->id]) --}}" class="btn btn-sm btn-primary">Edit</a>
                 </div>
                 
@@ -74,6 +79,8 @@
                         @endphp
                         @foreach($summary->pre_booking_details as $key => $val)
                             @php
+                                $hotel_chargable_type_details = DB::table('hotel_chargable_types')->find($val->hotel_chargable_type_id);
+                                // dd($hotel_chargable_type_details);
                                     $double_room = 0;
                                     $triple_room = 0;
                                     $current_room = 0;
@@ -90,10 +97,14 @@
                                      $current_room =+ $val->qty;
                                 }
                                  if($val->hotel_chargable_type_id != 1 && $val->hotel_chargable_type_id != 2){
+                                    if($hotel_chargable_type_details->is_single_qty == 1){
+                                        $total = $total  + ($val->qty * $val->rate);
+                                    } else {
                                          $threshold_rooms = ($total_room * $val->threshold)/100;
                                          if($current_room >= $threshold_rooms){
                                               $total = $total  + ($val->qty * $val->rate);
                                          }
+                                    }
                                     } else{
                                          $total = $total  + ($val->qty * $val->rate);
                                     }
@@ -110,7 +121,14 @@
                                 </td>
                                 <td>{{ $val->hotel_chargable_type->name }}</td>
                                 <td>
+                                    @if($hotel_chargable_type_details->is_single_qty == 1)
+                                        <!-- <a href="" class="update" data-name="qty" data-type="text" data-pk="{{ $val->id }}" data-title="Enter quantity"><i class="fa fa-minus-circle" aria-hidden="true"></i></a> -->
+                                        <i class="fa fa-minus-circle delete-icon" data-id="{{ $val->id }}" aria-hidden="true"></i>
+
+
+                                    @else
                                     <a href="" class="update" data-name="qty" data-type="text" data-pk="{{ $val->id }}" data-title="Enter quantity">{{ $val->qty }}</a>
+                                    @endif
                                 </td>
                                 <td>
                                     <a href="" class="update" data-name="rate" data-type="text" data-pk="{{ $val->id }}" data-title="Enter rate">{{ $val->rate }}</a>
@@ -304,6 +322,34 @@
     <script>$.fn.poshytip={defaults:null}</script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jquery-editable/js/jquery-editable-poshytip.min.js"></script>
     <script>
+        $('.delete-icon').click(function() {
+            var id = $(this).data('id');
+            var summary_id = "{{ $summary->id }}";
+            var icon = $(this); // Store the icon reference
+
+            // Use the jQuery variable as needed
+            console.log(summary_id);
+
+            $.ajax({
+                url: '/pre-bookings/delete/' + id,
+                type: 'DELETE',
+                data: {
+                    _token: '{{ csrf_token() }}', // Add the CSRF token for security
+                },
+                success: function(response) {
+                    // Handle success response, e.g., show a success message, update the UI, etc.
+                    console.log(response);
+                    $("#total_amount_th").html(response.total_amount);
+                    icon.closest('tr').hide();
+                    console.log($(this));
+                    // $("#amount_"+response.this_id).html(response.amount);
+                },
+                error: function(xhr) {
+                    // Handle error response, e.g., show an error message, etc.
+                    console.log(xhr.responseText);
+                }
+            });
+        });
         $.fn.editable.defaults.mode = 'inline';
   
         $.ajaxSetup({

@@ -69,20 +69,20 @@ class CancelBookingCommand extends Command
 
             $booking_details = BookingDetail::where('booking_summaries_id', $booking->booking_summary_id)->get();
 
-            foreach($booking_details as $eachdetail) {
-                $eachdetail->delete();
-            }
-            // $booking_details->delete();
+            // foreach($booking_details as $eachdetail) {
+            //     $eachdetail->delete();
+            // }
+            // // $booking_details->delete();
 
-            $booking_payment_summary = BookingPaymentSummary::where('booking_summaries_id', $booking->booking_summary_id)->first();
+            // $booking_payment_summary = BookingPaymentSummary::where('booking_summaries_id', $booking->booking_summary_id)->first();
 
-            $booking_payment_details = BookingPaymentDetail::where('booking_payment_summaries_id', $booking_payment_summary->id)->get();
-            foreach($booking_payment_details as $eachdetail) {
-                $eachdetail->delete();
-            }
-            $booking_payment_summary->delete();
+            // $booking_payment_details = BookingPaymentDetail::where('booking_payment_summaries_id', $booking_payment_summary->id)->get();
+            // foreach($booking_payment_details as $eachdetail) {
+            //     $eachdetail->delete();
+            // }
+            // $booking_payment_summary->delete();
 
-            $booking_summary = BookingSummary::destroy($booking->booking_summary_id);
+            // $booking_summary = BookingSummary::destroy($booking->booking_summary_id);
                 // dd($booking_summary);
 
             // Cancel the booking by updating its status

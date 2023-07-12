@@ -44,6 +44,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('property',App\Http\Controllers\PropertyController::class);
     Route::resource('pre-bookings',App\Http\Controllers\PreBookingSummaryController::class);
     Route::post('pre-bookings/update_details/{id}', [App\Http\Controllers\PreBookingSummaryController::class, 'update_details'])->name('pre-bookings.update_details'); //Pre-booking edit url
+    Route::delete('pre-bookings/delete/{id}', [App\Http\Controllers\PreBookingSummaryController::class, 'delete'])->name('delete');
 
     Route::post('pre_booking_qty_details/update_details/', [App\Http\Controllers\PreBookingSummaryController::class, 'update_qty_details'])->name('pre_booking_qty_details.update'); //Pre-booking edit url
 

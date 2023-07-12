@@ -81,13 +81,7 @@ class PreBookingSummaryController extends Controller
         $summary = PreBookingSummary::with(['user','property','pre_booking_details','pre_booking_details.hotel_chargable_type','pre_booking_summary_status'])
             ->find($id);
         $pre_booking_summary_status = PreBookingSummaryStatus::pluck('name','id')->all();
-        // dd($pre_booking_summary_status);
        return view('app.prebooking.show',compact('summary','pre_booking_summary_status'));
-//       return response()->json([
-//           'success' => true,
-//           'message' => 'Success',
-//           'data' => $summary
-//       ]);
 
     }
 
@@ -332,8 +326,6 @@ class PreBookingSummaryController extends Controller
     
     public function update_qty_details(Request $request)
     {
-
-        // print_r($request->all()); exit;
         if ($request->ajax()) {
             PreBookingDetails::find($request->pk)
                 ->update([
@@ -373,6 +365,21 @@ class PreBookingSummaryController extends Controller
             return response()->json(['success' => true, 'total_amount' => $result['total'], 'amount' => $amount, 'this_id' => $request->pk ]);
         }
     }
+
+    public function delete($id)
+    {
+        // Perform the deletion logic using the $id, e.g., delete the record from the database
+        // print_r($id);
+        $preBookingDetails = PreBookingDetails::where('id', $id)->first();
+        $preBookingSummary = PreBookingSummary::find($preBookingDetails->pre_booking_summaries_id);
+        $total_amount = $preBookingSummary->total_amount - $preBookingDetails->rate;
+        $preBookingSummary->update([
+                        'total_amount' => $total_amount,
+                    ]);
+        PreBookingDetails::where('id', $id)->delete();
+        return response()->json(['success' => true, 'total_amount' => $total_amount, 'message' => 'Data deleted successfully']);
+    }
+
 
     /**
      * Remove the specified resource from storage.

@@ -16,7 +16,7 @@ class PreBookingController extends Controller
 {
     public function submit(Request $request)
     {
-
+        // print_r($request->all()); exit;
         $user = auth()->user();
         $user_id = $user->id;
         $user_budget = $request->user_budget;
