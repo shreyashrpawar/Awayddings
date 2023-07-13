@@ -22,6 +22,7 @@ use App\Mail\ApprovalEmail;
 use App\Mail\RejectionMail;
 use Illuminate\Support\Facades\Mail;
 use App\Jobs\SendCongratsEmail;
+use App\Mail\BookingCancelEmail;
 use DB;
 
 class PreBookingSummaryController extends Controller
@@ -227,7 +228,18 @@ class PreBookingSummaryController extends Controller
 
             $request->session()->flash('success','Successfully Updated');
             return redirect(route('pre-bookings.index'));
-        }else{
+        }else if ($current_status->name == 'canceled'){
+
+            $pre_booking_summary->update([
+                'pre_booking_summary_status_id' => $status,
+                'admin_remarks' => $admin_remarks
+            ]);
+            Mail::to($user_details->email)->send(new BookingCancelEmail());
+
+            $request->session()->flash('success','Successfully Updated');
+            return redirect(route('pre-bookings.index'));
+        }
+        else{
             // update on the existing pre booking
             $pre_booking_summary->update([
                 'pre_booking_summary_status_id' => $status,

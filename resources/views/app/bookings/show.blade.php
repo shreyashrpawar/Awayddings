@@ -10,7 +10,11 @@
 @section('contents')
     <div class="card" style="background-color: #FFFFFF;">
         <div class="card-header ">
-            <h1 class="card-title text-uppercase text-black">Booking: {{ $bookings->user->name }} || {{ $bookings->property->name }}</h1>
+            <h1 class="card-title text-uppercase text-black">Booking: {{ $bookings->user->name }} || {{ $bookings->property->name }}
+
+            <span class="badge badge-pill badge-info">{{ $bookings->booking_summaries_status }}</span>
+
+            </h1>
         </div>
         <div class="card-body">
             <div class="row ">
@@ -63,13 +67,6 @@
                                 <label class="col-sm-3 col-form-label">Adult</label>
                                 <div class="col-sm-9">
                                   <input type="text" class="form-control" value="{{ $bookings->pax ?? '' }}" readonly>
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label class="col-sm-3 col-form-label">Status</label>
-                                <div class="col-sm-9">
-                                <input type="text" class="form-control" value="{{ $bookings->booking_summaries_status ?? '' }}" readonly>
                                 </div>
                             </div>
 

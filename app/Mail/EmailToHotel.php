@@ -57,6 +57,7 @@ class EmailToHotel extends Mailable
         $data['adult'] = $this->adult;
         $data['mailBtnText'] =  $this->mailBtnText;
         $data['mailBtnUrl'] = $this->mailbtnLink;
+        $data ['booking_id'] =  $this->booking_id;
 
         return $this->from(env('MAIL_FROM_ADDRESS'), 'Awayddings')
             ->subject($data['mailTitle'])

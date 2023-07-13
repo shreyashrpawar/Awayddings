@@ -58,7 +58,7 @@ class EMIPayment extends Command
             
             $emi->email_sent = 1;
             $emi->save(); 
-            \Log::info("Reminder Email sent successfully.");
+            // \Log::info("Reminder Email sent successfully.");
             exit;
         }
     }

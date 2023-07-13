@@ -7,9 +7,16 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class RejectionMail extends Mailable
+class BookingCancelEmail extends Mailable
 {
     use Queueable, SerializesModels;
+    // protected $email;
+    // protected $mailbtnLink;
+    // protected $mailBtnText;
+    // protected $mailTitle;
+    // protected $mailSubTitle;
+    // protected $mailBody;
+
     /**
      * Create a new message instance.
      *
@@ -17,7 +24,6 @@ class RejectionMail extends Mailable
      */
     public function __construct()
     {
-       
     }
 
     /**
@@ -28,13 +34,13 @@ class RejectionMail extends Mailable
     public function build()
     {
         // return $this->view('view.name');
-        $data['mailTitle'] = 'Rejected Bookings';
-        $data['mailSubTitle'] = 'You booking has been rejected';
-        $data['mailBody'] = 'Your booking has been rejected. Please contact with Administration for further query.';
+        $data['mailTitle'] = 'Canceled Bookings';
+        $data['mailSubTitle'] = 'You booking has been Canceled';
+        $data['mailBody'] = 'Your booking has been Canceled. Please contact with Administration for further query.';
         $data['mailBtnText'] = '';
         $data['mailBtnUrl'] = '';
         return $this->from(env('MAIL_FROM_ADDRESS'), 'Awayddings')
-            ->subject('Rejected Bookings')
-            ->view('emails.rejection',$data);
+            ->subject('Canceled Bookings')
+            ->view('emails.cancel',$data);
     }
 }
