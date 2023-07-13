@@ -16,6 +16,7 @@ use App\Models\UserVendorAlignment;
 use App\Models\VendorPropertyAlignment;
 use App\Models\User;
 use App\Models\Property;
+use App\Models\Vendor;
 
 class BookingSummaryController extends Controller
 {
@@ -121,21 +122,16 @@ class BookingSummaryController extends Controller
                     // SendCongratsEmail::dispatch($details);
                     $details = ['email' => $request->user_email,'mailbtnLink' => '', 'mailBtnText' => '',
                     'mailTitle' => 'Congrats!', 'mailSubTitle' => 'Hooray! Your booking is confirmed.', 'mailBody' => 'We are happy to inform you that your booking is confirmed! Get ready to create some unforgettable memories. All you need to do is show us this email on the day you arrive, and you’ll be good to go!'];
-                    // dd($details);
                     SendCongratsEmail::dispatch($details);
-
-                    // $email_details = ['data' => $bookings,'mailData' => $mailDetails];
 
                     $bookings = BookingSummary::find($bookingPaymentSummary->booking_summaries_id);
                     $user = User::find($bookings->user_id);
                     $property_id =  VendorPropertyAlignment::where('property_id',$bookings->property_id)->pluck('vendor_id')->first();
                     if ($property_id) { 
-
-                        $emailDetails = ['email' => $request->user_email, 'name' => $user->name, 'phone' => $user->phone, 'check_in' => $bookings->check_in, 'check_out' => $bookings->check_out, 'adult' => $bookings->pax];
-                        // $details = ['data' => $bookings,'mailData' => $mailDetails];
+                        $vendor_email = Vendor::where('id', $property_id)->pluck('email')->first();
+                        $emailDetails = ['vendor_email' => $vendor_email,'email' => $request->user_email, 'name' => $user->name, 'phone' => $user->phone, 'check_in' => $bookings->check_in, 'check_out' => $bookings->check_out, 'adult' => $bookings->pax,'booking_id' => $bookings->id];
                         SendEmailToHotel::dispatch($emailDetails);
                     }
-                    // dd($property_id);
                 }
 
                 if ($next_installment_date == null) {

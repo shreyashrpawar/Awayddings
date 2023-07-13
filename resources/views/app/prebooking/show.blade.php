@@ -9,7 +9,7 @@
                         <span class="badge badge-pill badge-info">{{ $summary->pre_booking_summary_status->name }}</span>
                     </h4>
                 </div>
-                
+
                 @can('pre-booking update')
                     <div class="col-md-3 mb-4 form-inline">
                         <label for="" class="font-weight-bold text-uppercase">Current status &nbsp;</label>
@@ -21,26 +21,28 @@
                     </div>
                 @endcan
                 @php
-                    $display = ''; 
+                    $display = '';
                     if($summary->pre_booking_summary_status_id == 3 || $summary->pre_booking_summary_status_id == 4)
                         $display = 'display:none';
                 @endphp
                 <div class="col-md-3 mb-4 form-inline text-right" style="@php echo $display; @endphp">
                     <a href="{{ route('pre-bookings.edit',$summary->id) }}{{-- url('pre-bookings.edit', ['id' => $summary->id]) --}}" class="btn btn-sm btn-primary">Edit</a>
                 </div>
-                
+
 
                 <div class="col-md-12">
                     <table class="table table-sm" id="pre_booking_details_table">
                         <tr>
                             <th>Name</th>
                             <td> {{ $summary->user->name }}</td>
-                            <th>Phone</th>
-                            <td>{{  $summary->user->phone  }}</td>
+                            <th>Pre Booking ID</th>
+                            <td>{{  $summary->id  }}</td>
                             <th>Property Name</th>
                             <td> {{ $summary->property->name }}</td>
                         </tr>
                         <tr>
+                        <th>Phone</th>
+                            <td>{{  $summary->user->phone  }}</td>
                             <th>Check In</th>
                             <td> {{ $summary->check_in->format('d-m-Y') }}</td>
                             <th>Check Out</th>
@@ -68,6 +70,7 @@
                                 <th>Quantity</th>
                                 <th>Rate</th>
                                 <th>Amount</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -75,12 +78,11 @@
                             $total = 0;
                             $old_date = '';
                             $total_room = $summary->property->total_rooms;
-                    
+
                         @endphp
                         @foreach($summary->pre_booking_details as $key => $val)
                             @php
                                 $hotel_chargable_type_details = DB::table('hotel_chargable_types')->find($val->hotel_chargable_type_id);
-                                // dd($hotel_chargable_type_details);
                                     $double_room = 0;
                                     $triple_room = 0;
                                     $current_room = 0;
@@ -121,20 +123,20 @@
                                 </td>
                                 <td>{{ $val->hotel_chargable_type->name }}</td>
                                 <td>
-                                    @if($hotel_chargable_type_details->is_single_qty == 1)
-                                        <!-- <a href="" class="update" data-name="qty" data-type="text" data-pk="{{ $val->id }}" data-title="Enter quantity"><i class="fa fa-minus-circle" aria-hidden="true"></i></a> -->
-                                        <i class="fa fa-minus-circle delete-icon" data-id="{{ $val->id }}" aria-hidden="true"></i>
+                                <a href="" class="update" data-name="qty" data-type="text" data-pk="{{ $val->id }}" data-title="Enter quantity">{{ $val->qty }}</a>
 
 
-                                    @else
-                                    <a href="" class="update" data-name="qty" data-type="text" data-pk="{{ $val->id }}" data-title="Enter quantity">{{ $val->qty }}</a>
-                                    @endif
                                 </td>
                                 <td>
                                     <a href="" class="update" data-name="rate" data-type="text" data-pk="{{ $val->id }}" data-title="Enter rate">{{ $val->rate }}</a>
                                 </td>
 
                                 <td id="amount_{{ $val->id }}">{{ $val->qty * $val->rate }}</td>
+                                 <td
+                                 @if($hotel_chargable_type_details->is_single_qty == 1)
+                                        <i class="fa fa-minus-circle delete-icon" data-id="{{ $val->id }}" aria-hidden="true"></i>
+                                  @endif      
+                                 </td>
 
                             </tr>
                         @endforeach
@@ -165,6 +167,28 @@
 
         </div>
     </div>
+
+    <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteConfirmationModalLabel">Confirmation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this item?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="deleteButton">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <div class="modal" id="confirmationModal">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -323,6 +347,14 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jquery-editable/js/jquery-editable-poshytip.min.js"></script>
     <script>
         $('.delete-icon').click(function() {
+
+            var id = $(this).data('id');
+            $('#deleteConfirmationModal').modal('show');
+            
+            // Set the ID of the item to be deleted
+            $('#deleteButton').data('id', id);
+        });
+        $('#deleteButton').click(function() {
             var id = $(this).data('id');
             var summary_id = "{{ $summary->id }}";
             var icon = $(this); // Store the icon reference
@@ -338,11 +370,13 @@
                 },
                 success: function(response) {
                     // Handle success response, e.g., show a success message, update the UI, etc.
-                    console.log(response);
-                    $("#total_amount_th").html(response.total_amount);
+                    //$("#total_amount_th").html(response.total_amount);
                     icon.closest('tr').hide();
-                    console.log($(this));
-                    // $("#amount_"+response.this_id).html(response.amount);
+                    $('#deleteConfirmationModal').modal('hide');
+                    setTimeout(function(){// wait for 5 secs(2)
+                          location.reload(); // then reload the page.(3)
+                     }, 500); 
+                   
                 },
                 error: function(xhr) {
                     // Handle error response, e.g., show an error message, etc.
@@ -351,12 +385,12 @@
             });
         });
         $.fn.editable.defaults.mode = 'inline';
-  
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': '{{csrf_token()}}'
             }
-        }); 
+        });
 
         $('.update').editable({
                 url: "{{ route('pre_booking_qty_details.update') }}",

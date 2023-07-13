@@ -136,7 +136,9 @@ class PreBookingSummaryController extends Controller
                 'total_amount' => $total_amount,
                 'pax' => $pre_booking_summary->pax,
                 'admin_remarks' =>$admin_remarks,
-                'status' => 1
+                'status' => 1,
+                'booking_summaries_status' => 'approved',
+                'booking_summaries_status_remarks' => 'APPROVED BY ADMIN',
             ];
 
 
@@ -235,13 +237,6 @@ class PreBookingSummaryController extends Controller
             return redirect(route('pre-bookings.index'));
 
         }
-
-
-
-
-
-
-
 
        return $request->all();
     }
@@ -368,15 +363,15 @@ class PreBookingSummaryController extends Controller
 
     public function delete($id)
     {
-        // Perform the deletion logic using the $id, e.g., delete the record from the database
-        // print_r($id);
         $preBookingDetails = PreBookingDetails::where('id', $id)->first();
         $preBookingSummary = PreBookingSummary::find($preBookingDetails->pre_booking_summaries_id);
-        $total_amount = $preBookingSummary->total_amount - $preBookingDetails->rate;
+        $reduceValue= $preBookingDetails->rate * $preBookingDetails->qty;
+        $total_amount = $preBookingSummary->total_amount - $reduceValue;
         $preBookingSummary->update([
                         'total_amount' => $total_amount,
                     ]);
         PreBookingDetails::where('id', $id)->delete();
+
         return response()->json(['success' => true, 'total_amount' => $total_amount, 'message' => 'Data deleted successfully']);
     }
 

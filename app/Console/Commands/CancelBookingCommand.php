@@ -82,7 +82,11 @@ class CancelBookingCommand extends Command
             // }
             // $booking_payment_summary->delete();
 
-            // $booking_summary = BookingSummary::destroy($booking->booking_summary_id);
+            $booking_summary = BookingSummary::find($booking->booking_summary_id)
+                ->update([
+                    'booking_summaries_status' => 'rejected',
+                    'booking_summaries_status_remarks' => 'auto reject due to payment'
+                ]);
                 // dd($booking_summary);
 
             // Cancel the booking by updating its status

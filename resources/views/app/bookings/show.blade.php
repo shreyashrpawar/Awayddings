@@ -65,6 +65,20 @@
                                   <input type="text" class="form-control" value="{{ $bookings->pax ?? '' }}" readonly>
                                 </div>
                             </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Status</label>
+                                <div class="col-sm-9">
+                                <input type="text" class="form-control" value="{{ $bookings->booking_summaries_status ?? '' }}" readonly>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Remarks</label>
+                                <div class="col-sm-9">
+                                <input type="text" class="form-control" value="{{ $bookings->booking_summaries_status_remarks ?? '' }}" readonly>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

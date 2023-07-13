@@ -1,46 +1,56 @@
-@extends('emails.layout') @section('content') <body marginheight="0" topmargin="0" marginwidth="0" style="margin: 0px; background-color: #f2f3f8;" leftmargin="0">
+@extends('emails.layout') @section('content')
+
+<body marginheight="0" topmargin="0" marginwidth="0" style="margin: 0px; background-color: #f2f3f8;" leftmargin="0">
   <!--100% body table-->
   <table cellspacing="0" border="0" cellpadding="0" width="100%" bgcolor="#f2f3f8" style="@import url(https://fonts.googleapis.com/css?family=Rubik:300,400,500,700|Open+Sans:300,400,600,700); font-family: 'Open Sans', sans-serif;">
     <td align="center" valign="top">
       <!-- Top -->
       <table width="600" border="0" cellspacing="0" cellpadding="0" class="mobile-shell">
-                <tr>
-                    <td class="td" style="font-size:0pt; line-height:0pt; padding:0; margin:0; font-weight:normal; width:600px; min-width:600px; Margin:0" width="600">
-                        <!-- Header -->
+        <tr>
+          <td class="td" style="font-size:0pt; line-height:0pt; padding:0; margin:0; font-weight:normal; width:600px; min-width:600px; Margin:0" width="600">
+            <!-- Header -->
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td class="content-spacing" style="font-size:0pt; line-height:0pt; text-align:left" width="20"></td>
+                <td>
+                  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">
+                    <tr>
+                      <td height="30" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td>
+                    </tr>
+                  </table>
+
+                  <div class="img-center" style="font-size:0pt; line-height:0pt; text-align:center"><a href="#" target="_blank"><img src="https://www.awayddings.com/_nuxt/img/awayddings-logo.fa617c7.png" border="0" width="50%" height="50%" alt="" /></a></div>
+
+                </td>
+              </tr>
+            </table>
+            <!-- END Header -->
+
+            <!-- Main -->
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border: 6px #fff solid;">
+              <tr>
+                <td>
+                  <!-- Head -->
+                  <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#fff">
+                    <tr>
+                      <td>
                         <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                            <tr>
-                                <td class="content-spacing" style="font-size:0pt; line-height:0pt; text-align:left" width="20"></td>
-                                <td>
-                                    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%"><tr><td height="30" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td></tr></table>
+                          <tr>
+                            <td>
+                              <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                  <td class="img" style="font-size:0pt; line-height:0pt; text-align:left" height="3" bgcolor="#fff">&nbsp;</td>
+                                </tr>
+                              </table>
+                              <table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">
+                                <tr>
+                                  <td height="24" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td>
+                                </tr>
+                              </table>
 
-                                    <div class="img-center" style="font-size:0pt; line-height:0pt; text-align:center"><a href="#" target="_blank"><img src="https://www.awayddings.com/_nuxt/img/awayddings-logo.fa617c7.png" border="0" width="50%" height="50%" alt="" /></a></div>
-
-                                </td>
-                            </tr>
+                            </td>
+                          </tr>
                         </table>
-                        <!-- END Header -->
-
-                        <!-- Main -->
-                        <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border: 6px #fff solid;">
-                            <tr>
-                                <td>
-                                    <!-- Head -->
-                                    <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#fff">
-                                        <tr>
-                                            <td>
-                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                                    <tr>
-                                                        <td>
-                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                                                <tr>
-                                                                    <td class="img" style="font-size:0pt; line-height:0pt; text-align:left" height="3" bgcolor="#fff">&nbsp;</td>
-                                                                </tr>
-                                                            </table>
-                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%"><tr><td height="24" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td></tr></table>
-
-                                                        </td>
-                                                    </tr>
-                                                </table>
                         <table width="100%" border="0" cellspacing="0" cellpadding="0">
                           <tr>
                             <td class="img" style="font-size:0pt; line-height:0pt; text-align:left" width="3" bgcolor="#fff"></td>
@@ -52,14 +62,14 @@
                                 </tr>
                               </table>
                               <div class="h2" style="color:#fc3333; font-family:Arial, serif; min-width:auto !important; font-size:42px; line-height:64px; text-align:center">
-                                {{ $mailTitle ?? '' }}
+                                {{ $data['mailTitle'] ?? '' }}
                               </div>
                               <table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">
                                 <tr>
                                   <td height="15" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td>
                                 </tr>
                               </table>
-                              <div class="h3-2-center" style="color:#1e1e1e; font-family:Arial, sans-serif; min-width:auto !important; font-size:20px; line-height:26px; text-align:center;">{{ $mailSubTitle ?? '' }}</div>
+                              <div class="h3-2-center" style="color:#1e1e1e; font-family:Arial, sans-serif; min-width:auto !important; font-size:20px; line-height:26px; text-align:center;">{{ $data['mailSubTitle'] ?? '' }}</div>
                               <table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">
                                 <tr>
                                   <td height="35" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td>
@@ -77,85 +87,76 @@
                   <!-- Body -->
                   <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff">
                     <tr>
-                      <td class="content-spacing" style="font-size:0pt; line-height:0pt; text-align:left" width="20"></td>
                       <td>
-                        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:left; width:100%; min-width:100%">
-                          <tr>
-                            <td height="35" class="spacer" style="font-size:0pt; line-height:0pt; text-align:left; width:100%; min-width:100%">&nbsp;</td>
-                          </tr>
-                        </table>
-                        <!-- Booking Details -->
+                        <div class="h3-1-center" style="color:#000; font-family:Arial, serif; min-width:auto !important; font-size:16px; line-height:26px; text-align:center"><u>Booking Details</u></div>
+
                         <table style="width:100%">
-                          <colgroup>
-                            <col span="2" style="background-color: #D6EEEE">
-                          </colgroup>
-                          <tr>
-                            <th colspan="6">User details</th>
+                        <colgroup>
+                            <col span="4" style="background-color: #D6EEEE">
+                        </colgroup>
+                        <tr>
+                            <th>
+                              <div class="h4-1-center" style="color:#000; font-family:Arial, serif; min-width:auto !important; font-size:14px; line-height:26px; text-align:center">Booking Name</div>
+                            </th>
+                            <td>
+                              <div class="h4-1-center" style="color:#000; font-family:Arial, serif; min-width:auto !important; font-size:13px; line-height:26px; text-align:center">{{ $bookings['user']['name']}}</div>
+                            </td>
+                            <th>
+                              <div class="h4-1-center" style="color:#000; font-family:Arial, serif; min-width:auto !important; font-size:14px; line-height:26px; text-align:center">Hotel Name</div>
+                            </th>
+                            <td>
+                              <div class="h4-1-center" style="color:#000; font-family:Arial, serif; min-width:auto !important; font-size:13px; line-height:26px; text-align:center">{{$bookings['property']['name'] }}</div>
+                            </td>
                           </tr>
                           <tr>
-                            <th>Name</th>
-                            <td>{{ $name ?? '' }}</td>
+                            <th>
+                              <div class="h4-1-left" style="color:#000; font-family:Arial, serif; min-width:auto !important; font-size:14px; line-height:26px; text-align:center">Check In</div>
+                            </th>
+                            <td>
+                              <div class="h4-1-center" style="color:#000; font-family:Arial, serif; min-width:auto !important; font-size:13px; line-height:26px; text-align:center">{{ $bookings['check_in'] }}</div>
+                            </td>
+                            <th>
+                              <div class="h4-1-left" style="color:#000; font-family:Arial, serif; min-width:auto !important; font-size:14px; line-height:26px; text-align:center">Check Out</div>
+                            </th>
+                            <td>
+                              <div class="h4-1-center" style="color:#000; font-family:Arial, serif; min-width:auto !important; font-size:13px; line-height:26px; text-align:center">{{ $bookings['check_out'] }}</div>
+                            </td>
                           </tr>
                           <tr>
-                            <th>Email</th>
-                            <td>{{ $email ?? '' }}</td>
+                            <th>
+                              <div class="h4-1-left" style="color:#000; font-family:Arial, serif; min-width:auto !important; font-size:14px; line-height:26px; text-align:center">Discount</div>
+                            </th>
+                            <td>
+                              <div class="h4-1-center" style="color:#000; font-family:Arial, serif; min-width:auto !important; font-size:13px; line-height:26px; text-align:center">{{ number_format($bookings['booking_payment_summary']['discount'] ?? '', 2, '.', ',') }}</div>
+                            </td>
+                            <th>
+                              <div class="h4-1-left" style="color:#000; font-family:Arial, serif; min-width:auto !important; font-size:14px; line-height:26px; text-align:center">Total Amount</div>
+                            </th>
+                            <td>
+                              <div class="h4-1-center" style="color:#000; font-family:Arial, serif; min-width:auto !important; font-size:13px; line-height:26px; text-align:center">Rs. {{ number_format($bookings['booking_payment_summary']['amount'] ?? '', 2, '.', ',') }}</div>
+                            </td>
                           </tr>
                           <tr>
-                            <th>Phone No</th>
-                            <td>{{ $phone ?? '' }}</td>
-                          </tr>
-                          <tr>
-                            <th>Check In</th>
-                            <td>{{ $check_in ?? '' }}</td>
-                          </tr>
-                          <tr>
-                            <th>Check Out</th>
-                            <td>{{ $check_out ?? '' }}</td>
-                          </tr>
-                          <tr>
-                            <th>Adult</th>
-                            <td>{{ $adult ?? '' }}</td>
-                          </tr>
-                        </table>
-                        <table style="width:100%">
-                          <colgroup>
-                            <col span="2" style="background-color: #e9b88a">
-                          </colgroup>
-                          <tr>
-                            <th colspan="6">Amount details</th>
-                          </tr>
-                          <tr>
-                            <th>Total Amount</th>
-                            <td>{{ number_format($bookings->amount ?? '', 2, '.', ',') }}</td>
-                          </tr>
-                          <tr>
-                            <th>Discount</th>
-                            <td>{{ $bookings->booking_payment_summary->discount }}</td>
-                          </tr>
-                          <tr>
-                            <th>Amount</th>
-                            <td>{{ number_format($bookings->booking_payment_summary->amount, 2, '.', ',') }}</td>
-                          </tr>
-                          <tr>
-                            <th>Paid</th>
-                            <td>{{ number_format($bookings->booking_payment_summary->paid, 1, '.', ',') }}</td>
-                          </tr>
-                          <tr>
-                            <th>Due</th>
-                            <td>{{ number_format($bookings->booking_payment_summary->due, 1, '.', ',') }}</td>
+                            <th>
+                              <div class="h4-1-center" style="color:#000; font-family:Arial, serif; min-width:auto !important; font-size:14px; line-height:26px; text-align:center">Installment Amount</div>
+                            </th>
+                            <td>
+                              <div class="h4-1-center" style="color:#000; font-family:Arial, serif; min-width:auto !important; font-size:13px; line-height:26px; text-align:center">Rs. {{ number_format($bookings['booking_payment_summary']['amount'] / $bookings['booking_payment_summary']['installment_no']?? '', 2, '.', ',') }}</div>
+                            </td>
+                            <th>
+                              <div class="h4-1-center" style="color:#000; font-family:Arial, serif; min-width:auto !important; font-size:14px; line-height:26px; text-align:center">Total EMI</div>
+                            </th>
+                            <td>
+                              <div class="h4-1-center" style="color:#000; font-family:Arial, serif; min-width:auto !important; font-size:13px; line-height:26px; text-align:center">{{ $bookings['booking_payment_summary']['installment_no'] }}</div>
+                            </td>
                           </tr>
                         </table>
                         <table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">
-                          <tr>
-                            <td height="20" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td>
-                          </tr>
-                        </table>
-                        <!-- Booking Details -->
-                        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">
-                          <tr>
-                            <td height="20" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td>
-                          </tr>
-                        </table> @if ($data['mailBtnText'] !='')
+                                <tr>
+                                  <td height="30" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td>
+                                </tr>
+                          </table>
+                        @if ($data['mailBtnText'] !='')
                         <!-- Button -->
                         <table width="100%" border="0" cellspacing="0" cellpadding="0">
                           <tr>
@@ -174,9 +175,7 @@
                                         </td>
                                         <td bgcolor="#fc3333">
                                           <div class="text-btn" style="color:#fc3333; font-family:Arial, sans-serif; min-width:auto !important; font-size:16px; line-height:20px; text-align:center">
-                                            <a href="{{ $mailBtnUrl ?? '' }}" target="_blank" class="link-white" style="padding:20px;color:#ffffff; text-decoration:none">
-                                              <span class="link-white" style="color:#fff; text-decoration:none">{{ $mailBtnText ?? ''}}</span>
-                                            </a>
+                                            <a href="{{ $data['mailBtnUrl'] ?? '' }}" target="_blank" class="link-white" style="padding:20px;color:#ffffff; text-decoration:none"><span class="link-white" style="color:#fff; text-decoration:none">{{$data['mailBtnText'] ?? ''}}</span></a>
                                           </div>
                                         </td>
                                         <td class="img" style="font-size:0pt; line-height:0pt; text-align:left" width="15"></td>
@@ -187,11 +186,16 @@
                               </table>
                             </td>
                           </tr>
-                        </table> @endif <table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">
+                        </table>
+                        @endif
+                        <!-- END Button -->
+
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">
                           <tr>
                             <td height="35" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td>
                           </tr>
                         </table>
+
                       </td>
                       <td class="content-spacing" style="font-size:0pt; line-height:0pt; text-align:left" width="20"></td>
                     </tr>
@@ -251,5 +255,5 @@
     </td>
   </table>
   <!--/100% body table-->
-</body> 
+</body>
 @endsection

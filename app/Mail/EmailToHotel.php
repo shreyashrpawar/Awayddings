@@ -19,13 +19,14 @@ class EmailToHotel extends Mailable
     protected $adult;
     protected $mailbtnLink;
     protected $mailBtnText;
+    protected $booking_id;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($email,$name,$phone,$check_in,$check_out,$adult,$mailbtnLink,$mailBtnText)
+    public function __construct($email,$name,$phone,$check_in,$check_out,$adult,$mailbtnLink,$mailBtnText,$booking_id)
     {
         $this->email = $email;
         $this->name = $name;
@@ -35,6 +36,7 @@ class EmailToHotel extends Mailable
         $this->adult = $adult;
         $this->mailbtnLink = $mailbtnLink??"";
         $this->mailBtnText = $mailBtnText??"";
+        $this->booking_id= $booking_id;
     }
 
     /**

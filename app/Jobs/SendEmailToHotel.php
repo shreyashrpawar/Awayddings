@@ -34,7 +34,7 @@ class SendEmailToHotel implements ShouldQueue
      */
     public function handle()
     {
-        $email = new EmailToHotel($this->details['email'],$this->details['name'],$this->details['phone'],$this->details['adult'],$this->details['check_in'],$this->details['check_out'],"","");
-        Mail::to($this->details['email'])->send($email);
+        $email = new EmailToHotel($this->details['email'],$this->details['name'],$this->details['phone'],$this->details['adult'],$this->details['check_in'],$this->details['check_out'],"","",$this->details['booking_id']);
+        Mail::to($this->details['vendor_email'])->send($email);
     }
 }

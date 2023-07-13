@@ -101,28 +101,32 @@
                             <th colspan="6">User details</th>
                           </tr>
                           <tr>
-                            <th>Name</th>
-                            <td>{{ $name ?? '' }}</td>
+                            <th><div class="h4-1-center" style="color:#000; font-family:Arial, serif; min-width:auto !important; font-size:13px; line-height:26px; text-align:center">Booking ID</div></th>
+                            <td><div class="h4-1-center" style="color:#000; font-family:Arial, serif; min-width:auto !important; font-size:13px; line-height:26px; text-align:center">{{$booking_id}}</div></td>
                           </tr>
                           <tr>
-                            <th>Email</th>
-                            <td>{{ $email ?? '' }}</td>
+                            <th><div class="h4-1-center" style="color:#000; font-family:Arial, serif; min-width:auto !important; font-size:13px; line-height:26px; text-align:center">Customer Name</div></th>
+                            <td><div class="h4-1-center" style="color:#000; font-family:Arial, serif; min-width:auto !important; font-size:13px; line-height:26px; text-align:center">{{$name}}</div></td>
                           </tr>
                           <tr>
-                            <th>Phone No</th>
-                            <td>{{ $phone ?? '' }}</td>
+                            <th><div class="h4-1-center" style="color:#000; font-family:Arial, serif; min-width:auto !important; font-size:13px; line-height:26px; text-align:center">Customer Email</div></th>
+                            <td><div class="h4-1-center" style="color:#000; font-family:Arial, serif; min-width:auto !important; font-size:13px; line-height:26px; text-align:center">{{$email}}</div></td>
                           </tr>
                           <tr>
-                            <th>Check In</th>
-                            <td>{{ $check_in ?? '' }}</td>
+                            <th><div class="h4-1-center" style="color:#000; font-family:Arial, serif; min-width:auto !important; font-size:13px; line-height:26px; text-align:center">Customer Phone Number</div></th>
+                            <td><div class="h4-1-center" style="color:#000; font-family:Arial, serif; min-width:auto !important; font-size:13px; line-height:26px; text-align:center">{{$phone}}</div></td>
                           </tr>
                           <tr>
-                            <th>Check Out</th>
-                            <td>{{ $check_out ?? '' }}</td>
+                          <th><div class="h4-1-center" style="color:#000; font-family:Arial, serif; min-width:auto !important; font-size:13px; line-height:26px; text-align:center">Check In</div></th>
+                            <td><div class="h4-1-center" style="color:#000; font-family:Arial, serif; min-width:auto !important; font-size:13px; line-height:26px; text-align:center">{{$check_in}}</div></td>
                           </tr>
                           <tr>
-                            <th>Adult</th>
-                            <td>{{ $adult ?? '' }}</td>
+                          <th><div class="h4-1-center" style="color:#000; font-family:Arial, serif; min-width:auto !important; font-size:13px; line-height:26px; text-align:center">Check Out</div></th>
+                            <td><div class="h4-1-center" style="color:#000; font-family:Arial, serif; min-width:auto !important; font-size:13px; line-height:26px; text-align:center">{{$check_out}}</div></td>
+                          </tr>
+                          <tr>
+                          <th><div class="h4-1-center" style="color:#000; font-family:Arial, serif; min-width:auto !important; font-size:13px; line-height:26px; text-align:center">Total Guest</div></th>
+                            <td><div class="h4-1-center" style="color:#000; font-family:Arial, serif; min-width:auto !important; font-size:13px; line-height:26px; text-align:center">{{$adult}}</div></td>
                           </tr>
                         </table>
                         <table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">
@@ -135,7 +139,8 @@
                           <tr>
                             <td height="20" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td>
                           </tr>
-                        </table> @if ($mailBtnText !='')
+                        </table>
+                         @if ($mailBtnText !='')
                         <!-- Button -->
                         <table width="100%" border="0" cellspacing="0" cellpadding="0">
                           <tr>
