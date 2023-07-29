@@ -41,11 +41,11 @@
                                     {{ $val->from_time }}
                                 </td>
                                 <td>{{ $val->to_time }}</td>
-                                <td>{{ $val->status }}</td>
+                                <td>{{ ($val->status == 1 ? 'Active' : Inactive) }}</td>
 
                                 <td>
                                     <div class="btn-group">
-                                        <a href="{{ route('timeslots.show',$val->id) }}" class="btn btn-sm btn-outline-primary">View</a>
+                                        <a href="{{ route('timeslots.edit',$val->id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
                                     </div>
 
                                 </td>

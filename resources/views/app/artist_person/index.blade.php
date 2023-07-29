@@ -15,10 +15,10 @@
         <div class="card-body">
             <div class="row form-group">
                 <div class="col-md-6">
-                    <h4 class="card-title text-uppercase">Time Slots</h4>
+                    <h4 class="card-title text-uppercase">Artists</h4>
                 </div>
                 <div class="col-md-6 text-right">
-                    <a href="{{ route('timeslots.create') }}" class="btn btn-sm btn-primary">Add</a>
+                    <a href="{{ route('artist_person_create') }}" class="btn btn-sm btn-primary">Add</a>
                 </div>
             </div>
             <div class="table-responsive">
@@ -26,26 +26,26 @@
                     <thead class="thead-dark">
                     <tr>
                         <th width="5%">#</th>
-                        <th>From Time</th>
-                        <th>To Time</th>
+                        <th>Name</th>
+                        <th>Price</th>
                         <th>Status</th>
                         <th width="10%">Actions</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @if($time_slots->count() > 0)
-                        @foreach($time_slots as $key => $val)
+                    @if($artist_persons->count() > 0)
+                        @foreach($artist_persons as $key => $val)
                             <tr>
                                 <th>{{ 1+ $key }}</th>
                                 <td>
-                                    {{ $val->from_time }}
+                                    {{ $val->name }}
                                 </td>
-                                <td>{{ $val->to_time }}</td>
-                                <td>{{ $val->status }}</td>
+                                <td>{{ $val->price }}</td>
+                                <td>{{ ($val->status == 1 ? 'Active' : Inactive) }}</td>
 
                                 <td>
                                     <div class="btn-group">
-                                        <a href="{{ route('timeslots.show',$val->id) }}" class="btn btn-sm btn-outline-primary">View</a>
+                                        <a href="{{ route('artist_person_edit',$val->id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
                                     </div>
 
                                 </td>

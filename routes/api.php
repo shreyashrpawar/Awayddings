@@ -39,9 +39,9 @@ Route::prefix('v1')->group(function () {
         Route::post('change-password',[\App\Http\Controllers\Api\ChangePasswordController::class,'changePassword']);
         Route::get('pre-booking',[\App\Http\Controllers\Api\PreBookingController::class,'index']);
         Route::get('me',[\App\Http\Controllers\Api\UserController::class,'userInformation']);
+        Route::get('getEventManagementData',[\App\Http\Controllers\Api\EventManagementController::class,'event_details']);
     });
 
     Route::get('top-destination',[\App\Http\Controllers\Api\PropertyController::class,'propertyCountWithLocation']);
-
 
 });

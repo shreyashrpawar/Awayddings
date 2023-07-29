@@ -56,6 +56,21 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('bookings',App\Http\Controllers\BookingSummaryController::class);
     Route::get('properties/budget-calculator',[\App\Http\Controllers\PropertyController::class,'getDataOfBudgetCalculator']);
 
+    //Event Management
+    Route::resource('artists',App\Http\Controllers\ArtistsController::class);
+
+    Route::get('artist_person',[\App\Http\Controllers\ArtistsController::class,'artist_person_view'])->name('artist_person');
+    Route::get('artist_person_create',[\App\Http\Controllers\ArtistsController::class,'artist_person_create'])->name('artist_person_create');
+    Route::post('artist_person_store',[\App\Http\Controllers\ArtistsController::class,'artist_person_store'])->name('artist_person_store');
+    Route::get('artist_person_edit/{id}',[\App\Http\Controllers\ArtistsController::class,'artist_person_edit'])->name('artist_person_edit');
+    Route::post('artist_person_update/{id}',[\App\Http\Controllers\ArtistsController::class,'artist_person_update'])->name('artist_person_update');
+
+    Route::resource('decorations',App\Http\Controllers\DecorationsController::class);
+    Route::resource('events',App\Http\Controllers\EventsController::class);
+    Route::resource('lightandsounds',App\Http\Controllers\LightandSoundsController::class);
+    Route::resource('timeslots',App\Http\Controllers\TimeSlotsController::class);
+    Route::post('timeslots/update/{id}', [App\Http\Controllers\TimeSlotsController::class, 'update'])->name('timeslots.update'); //Pre-booking edit url
+
 });
 Route::prefix('settings')->middleware(['auth'])->group(function () {
     Route::resource('locations',App\Http\Controllers\Settings\LocationController::class);
