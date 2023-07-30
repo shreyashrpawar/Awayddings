@@ -22,13 +22,13 @@ class EventManagementController extends Controller
 
         $light_sound = LightandSound::where('status', 1)->get();
 
-        //$additional_artist = Artist::where('status', 1)->get();
+        $additional_artist = Artist::where('status', 1)->get();
 
         $data =[
             'event' => $event,
             'light_decor' =>$light_sound,
             'time_slots' => $time_slot,
-            //'additional_artist' => $additional_artist
+            'additional_artist' => $additional_artist
         ];
 
         return response()->json([
