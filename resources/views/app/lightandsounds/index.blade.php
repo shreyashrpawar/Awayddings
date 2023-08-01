@@ -27,6 +27,8 @@
                     <tr>
                         <th width="5%">#</th>
                         <th>Image</th>
+                        <th>Price</th>
+                        <th>Description</th>
                         <th>Status</th>
                         <th width="10%">Actions</th>
                     </tr>
@@ -37,7 +39,13 @@
                             <tr>
                                 <th>{{ 1+ $key }}</th>
                                 <td> <img src="{{ asset('storage/' . $val->image->url) }}" alt="Light and Sound Image" width="300" height="200"> </td>
-                                <td>{{ ($val->status == 1 ? 'Active' : Inactive) }}</td>
+                                <td>{{ $val->price }}</td>
+                                <td>{{ $val->description }}</td>
+                                <td>
+                                    <button class="status-toggle btn btn-sm {{ $val->status == 1 ? 'btn-outline-success' : 'btn-outline-danger' }}" data-id="{{ $val->id }}">
+                                        {{ $val->status == 1 ? 'Active' : 'Inactive' }}
+                                    </button>
+                                </td>
 
                                 <td>
                                     <div class="btn-group">
@@ -127,6 +135,33 @@
             "autoWidth": false,
             "responsive": true,
           });
+
+          $('.status-toggle').on('click', function() {
+                const button = $(this);
+                const id = button.data('id');
+                const currentStatus = button.hasClass('btn-outline-success') ? 1 : 0;
+                const newStatus = currentStatus === 1 ? 0 : 1;
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ route('lightandsound_update_status') }}',
+                    data: {
+                        id: id,
+                        status: newStatus,
+                        _token: '{{ csrf_token() }}',
+                    },
+                    success: function(response) {
+                        // Update the button text and color after successful update
+                        button.text(newStatus === 1 ? 'Active' : 'Inactive');
+                        button.removeClass('btn-outline-success btn-outline-danger');
+                        button.addClass(newStatus === 1 ? 'btn-outline-success' : 'btn-outline-danger');
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle errors if needed
+                        console.error(error);
+                    }
+                });
+            });
         });
     </script>
 @endsection

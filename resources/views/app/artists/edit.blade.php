@@ -32,18 +32,18 @@
                         @endif
                     </div>
                 </div>
-                <div class="col-md-6">
+                <!-- <div class="col-md-6">
                     
 
                     <div class="form-group">
                         <label for="">Status <span style="color:red">*</span></label>
                         <select name="artist_status" id="artist_status" class="form-control" required>
                             <option value="" disabled >Select Status</option>
-                            <option value="0" <?php echo ($artist->status == 0 ? 'selected' : '') ?>>Inactive</option>
-                            <option value="1" <?php echo ($artist->status == 1 ? 'selected' : '') ?>>Active</option>
+                            <option value="0" <?php //echo ($artist->status == 0 ? 'selected' : '') ?>>Inactive</option>
+                            <option value="1" <?php //echo ($artist->status == 1 ? 'selected' : '') ?>>Active</option>
                         </select>
                     </div>
-                </div>
+                </div> -->
             </div>
 
             <div class="form-group" style="margin: 10px;">

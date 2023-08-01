@@ -12,6 +12,8 @@ class LightandSound extends Model
     protected $table = 'lightandsounds';//lightand_sounds
 
     protected $fillable = [
+        'price',
+        'description',
         'status',
     ];
 

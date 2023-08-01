@@ -14,6 +14,20 @@
             <input type="hidden" name="light_sound_id" value="{{ $light_sound->id }}">
 
             <div class="row">
+                <div class="col-md-6">
+                    
+                    <div class="form-group">
+                        <label for="">Price  <span style="color:red">*</span></label>
+                        <input type="number" step="any"  name="light_sound_price" id="light_sound_price" class="form-control" value="{{ $light_sound->price }}">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="">Description <span style="color:red">*</span></label>
+                        <textarea name="light_sound_description" id="light_sound_description"  class="form-control"  cols="30" rows="5">{{ $light_sound->description }}</textarea>
+                    </div>
+                </div>
 
                 <div class="col-md-6">
                     <div class="col-md-6">
@@ -27,16 +41,16 @@
                     </div>
                 </div>
 
-                <div class="col-md-6">
+                <!-- <div class="col-md-6">
                     <div class="form-group">
                         <label for="">Status <span style="color:red">*</span></label>
                         <select name="light_sound_status" id="light_sound_status" class="form-control" required>
                             <option value="" disabled >Select Status</option>
-                            <option value="0" <?php echo ($light_sound->status == 0 ? 'selected' : '') ?>>Inactive</option>
-                            <option value="1" <?php echo ($light_sound->status == 1 ? 'selected' : '') ?>>Active</option>
+                            <option value="0" <?php// echo ($light_sound->status == 0 ? 'selected' : '') ?>>Inactive</option>
+                            <option value="1" <?php //echo ($light_sound->status == 1 ? 'selected' : '') ?>>Active</option>
                         </select>
                     </div>
-                </div>
+                </div> -->
             </div>
 
             <div class="form-group" style="margin: 10px;">

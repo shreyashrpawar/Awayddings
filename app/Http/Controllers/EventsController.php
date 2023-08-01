@@ -16,7 +16,7 @@ class EventsController extends Controller
      */
     public function index()
     {
-        $events = Event::orderBy('id', 'DESC')->get();
+        $events = Event::with('artists', 'decorations')->orderBy('id', 'DESC')->get();
         return view('app.events.index',compact('events'));
     }
 
@@ -41,6 +41,18 @@ class EventsController extends Controller
     public function store(Request $request)
     {
         try {
+            $request->validate([
+                'event_name' => 'required|string|max:255',
+                'event_description' => 'nullable|string',
+                'is_artist_visible' => 'required|boolean',
+                'is_decor_visible' => 'required|boolean',
+                // 'event_status' => 'required|boolean',
+                'artists' => 'nullable|array', // Make sure 'artists' is an array
+                'artists.*' => 'exists:artists,id', // Make sure all artists exist in the 'artists' table
+                'decorations' => 'nullable|array', // Make sure 'decorations' is an array
+                'decorations.*' => 'exists:decorations,id', // Make sure all decorations exist in the 'decorations' table
+            ]);
+
             $eventExists = Event::where('name', $request->event_name)->exists();
 
             if ($eventExists == false) {
@@ -50,7 +62,7 @@ class EventsController extends Controller
                 $isDecorVisible = $request->input('is_decor_visible');
                 $artists = $request->input('artists'); // This will be an array of selected artist IDs
                 $decorations = $request->input('decorations'); // This will be an array of selected decoration IDs
-                $eventStatus = $request->input('event_status');
+                // $eventStatus = $request->input('event_status');
 
                 // Now you can save these values to your database or perform any other operations as needed.
                 // For example:
@@ -60,7 +72,7 @@ class EventsController extends Controller
                 $event->description = $eventDescription;
                 $event->is_artist_visible = $isArtistVisible;
                 $event->is_decor_visible = $isDecorVisible;
-                $event->status = $eventStatus;
+                $event->status = 1;
                 $event->save();
 
                 // Attach artists and decorations to the event
@@ -131,7 +143,7 @@ class EventsController extends Controller
                     'event_description' => 'nullable|string',
                     'is_artist_visible' => 'required|boolean',
                     'is_decor_visible' => 'required|boolean',
-                    'event_status' => 'required|boolean',
+                    // 'event_status' => 'required|boolean',
                     'artists' => 'nullable|array', // Make sure 'artists' is an array
                     'artists.*' => 'exists:artists,id', // Make sure all artists exist in the 'artists' table
                     'decorations' => 'nullable|array', // Make sure 'decorations' is an array
@@ -147,7 +159,7 @@ class EventsController extends Controller
                     'description' => $request->event_description,
                     'is_artist_visible' => $request->is_artist_visible,
                     'is_decor_visible' => $request->is_decor_visible,
-                    'status' => $request->event_status,
+                    // 'status' => $request->event_status,
                 ]);
             
                 // Sync the associated artists and decorations with the event
@@ -164,6 +176,23 @@ class EventsController extends Controller
         //     $request->session()->flash('error', 'An error occurred while saving the time slot.');
         //     return redirect()->back();
         // }
+    }
+
+    public function event_updateStatus(Request $request)
+    {
+        $id = $request->input('id');
+        $status = $request->input('status');
+
+        // Assuming you have a model named YourModel with a 'status' column
+        $record = Event::find($id);
+        if (!$record) {
+            return response()->json(['error' => 'Event not found'], 404);
+        }
+
+        $record->status = $status;
+        $record->save();
+
+        return response()->json(['success' => 'Status updated successfully']);
     }
 
     /**

@@ -22,7 +22,7 @@ class EventManagementController extends Controller
 
         $light_sound = LightandSound::where('status', 1)->get();
 
-        $additional_artist = Artist::where('status', 1)->get();
+        $additional_artist = Artist::doesntHave('events')->orderBy('id', 'DESC')->get();
 
         $data =[
             'event' => $event,

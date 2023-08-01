@@ -20,14 +20,14 @@
                         <input type="time"  name="from_time" id="from_time" class="form-control time">
                     </div>
 
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="">Status <span style="color:red">*</span></label>
                         <select name="status" id="status" class="form-control" required>
                             <option value="" disabled selected>Select Status</option>
                             <option value="0">Inactive</option>
                             <option value="1">Active</option>
                         </select>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="col-md-6">
                     

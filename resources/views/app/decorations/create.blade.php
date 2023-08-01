@@ -43,7 +43,7 @@
 
                     </div>
                 </div>
-                <div class="col-md-6">
+                <!-- <div class="col-md-6">
 
                     <div class="form-group">
                         <label for="">Status <span style="color:red">*</span></label>
@@ -53,7 +53,7 @@
                             <option value="1">Active</option>
                         </select>
                     </div>
-                </div>
+                </div> -->
             </div>
 
             <div class="form-group" style="margin: 10px;">

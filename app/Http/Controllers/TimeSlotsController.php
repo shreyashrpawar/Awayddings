@@ -38,18 +38,22 @@ class TimeSlotsController extends Controller
     {
         try {
             // print_r($request->all());
+            $request->validate([
+                'from_time' => 'required',
+                'to_time' => 'required'
+            ]);
             $timeEntry = TimeSlot::where('from_time', $request->from_time)->exists();
 
             if ($timeEntry == false) {
                 $time_slot_details = [
                     'from_time' => $request->from_time,
                     'to_time' => $request->to_time,
-                    'status' => $request->status
+                    'status' => 1
                 ];
 
                 $timeSlot_add = TimeSlot::create($time_slot_details);
                 $request->session()->flash('success','Successfully Saved');
-                return redirect(route('time_slots.index'));
+                return redirect(route('timeslots.index'));
             } else {
                 $request->session()->flash('error', 'The selected time slot already exists.');
                 return redirect()->back();
@@ -94,6 +98,11 @@ class TimeSlotsController extends Controller
     public function update(Request $request, TimeSlot $timeSlot)
     {
         try {
+            $request->validate([
+                'from_time' => 'required',
+                'to_time' => 'required'
+            ]);
+            
             // print_r($request->all());
             $timeEntry = TimeSlot::where('from_time', $request->from_time)->where('id', '<>', $request->time_slot_id)->exists();
             $time_slot = TimeSlot::find($request->time_slot_id);
@@ -103,7 +112,7 @@ class TimeSlotsController extends Controller
                 $time_slot->update([
                     'from_time' => $request->from_time,
                     'to_time' => $request->to_time,
-                    'status' => $request->status
+                    // 'status' => $request->status
                 ]);
                 $request->session()->flash('success','Successfully Updated');
                 return redirect(route('timeslots.index'));
@@ -116,6 +125,23 @@ class TimeSlotsController extends Controller
             $request->session()->flash('error', 'An error occurred while saving the time slot.');
             return redirect()->back();
         }
+    }
+
+    public function timeslot_updateStatus(Request $request)
+    {
+        $id = $request->input('id');
+        $status = $request->input('status');
+
+        // Assuming you have a model named YourModel with a 'status' column
+        $record = TimeSlot::find($id);
+        if (!$record) {
+            return response()->json(['error' => 'Time Slot not found'], 404);
+        }
+
+        $record->status = $status;
+        $record->save();
+
+        return response()->json(['success' => 'Status updated successfully']);
     }
 
     /**

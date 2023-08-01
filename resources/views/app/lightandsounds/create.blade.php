@@ -14,15 +14,28 @@
             <div class="row">
 
                 <div class="col-md-6">
+                        
+                    <div class="form-group">
+                        <label for="">Price  <span style="color:red">*</span></label>
+                        <input type="number" step="any"  name="light_sound_price" id="light_sound_price" class="form-control">
+                    </div>
+                </div>
 
-                
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="">Description <span style="color:red">*</span></label>
+                        <textarea name="light_sound_description" id="light_sound_description"  class="form-control"  cols="30" rows="5"></textarea>
+                    </div>
+                </div>
+
+                <div class="col-md-6">                
                     <div class="col-md-6">
                     <label for="light_sound_image">Light & Sound Image:</label>
                     <input type="file" id="light_sound_image" name="light_sound_image">
 
                     </div>
                 </div>
-                <div class="col-md-6">
+                <!-- <div class="col-md-6">
 
                     <div class="form-group">
                         <label for="">Status <span style="color:red">*</span></label>
@@ -32,7 +45,7 @@
                             <option value="1">Active</option>
                         </select>
                     </div>
-                </div>
+                </div> -->
             </div>
 
             <div class="form-group" style="margin: 10px;">

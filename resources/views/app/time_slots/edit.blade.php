@@ -20,14 +20,14 @@
                         <input type="time"  name="from_time" id="from_time" class="form-control time" value="{{ $time_slot->from_time }}">
                     </div>
 
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="">Status <span style="color:red">*</span></label>
                         <select name="status" id="status" class="form-control" required>
                             <option value="" >Select Status</option>
-                            <option value="0" <?php echo ($time_slot->status == 0 ? 'selected' : '') ?>>Inactive</option>
-                            <option value="1" <?php echo ($time_slot->status == 1 ? 'selected' : '') ?>>Active</option>
+                            <option value="0" <?php// echo ($time_slot->status == 0 ? 'selected' : '') ?>>Inactive</option>
+                            <option value="1" <?php //echo ($time_slot->status == 1 ? 'selected' : '') ?>>Active</option>
                         </select>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="col-md-6">
                     

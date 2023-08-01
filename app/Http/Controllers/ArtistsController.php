@@ -40,7 +40,8 @@ class ArtistsController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            // Add any validation rules for other fields if needed.
+            'artist_image' => 'required',
+            'artist_name' => 'required',
         ]);
 
         // Check if the artist name already exists
@@ -65,7 +66,7 @@ class ArtistsController extends Controller
                 // Create the artist record.
                 $artist = Artist::create([
                     'name' => $request->input('artist_name'),
-                    'status' => $request->input('artist_status'),
+                    'status' => 1,
                     // Add other artist fields as needed.
                 ]);
                 // Associate the image with the artist.
@@ -120,7 +121,8 @@ class ArtistsController extends Controller
     public function update(Request $request, Artist $artist)
     {
         $request->validate([
-            // Add any validation rules for other fields if needed.
+            'artist_image' => 'required',
+            'artist_name' => 'required',
         ]);
     
         $artist = Artist::findOrFail($request->artist_id);
@@ -157,12 +159,29 @@ class ArtistsController extends Controller
         // Save other changes to the artist and redirect
         $artist->update([
             'name' => $request->input('artist_name'),
-            'status' => $request->input('artist_status'),
+            // 'status' => $request->input('artist_status'),
             // Add other artist fields as needed.
         ]);
     
         $request->session()->flash('success', 'Successfully Updated');
         return redirect()->route('artists.edit', $request->artist_id);
+    }
+
+    public function artist_updateStatus(Request $request)
+    {
+        $id = $request->input('id');
+        $status = $request->input('status');
+
+        // Assuming you have a model named YourModel with a 'status' column
+        $record = Artist::find($id);
+        if (!$record) {
+            return response()->json(['error' => 'Artist not found'], 404);
+        }
+
+        $record->status = $status;
+        $record->save();
+
+        return response()->json(['success' => 'Status updated successfully']);
     }
 
     /**
@@ -200,6 +219,12 @@ class ArtistsController extends Controller
     {
         try {
 
+            $request->validate([
+                'artist_person_name' => 'required',
+                'artist_person_price' => 'required',
+                'artist_id' => 'required',
+            ]);
+
             // Check if the artist name already exists
             $artistExists = ArtistPerson::where('name', $request->artist_person_name)->exists();
             if ($artistExists) {
@@ -212,7 +237,7 @@ class ArtistsController extends Controller
                 'name' => $request->input('artist_person_name'),
                 'price' => $request->input('artist_person_price'),
                 'artist_id' => $request->input('artist_id'),
-                'status' => $request->input('artist_person_status'),
+                'status' => 1,
                 // Add other artist fields as needed.
             ]);
 
@@ -242,7 +267,9 @@ class ArtistsController extends Controller
     public function artist_person_update(Request $request, Artist $artist)
     {
         $request->validate([
-            // Add any validation rules for other fields if needed.
+            'artist_person_name' => 'required',
+            'artist_person_price' => 'required',
+            'artist_id' => 'required',
         ]);
     
         $artist_person = ArtistPerson::findOrFail($request->artist_person_id);
@@ -252,7 +279,7 @@ class ArtistsController extends Controller
             'name' => $request->input('artist_person_name'),
             'price' => $request->input('artist_person_price'),
             'artist_id' => $request->input('artist_id'),
-            'status' => $request->input('artist_person_status'),
+            // 'status' => $request->input('artist_person_status'),
             // Add other artist fields as needed.
         ]);
     
@@ -260,5 +287,20 @@ class ArtistsController extends Controller
         return redirect()->route('artist_person_edit', $request->artist_id);
     }
 
+    public function artistPerson_updateStatus(Request $request)
+    {
+        $id = $request->input('id');
+        $status = $request->input('status');
 
+        // Assuming you have a model named YourModel with a 'status' column
+        $record = ArtistPerson::find($id);
+        if (!$record) {
+            return response()->json(['error' => 'Record not found'], 404);
+        }
+
+        $record->status = $status;
+        $record->save();
+
+        return response()->json(['success' => 'Status updated successfully']);
+    }
 }

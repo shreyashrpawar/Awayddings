@@ -26,6 +26,7 @@
                     <thead class="thead-dark">
                     <tr>
                         <th width="5%">#</th>
+                        <th>Name</th>
                         <th>Description</th>
                         <th>Price</th>
                         <th>Event</th>
@@ -38,12 +39,26 @@
                         @foreach($decors as $key => $val)
                             <tr>
                                 <th>{{ 1+ $key }}</th>
+                                <td>{{ $val->name }}</td>
                                 <td>{{ (strlen($val->description) > 50 ? substr($val->description, 0, 50) . '...': $val->description) }}</td>
                                 <td>{{ $val->price }}</td>
                                 <td>
-                                    {{ \App\Models\Event::where(['id' => $val->event_id])->pluck('name')->first(); }}
+                                    {{-- \App\Models\Event::where(['id' => $val->event_id])->pluck('name')->first(); --}}
+                                   
+                                    @if($val->events->count() > 0)
+                                        @foreach($val->events as $event)
+                                            {{ $event->name }}@if(!$loop->last), @endif
+                                        @endforeach
+                                    @else
+                                        No Events
+                                    @endif
                                 </td>
-                                <td>{{ ($val->status == 1 ? 'Active' : Inactive) }}</td>
+                                
+                                <td>
+                                    <button class="status-toggle btn btn-sm {{ $val->status == 1 ? 'btn-outline-success' : 'btn-outline-danger' }}" data-id="{{ $val->id }}">
+                                        {{ $val->status == 1 ? 'Active' : 'Inactive' }}
+                                    </button>
+                                </td>
 
                                 <td>
                                     <div class="btn-group">
@@ -133,6 +148,33 @@
             "autoWidth": false,
             "responsive": true,
           });
+
+          $('.status-toggle').on('click', function() {
+                const button = $(this);
+                const id = button.data('id');
+                const currentStatus = button.hasClass('btn-outline-success') ? 1 : 0;
+                const newStatus = currentStatus === 1 ? 0 : 1;
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ route('decoration_update_status') }}',
+                    data: {
+                        id: id,
+                        status: newStatus,
+                        _token: '{{ csrf_token() }}',
+                    },
+                    success: function(response) {
+                        // Update the button text and color after successful update
+                        button.text(newStatus === 1 ? 'Active' : 'Inactive');
+                        button.removeClass('btn-outline-success btn-outline-danger');
+                        button.addClass(newStatus === 1 ? 'btn-outline-success' : 'btn-outline-danger');
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle errors if needed
+                        console.error(error);
+                    }
+                });
+            });
         });
     </script>
 @endsection

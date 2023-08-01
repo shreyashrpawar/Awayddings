@@ -28,6 +28,8 @@
                         <th width="5%">#</th>
                         <th>Name</th>
                         <th>Description</th>
+                        <th>Artists</th>
+                        <th>Decorations</th>
                         <th>Status</th>
                         <th width="10%">Actions</th>
                     </tr>
@@ -41,7 +43,23 @@
                                     {{ $val->name }}
                                 </td>
                                 <td>{{ (strlen($val->description) > 50 ? substr($val->description, 0, 50) . '...': $val->description) }}</td>
-                                <td>{{ ($val->status == 1 ? 'Active' : Inactive) }}</td>
+                                <td>
+                                    @foreach($val->artists as $artist)
+                                        {{ $artist->name }}@if(!$loop->last), @endif
+                                    @endforeach
+                                </td>
+
+                                <td>
+                                    @foreach($val->decorations as $decoration)
+                                        {{ $decoration->name }}@if(!$loop->last), @endif
+                                    @endforeach
+                                </td>
+                                
+                                <td>
+                                    <button class="status-toggle btn btn-sm {{ $val->status == 1 ? 'btn-outline-success' : 'btn-outline-danger' }}" data-id="{{ $val->id }}">
+                                        {{ $val->status == 1 ? 'Active' : 'Inactive' }}
+                                    </button>
+                                </td>
 
                                 <td>
                                     <div class="btn-group">
@@ -131,6 +149,33 @@
             "autoWidth": false,
             "responsive": true,
           });
+
+          $('.status-toggle').on('click', function() {
+                const button = $(this);
+                const id = button.data('id');
+                const currentStatus = button.hasClass('btn-outline-success') ? 1 : 0;
+                const newStatus = currentStatus === 1 ? 0 : 1;
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ route('event_update_status') }}',
+                    data: {
+                        id: id,
+                        status: newStatus,
+                        _token: '{{ csrf_token() }}',
+                    },
+                    success: function(response) {
+                        // Update the button text and color after successful update
+                        button.text(newStatus === 1 ? 'Active' : 'Inactive');
+                        button.removeClass('btn-outline-success btn-outline-danger');
+                        button.addClass(newStatus === 1 ? 'btn-outline-success' : 'btn-outline-danger');
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle errors if needed
+                        console.error(error);
+                    }
+                });
+            });
         });
     </script>
 @endsection

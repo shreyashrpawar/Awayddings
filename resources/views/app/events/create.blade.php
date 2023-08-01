@@ -126,7 +126,7 @@
 
 
 
-                <div class="col-md-6">
+                <!-- <div class="col-md-6">
                     <div class="form-group">
                         <label for="">Status <span style="color:red">*</span></label>
                         <select name="event_status" id="event_status" class="form-control" required>
@@ -136,7 +136,7 @@
                         </select>
                     </div>
 
-                </div>
+                </div> -->
 
                 <!-- <div class="col-md-6">
                     <div class="form-group">

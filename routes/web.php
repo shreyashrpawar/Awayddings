@@ -58,18 +58,27 @@ Route::middleware(['auth'])->group(function () {
 
     //Event Management
     Route::resource('artists',App\Http\Controllers\ArtistsController::class);
+    Route::post('artist_update_status', [\App\Http\Controllers\ArtistsController::class, 'artist_updateStatus'])->name('artist_update_status');
 
     Route::get('artist_person',[\App\Http\Controllers\ArtistsController::class,'artist_person_view'])->name('artist_person');
     Route::get('artist_person_create',[\App\Http\Controllers\ArtistsController::class,'artist_person_create'])->name('artist_person_create');
     Route::post('artist_person_store',[\App\Http\Controllers\ArtistsController::class,'artist_person_store'])->name('artist_person_store');
     Route::get('artist_person_edit/{id}',[\App\Http\Controllers\ArtistsController::class,'artist_person_edit'])->name('artist_person_edit');
     Route::post('artist_person_update/{id}',[\App\Http\Controllers\ArtistsController::class,'artist_person_update'])->name('artist_person_update');
+    Route::post('artist_person_update_status', [\App\Http\Controllers\ArtistsController::class, 'artistPerson_updateStatus'])->name('artist_person_update_status');
 
     Route::resource('decorations',App\Http\Controllers\DecorationsController::class);
+    Route::post('decoration_update_status', [\App\Http\Controllers\DecorationsController::class, 'decoration_updateStatus'])->name('decoration_update_status');
+
     Route::resource('events',App\Http\Controllers\EventsController::class);
+    Route::post('event_update_status', [\App\Http\Controllers\EventsController::class, 'event_updateStatus'])->name('event_update_status');
+
     Route::resource('lightandsounds',App\Http\Controllers\LightandSoundsController::class);
+    Route::post('lightandsound_update_status', [\App\Http\Controllers\LightandSoundsController::class, 'lightandsound_updateStatus'])->name('lightandsound_update_status');
+
     Route::resource('timeslots',App\Http\Controllers\TimeSlotsController::class);
-    Route::post('timeslots/update/{id}', [App\Http\Controllers\TimeSlotsController::class, 'update'])->name('timeslots.update'); //Pre-booking edit url
+    Route::post('timeslots/update/{id}', [App\Http\Controllers\TimeSlotsController::class, 'update'])->name('timeslots.update'); 
+    Route::post('timeslot_update_status', [\App\Http\Controllers\TimeSlotsController::class, 'timeslot_updateStatus'])->name('timeslot_update_status');
 
 });
 Route::prefix('settings')->middleware(['auth'])->group(function () {

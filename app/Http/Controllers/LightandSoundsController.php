@@ -38,39 +38,37 @@ class LightandSoundsController extends Controller
      */
     public function store(Request $request)
     {
-        // Check if the file input exists in the request.
+        $request->validate([
+            'light_sound_image' => 'required',
+            'light_sound_price' => 'required',
+            'light_sound_description' => 'required',
+        ]);
+        
         if ($request->hasFile('light_sound_image')) {
-            // Retrieve the uploaded file from the request.
             $image = $request->file('light_sound_image');
 
-            // Check if the file is valid.
             if ($image->isValid()) {
-                // Save the file to the desired location.
                 $name = time() . $image->getClientOriginalName();
                 $filePath = 'images/'. $name;
                 Storage::disk('s3')->put($filePath, file_get_contents($image),'public');
-    
-                // Create the light record.
+                
                 $light = LightandSound::create([
-                    'status' => $request->input('light_sound_status'),
-                    // Add other light fields as needed.
+                    'price' => $request->light_sound_price,
+                    'description' => $request->light_sound_description,
+                    'status' => 1,
                 ]);
     
-                // Associate the image with the light.
                 $light->image()->create(['url' =>  Storage::disk('s3')->url($filePath)]);
     
-                // Handle other form fields and redirect as needed.
                 $request->session()->flash('success', 'Successfully Saved');
                 return redirect(route('lightandsounds.index'));
             } else {
                 $request->session()->flash('error', 'File is not valid.');
                 return redirect()->back();
-                // File is not valid. Handle the error appropriately.
             }
         } else {
             $request->session()->flash('error', 'Light and Sound image file input was not found in the request.');
             return redirect()->back();
-            // 'light_image' file input was not found in the request.
         }
     }
 
@@ -106,6 +104,12 @@ class LightandSoundsController extends Controller
      */
     public function update(Request $request, LightandSound $lightandSound)
     {
+        $request->validate([
+            'light_sound_image' => 'required',
+            'light_sound_price' => 'required',
+            'light_sound_description' => 'required',
+        ]);
+        
         $light_sound = LightandSound::findOrFail($request->light_sound_id);
 
         if ($request->hasFile('light_sound_image')) {
@@ -127,12 +131,31 @@ class LightandSoundsController extends Controller
     
         // Save other changes to the light_sound and redirect
         $light_sound->update([
-            'status' => $request->input('light_sound_status'),
+            'price' => $request->light_sound_price,
+            'description' => $request->light_sound_description,
+            // 'status' => $request->input('light_sound_status'),
             // Add other light_sound fields as needed.
         ]);
     
         $request->session()->flash('success', 'Successfully Updated');
         return redirect()->route('lightandsounds.edit', $request->light_sound_id);
+    }
+
+    public function lightandsound_updateStatus(Request $request)
+    {
+        $id = $request->input('id');
+        $status = $request->input('status');
+
+        // Assuming you have a model named YourModel with a 'status' column
+        $record = LightandSound::find($id);
+        if (!$record) {
+            return response()->json(['error' => 'Record not found'], 404);
+        }
+
+        $record->status = $status;
+        $record->save();
+
+        return response()->json(['success' => 'Status updated successfully']);
     }
 
     /**

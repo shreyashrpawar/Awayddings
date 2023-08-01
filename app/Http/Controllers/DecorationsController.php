@@ -40,6 +40,13 @@ class DecorationsController extends Controller
     public function store(Request $request)
     {
 
+        $request->validate([
+            'decoration_image' => 'required',
+            'decoration_name' => 'required',
+            'decoration_price' => 'required',
+            'decoration_description' => 'required',
+        ]);
+
         // Check if the file input exists in the request.
         if ($request->hasFile('decoration_image')) {
             // Retrieve the uploaded file from the request.
@@ -57,7 +64,7 @@ class DecorationsController extends Controller
                     'name' => $request->input('decoration_name'),
                     'price' => $request->input('decoration_price'),
                     'description' => $request->input('decoration_description'),
-                    'status' => $request->input('decoration_status'),
+                    'status' => 1,
                     // Add other decoration fields as needed.
                 ]);
     
@@ -111,9 +118,11 @@ class DecorationsController extends Controller
      */
     public function update(Request $request, Decoration $decoration)
     {
-        // dd($request->all());
         $request->validate([
-            // Add any validation rules for other fields if needed.
+            'decoration_image' => 'required',
+            'decoration_name' => 'required',
+            'decoration_price' => 'required',
+            'decoration_description' => 'required',
         ]);
     
         $decoration = Decoration::findOrFail($request->decoration_id);
@@ -152,12 +161,29 @@ class DecorationsController extends Controller
             'name' => $request->input('decoration_name'),
             'price' => $request->input('decoration_price'),
             'description' => $request->input('decoration_description'),
-            'status' => $request->input('decoration_status'),
+            // 'status' => $request->input('decoration_status'),
             // Add other decoration fields as needed.
         ]);
     
         $request->session()->flash('success', 'Successfully Updated');
         return redirect()->route('decorations.edit', $request->decoration_id);
+    }
+
+    public function decoration_updateStatus(Request $request)
+    {
+        $id = $request->input('id');
+        $status = $request->input('status');
+
+        // Assuming you have a model named YourModel with a 'status' column
+        $record = Decoration::find($id);
+        if (!$record) {
+            return response()->json(['error' => 'Decoration not found'], 404);
+        }
+
+        $record->status = $status;
+        $record->save();
+
+        return response()->json(['success' => 'Status updated successfully']);
     }
 
     /**
