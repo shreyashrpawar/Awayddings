@@ -19,4 +19,6 @@ class TimeSlot extends Model
         'created_at',
         'updated_at'
     ];
+
+    protected $table = 'em_time_slots';
 }

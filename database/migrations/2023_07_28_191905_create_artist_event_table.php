@@ -13,7 +13,7 @@ class CreateArtistEventTable extends Migration
      */
     public function up()
     {
-        Schema::create('artist_event', function (Blueprint $table) {
+        Schema::create('em_artist_event', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('artist_id');
             $table->unsignedBigInteger('event_id');
@@ -21,8 +21,8 @@ class CreateArtistEventTable extends Migration
             // $table->timestamps();
 
             // Define foreign keys
-            $table->foreign('artist_id')->references('id')->on('artists')->onDelete('cascade');
-            $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
+            $table->foreign('artist_id')->references('id')->on('em_artists')->onDelete('cascade');
+            $table->foreign('event_id')->references('id')->on('em_events')->onDelete('cascade');
 
             // Add a unique constraint to prevent duplicate entries
             $table->unique(['artist_id', 'event_id']);
@@ -37,6 +37,6 @@ class CreateArtistEventTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('artist_event');
+        Schema::dropIfExists('em_artist_event');
     }
 }

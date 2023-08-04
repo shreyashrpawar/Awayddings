@@ -17,7 +17,8 @@ class Artist extends Model
         'status',
     ];
 
-    protected $morphClass = 'artist';
+    // Update the $morphClass property to use the new table name
+    protected $morphClass = 'em_artists';
 
     public function image()
     {
@@ -30,7 +31,7 @@ class Artist extends Model
 
     public function events()
     {
-        return $this->belongsToMany(Event::class);
+        return $this->belongsToMany(Event::class,'em_artist_event');
     }
 
     protected $hidden = [
@@ -38,4 +39,6 @@ class Artist extends Model
         'updated_at',
         'pivot'
     ];
+
+    protected $table = 'em_artists';
 }

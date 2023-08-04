@@ -13,7 +13,7 @@ class CreateDecorationEventTable extends Migration
      */
     public function up()
     {
-        Schema::create('decoration_event', function (Blueprint $table) {
+        Schema::create('em_decoration_event', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('decoration_id');
             $table->unsignedBigInteger('event_id');
@@ -21,8 +21,8 @@ class CreateDecorationEventTable extends Migration
             // $table->timestamps();
 
             // Define foreign keys
-            $table->foreign('decoration_id')->references('id')->on('decorations')->onDelete('cascade');
-            $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
+            $table->foreign('decoration_id')->references('id')->on('em_decorations')->onDelete('cascade');
+            $table->foreign('event_id')->references('id')->on('em_events')->onDelete('cascade');
 
             // Add a unique constraint to prevent duplicate entries
             $table->unique(['decoration_id', 'event_id']);

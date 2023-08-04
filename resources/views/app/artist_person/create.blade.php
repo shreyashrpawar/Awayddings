@@ -8,7 +8,7 @@
     <div class="card-body">
         <h4 class="card-title">Artist Person Add</h4>
         <hr>
-        <form id="timeSlotForm" action="{{ route('artist_person_store') }}" method="POST"   enctype="multipart/form-data">
+        <form id="artistPersonForm" action="{{ route('artist_person_store') }}" method="POST"   enctype="multipart/form-data">
             @csrf
             @method('post')
             <div class="row">
@@ -41,6 +41,21 @@
                     <div class="form-group">
                         <label for="">Price  <span style="color:red">*</span></label>
                         <input type="number" step="any"  name="artist_person_price" id="artist_person_price" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="">Link  <span style="color:red">*</span></label>
+                        <input type="url" id="artist_person_link" name="artist_person_link" placeholder="https://www.instagram.com/username" class="form-control">
+                    </div>
+                </div>
+
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="artist_image">Image:</label>
+                        <input type="file" id="artist_person_image" name="artist_person_image">
                     </div>
                 </div>
 

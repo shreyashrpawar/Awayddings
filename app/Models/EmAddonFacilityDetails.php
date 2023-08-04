@@ -4,28 +4,28 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Image;
 
-class Decoration extends Model
+class EmAddonFacilityDetails extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'description',
         'price',
+        'description',
         'status',
     ];
 
-    protected $morphClass = 'em_decorations';
+    protected $morphClass = 'em_addon_facility_details';
 
     public function image()
     {
         return $this->morphOne(Image::class, 'imageable');
     }
-
-    public function events()
+    
+    public function facility()
     {
-        return $this->belongsToMany(Event::class, 'em_decoration_event');
+        return $this->belongsTo(EmAddonFacility::class);
     }
 
     protected $hidden = [
@@ -34,5 +34,5 @@ class Decoration extends Model
         'pivot'
     ];
 
-    protected $table = 'em_decorations';
+    protected $table = 'em_addon_facility_details';
 }

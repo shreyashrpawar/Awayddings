@@ -8,7 +8,7 @@
     <div class="card-body">
         <h4 class="card-title">Artist Add</h4>
         <hr>
-        <form id="timeSlotForm" action="{{ route('artists.store') }}" method="POST"   enctype="multipart/form-data">
+        <form id="artistForm" action="{{ route('artists.store') }}" method="POST"   enctype="multipart/form-data">
             @csrf
             @method('post')
             <div class="row">

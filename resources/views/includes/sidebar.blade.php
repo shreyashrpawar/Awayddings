@@ -59,7 +59,7 @@
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item"> <a class="nav-link" href="{{ route('events.index') }}">Events</a></li>
                 
-                    <li class="nav-item"> <a class="nav-link" href="{{ route('timeslots.index') }}">Timeslots</a></li>
+                    <!-- <li class="nav-item"> <a class="nav-link" href="{{ route('timeslots.index') }}">Timeslots</a></li> -->
                     <!-- <li class="nav-item"> 
                         <a class="nav-link collapsed" data-toggle="collapse" href="#artist">
                             <i class="mdi mdi-seat-individual-suite menu-icon"></i>
@@ -78,7 +78,8 @@
                     <li class="nav-item"> <a class="nav-link" href="{{ route('artists.index') }}">Artists</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{ route('artist_person') }}">Artist Person</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{ route('decorations.index') }}">Decorations</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="{{ route('lightandsounds.index') }}">Light and Sounds</a></li>
+                    <!-- <li class="nav-item"> <a class="nav-link" href="{{-- route('lightandsounds.index') --}}">Light and Sounds</a></li> -->
+                    <li class="nav-item"> <a class="nav-link" href="{{ route('addon_facilities.index') }}">Facilty</a></li>
                     
 
                 </ul>

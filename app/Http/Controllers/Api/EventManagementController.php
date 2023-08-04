@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\EventManagementResource;
 use App\Http\Resources\EventResource;
 use App\Models\Artist;
+use App\Models\EmAddonFacility;
 use Illuminate\Http\Request;
 use App\Models\Event;
 use App\Models\LightandSound;
@@ -18,16 +19,13 @@ class EventManagementController extends Controller
     {
         $event = Event::with(['decorations','artists'])->where('status', 1)->get();
 
-        $time_slot = TimeSlot::where('status', 1)->get();
-
-        $light_sound = LightandSound::where('status', 1)->get();
+        $additional_facility = EmAddonFacility::where('status', 1)->get();
 
         $additional_artist = Artist::doesntHave('events')->orderBy('id', 'DESC')->get();
 
         $data =[
             'event' => $event,
-            'light_decor' =>$light_sound,
-            'time_slots' => $time_slot,
+            'additional_facility' =>$additional_facility,
             'additional_artist' => $additional_artist
         ];
 

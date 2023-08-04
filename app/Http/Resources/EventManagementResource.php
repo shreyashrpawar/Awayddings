@@ -17,8 +17,7 @@ class EventManagementResource extends JsonResource
     {
         return [
             'event' => EventResource::collection($this['event']),
-            'lightDecor' => LightDecorResource::collection($this['light_decor']),
-            'timeSlot' => TimeSlotResource::collection($this['time_slots']),
+            'additional_facility' => AdditionalFacilityResource::collection($this['additional_facility']),
             'additional_artist' => ArtistResource::collection($this['additional_artist']), 
         ];
     }

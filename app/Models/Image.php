@@ -15,4 +15,6 @@ class Image extends Model
     {
         return $this->morphTo();
     }
+
+    protected $table = 'em_images';
 }

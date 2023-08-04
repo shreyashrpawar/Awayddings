@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class LightDecorResource extends JsonResource
+class AdditionalFacilityResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,10 +15,9 @@ class LightDecorResource extends JsonResource
     public function toArray($request)
     {
         return [
+             'name' => $this->name,
              'id' =>  $this->id,
-             //'name' =>  $this->name,
-             'image' =>new  ImageResource($this->image),
-              //'artistsPersion' => ArtistPersonResource::collection($this->artist_person)
+             'facilityDetials' => AdditionalFacilityDetailsResource::collection($this->facilityDetails)
         ];
     }
 }

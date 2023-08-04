@@ -13,7 +13,7 @@ class CreateArtistsTable extends Migration
      */
     public function up()
     {
-        Schema::create('artists', function (Blueprint $table) {
+        Schema::create('em_artists', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->double('price');
@@ -31,6 +31,6 @@ class CreateArtistsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('artists');
+        Schema::dropIfExists('em_artists');
     }
 }

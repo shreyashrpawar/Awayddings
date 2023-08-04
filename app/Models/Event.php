@@ -23,12 +23,12 @@ class Event extends Model
 
     public function artists()
     {
-        return $this->belongsToMany(Artist::class);
+        return $this->belongsToMany(Artist::class, 'em_artist_event');
     }
 
     public function decorations()
     {
-        return $this->belongsToMany(Decoration::class);
+        return $this->belongsToMany(Decoration::class, 'em_decoration_event');
     }
 
     protected $casts = [
@@ -41,4 +41,6 @@ class Event extends Model
         'created_at',
         'updated_at'
     ];
+
+    protected $table = 'em_events';
 }

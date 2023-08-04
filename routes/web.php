@@ -80,6 +80,19 @@ Route::middleware(['auth'])->group(function () {
     Route::post('timeslots/update/{id}', [App\Http\Controllers\TimeSlotsController::class, 'update'])->name('timeslots.update'); 
     Route::post('timeslot_update_status', [\App\Http\Controllers\TimeSlotsController::class, 'timeslot_updateStatus'])->name('timeslot_update_status');
 
+    // Route::resource('EmAddonFacility',App\Http\Controllers\AddonFacilityController::class);
+    Route::get('addon_facilities.index', [\App\Http\Controllers\AddonFacilityController::class, 'index'])->name('addon_facilities.index');
+    Route::post('addon_facilities.store', [\App\Http\Controllers\AddonFacilityController::class, 'store'])->name('addon_facilities.store');
+    Route::put('addon_facilities/{id}', [\App\Http\Controllers\AddonFacilityController::class, 'update'])->name('addon_facilities.update');
+    Route::post('facility_updateStatus', [\App\Http\Controllers\AddonFacilityController::class, 'facility_updateStatus'])->name('facility_updateStatus');
+
+
+    Route::get('addon_facility_details', [\App\Http\Controllers\AddonFacilityDetailsController::class, 'index'])->name('addon_facility_details.index');
+    Route::post('addon_facility_details.store', [\App\Http\Controllers\AddonFacilityDetailsController::class, 'store'])->name('addon_facility_details.store');
+    Route::get('addon_facility_details/{id}/edit', [\App\Http\Controllers\AddonFacilityDetailsController::class, 'edit'])->name('addon_facility_details.edit');
+    Route::put('addon_facility_details/{id}', [\App\Http\Controllers\AddonFacilityDetailsController::class, 'update'])->name('addon_facility_details.update');
+    Route::post('facilityDetails_updateStatus', [\App\Http\Controllers\AddonFacilityDetailsController::class, 'facilityDetails_updateStatus'])->name('facilityDetails_updateStatus');
+
 });
 Route::prefix('settings')->middleware(['auth'])->group(function () {
     Route::resource('locations',App\Http\Controllers\Settings\LocationController::class);

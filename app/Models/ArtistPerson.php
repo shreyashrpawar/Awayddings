@@ -12,9 +12,15 @@ class ArtistPerson extends Model
     protected $fillable = [
         'name',
         'price',
+        'artist_person_link',
         'artist_id',
         'status',
     ];
 
-    protected $table = 'artist_persons';//lightand_sounds
+    protected $table = 'em_artist_persons';//lightand_sounds
+
+    public function image()
+    {
+        return $this->morphOne(Image::class, 'imageable');
+    }
 }

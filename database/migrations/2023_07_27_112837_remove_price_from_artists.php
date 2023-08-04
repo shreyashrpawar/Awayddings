@@ -13,7 +13,7 @@ class RemovePriceFromArtists extends Migration
      */
     public function up()
     {
-        Schema::table('artists', function (Blueprint $table) {
+        Schema::table('em_artists', function (Blueprint $table) {
             $table->dropColumn('price');
         });
     }

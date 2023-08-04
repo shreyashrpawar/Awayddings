@@ -222,6 +222,7 @@ class ArtistsController extends Controller
             $request->validate([
                 'artist_person_name' => 'required',
                 'artist_person_price' => 'required',
+                'artist_person_link' => 'required',
                 'artist_id' => 'required',
             ]);
 
@@ -231,15 +232,53 @@ class ArtistsController extends Controller
                 $request->session()->flash('error', 'The selected artist already exists.');
                 return redirect()->back();
             }
+
+            // Check if the file input exists in the request.
+            if ($request->hasFile('artist_person_image')) {
+                // Retrieve the uploaded file from the request.
+                $image = $request->file('artist_person_image');
+
+                // Check if the file is valid.
+                if ($image->isValid()) {
+                    // Save the file to the desired location.
+                    $name = time() . $image->getClientOriginalName();
+                    $filePath = 'images/'. $name;
+                    Storage::disk('s3')->put($filePath, file_get_contents($image),'public');
+        
+                    // Create the artist record.
+                    $artist = ArtistPerson::create([
+                        'name' => $request->input('artist_person_name'),
+                        'price' => $request->input('artist_person_price'),
+                        'artist_person_link' => $request->input('artist_person_link'),
+                        'artist_id' => $request->input('artist_id'),
+                        'status' => 1,
+                        // Add other artist fields as needed.
+                    ]);
+                    // Associate the image with the artist.
+                    $artist->image()->create(['url' =>  Storage::disk('s3')->url($filePath)]);
+                    // Handle other form fields and redirect as needed.
+                    $request->session()->flash('success', 'Successfully Saved');
+                    return redirect(route('artist_person'));
+                } else {
+                    $request->session()->flash('error', 'File is not valid.');
+                    return redirect()->back();
+                    // File is not valid. Handle the error appropriately.
+                }
+            } else {
+                $request->session()->flash('error', 'Artist image file input was not found in the request.');
+                return redirect()->back();
+                // 'artist_image' file input was not found in the request.
+            }
         
             // Create the artist record.
-            $artist = ArtistPerson::create([
-                'name' => $request->input('artist_person_name'),
-                'price' => $request->input('artist_person_price'),
-                'artist_id' => $request->input('artist_id'),
-                'status' => 1,
-                // Add other artist fields as needed.
-            ]);
+            // $artist = ArtistPerson::create([
+            //     'name' => $request->input('artist_person_name'),
+            //     'price' => $request->input('artist_person_price'),
+            //     'artist_person_link' => $request->input('artist_person_link'),
+            //     'artist_id' => $request->input('artist_id'),
+            //     'status' => 1,
+            //     // Add other artist fields as needed.
+            // ]);
 
             $request->session()->flash('success', 'Successfully Saved');
             return redirect(route('artist_person'));
@@ -269,15 +308,43 @@ class ArtistsController extends Controller
         $request->validate([
             'artist_person_name' => 'required',
             'artist_person_price' => 'required',
+            'artist_person_link' => 'required',
             'artist_id' => 'required',
         ]);
     
         $artist_person = ArtistPerson::findOrFail($request->artist_person_id);
+
+        if ($request->hasFile('artist_person_image')) {
+            $image = $request->file('artist_person_image');
+    
+            // Check if the file is valid
+            if ($image->isValid()) {
+                // Delete the existing image if one exists
+                if ($artist_person->image) {
+                    Storage::disk('public')->delete($artist_person->image->url);
+                    $artist_person->image->delete();
+                }
+    
+                // Save the new image to the desired location
+                $url = $image->store('images', 'public');
+    
+                // Create and save the new image record
+                // $newImage = new Image(['url' => $url]);
+                // $newImage->save();
+    
+                // Associate the new image with the artist
+                $artist_person->image()->create(['url' => $url]);
+            } else {
+                $request->session()->flash('error', 'File is not valid.');
+                return redirect()->back();
+            }
+        }
     
         // Save other changes to the artist and redirect
         $artist_person->update([
             'name' => $request->input('artist_person_name'),
             'price' => $request->input('artist_person_price'),
+            'artist_person_link' => $request->input('artist_person_link'),
             'artist_id' => $request->input('artist_id'),
             // 'status' => $request->input('artist_person_status'),
             // Add other artist fields as needed.

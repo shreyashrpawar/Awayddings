@@ -40,7 +40,7 @@ class EventsController extends Controller
      */
     public function store(Request $request)
     {
-        try {
+        // try {
             $request->validate([
                 'event_name' => 'required|string|max:255',
                 'event_description' => 'nullable|string',
@@ -48,9 +48,9 @@ class EventsController extends Controller
                 'is_decor_visible' => 'required|boolean',
                 // 'event_status' => 'required|boolean',
                 'artists' => 'nullable|array', // Make sure 'artists' is an array
-                'artists.*' => 'exists:artists,id', // Make sure all artists exist in the 'artists' table
+                'artists.*' => 'exists:em_artists,id', // Make sure all artists exist in the 'artists' table
                 'decorations' => 'nullable|array', // Make sure 'decorations' is an array
-                'decorations.*' => 'exists:decorations,id', // Make sure all decorations exist in the 'decorations' table
+                'decorations.*' => 'exists:em_decorations,id', // Make sure all decorations exist in the 'decorations' table
             ]);
 
             $eventExists = Event::where('name', $request->event_name)->exists();
@@ -76,19 +76,22 @@ class EventsController extends Controller
                 $event->save();
 
                 // Attach artists and decorations to the event
-                $event->artists()->attach($artists);
-                $event->decorations()->attach($decorations);
+                // $event->artists()->attach($artists);
+                $event->artists()->attach($artists, ['event_id' => $event->id]);
+                // $event->decorations()->attach($decorations);
+                $event->decorations()->attach($decorations, ['event_id' => $event->id]);
+
                 $request->session()->flash('success','Successfully Saved');
                 return redirect(route('events.index'));
             } else {
                 $request->session()->flash('error', 'The selected event already exists.');
                 return redirect()->back();
             }
-        } catch (\Exception $e) {
-            // Handle any exceptions that might occur during the database operation
-            $request->session()->flash('error', 'An error occurred while saving the event.');
-            return redirect()->back();
-        }
+        // } catch (\Exception $e) {
+        //     // Handle any exceptions that might occur during the database operation
+        //     $request->session()->flash('error', 'An error occurred while saving the event.');
+        //     return redirect()->back();
+        // }
     }
 
     /**

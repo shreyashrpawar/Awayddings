@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddNameToDecorations extends Migration
+class AddArtistPersonLinkToEmArtistPersonsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddNameToDecorations extends Migration
      */
     public function up()
     {
-        Schema::table('em_decorations', function (Blueprint $table) {
-            $table->string('name');
+        Schema::table('em_artist_persons', function (Blueprint $table) {
+            $table->string('artist_person_link')->nullable();
         });
     }
 
@@ -25,8 +25,8 @@ class AddNameToDecorations extends Migration
      */
     public function down()
     {
-        Schema::table('decorations', function (Blueprint $table) {
-            $table->dropColumn('name');
+        Schema::table('em_artist_persons', function (Blueprint $table) {
+            $table->dropColumn('artist_person_link');
         });
     }
 }

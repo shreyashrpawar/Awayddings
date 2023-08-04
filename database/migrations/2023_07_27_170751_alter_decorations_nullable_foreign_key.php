@@ -13,12 +13,12 @@ class AlterDecorationsNullableForeignKey extends Migration
      */
     public function up()
     {
-        Schema::table('decorations', function (Blueprint $table) {
+        Schema::table('em_decorations', function (Blueprint $table) {
             // Drop existing foreign key constraint (if exists)
-            $table->dropForeign(['event_id']);
+            $table->dropForeign(['em_event_id']);
             
             // Modify the foreign key column to be nullable
-            $table->unsignedBigInteger('event_id')->nullable()->change();
+            $table->unsignedBigInteger('em_event_id')->nullable()->change();
             
             // Add the foreign key constraint again (if needed)
             // $table->foreign('foreign_key_column')->references('id')->on('related_table')->onDelete('cascade');

@@ -13,7 +13,7 @@ class AddEventIdToArtists extends Migration
      */
     public function up()
     {
-        Schema::table('artists', function (Blueprint $table) {
+        Schema::table('em_artists', function (Blueprint $table) {
             
             $table->unsignedBigInteger('event_id')->nullable(); // Add the event_id column
             // $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');

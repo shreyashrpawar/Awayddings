@@ -17,8 +17,9 @@ class ArtistPersonResource extends JsonResource
         return [
             'id' =>  $this->id,
             'price' =>  $this->price,
-            'name' =>  $this->name
-            
+            'name' =>  $this->name,
+            'image_url' =>$this->image->url,
+             'url' =>  $this->artist_person_link
         ];
     }
 }
