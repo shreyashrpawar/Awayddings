@@ -119,7 +119,7 @@ class DecorationsController extends Controller
     public function update(Request $request, Decoration $decoration)
     {
         $request->validate([
-            'decoration_image' => 'required',
+            // 'decoration_image' => 'required',
             'decoration_name' => 'required',
             'decoration_price' => 'required',
             'decoration_description' => 'required',

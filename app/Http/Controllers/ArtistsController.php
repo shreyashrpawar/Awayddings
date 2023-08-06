@@ -121,7 +121,7 @@ class ArtistsController extends Controller
     public function update(Request $request, Artist $artist)
     {
         $request->validate([
-            'artist_image' => 'required',
+            // 'artist_image' => 'required',
             'artist_name' => 'required',
         ]);
     
@@ -164,7 +164,7 @@ class ArtistsController extends Controller
         ]);
     
         $request->session()->flash('success', 'Successfully Updated');
-        return redirect()->route('artists.edit', $request->artist_id);
+        return redirect()->route('artists.index', $request->artist_id);
     }
 
     public function artist_updateStatus(Request $request)

@@ -148,9 +148,9 @@ class EventsController extends Controller
                     'is_decor_visible' => 'required|boolean',
                     // 'event_status' => 'required|boolean',
                     'artists' => 'nullable|array', // Make sure 'artists' is an array
-                    'artists.*' => 'exists:artists,id', // Make sure all artists exist in the 'artists' table
+                    'artists.*' => 'exists:em_artists,id', // Make sure all artists exist in the 'artists' table
                     'decorations' => 'nullable|array', // Make sure 'decorations' is an array
-                    'decorations.*' => 'exists:decorations,id', // Make sure all decorations exist in the 'decorations' table
+                    'decorations.*' => 'exists:em_decorations,id', // Make sure all decorations exist in the 'decorations' table
                 ]);
             
                 // Find the event by its ID
