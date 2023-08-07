@@ -11,7 +11,19 @@ use App\Models\PreBookingSummaryStatus;
 use App\Models\UserVendorAlignment;
 use App\Models\VendorPropertyAlignment;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
+use App\Models\User;
+use App\Models\Property;
+use App\Models\PropertyDefaultRate;
+use App\Models\PropertyRate;
+use App\Models\PreBookingDetails;
 use Illuminate\Http\Request;
+use App\Mail\ApprovalEmail;
+use App\Mail\RejectionMail;
+use Illuminate\Support\Facades\Mail;
+use App\Jobs\SendCongratsEmail;
+use App\Mail\BookingCancelEmail;
+use DB;
 
 class PreBookingSummaryController extends Controller
 {
@@ -71,11 +83,6 @@ class PreBookingSummaryController extends Controller
             ->find($id);
         $pre_booking_summary_status = PreBookingSummaryStatus::pluck('name','id')->all();
        return view('app.prebooking.show',compact('summary','pre_booking_summary_status'));
-//       return response()->json([
-//           'success' => true,
-//           'message' => 'Success',
-//           'data' => $summary
-//       ]);
 
     }
 
@@ -85,9 +92,13 @@ class PreBookingSummaryController extends Controller
      * @param  \App\Models\PreBookingSummary  $preBookingSummary
      * @return \Illuminate\Http\Response
      */
-    public function edit(PreBookingSummary $preBookingSummary)
+    public function edit($id)
     {
-        //
+        $summary = PreBookingSummary::with(['user','property','pre_booking_details','pre_booking_details.hotel_chargable_type','pre_booking_summary_status'])
+            ->find($id);
+        // $pre_booking_summary_status = PreBookingSummaryStatus::pluck('name','id')->all();
+        // dd($summary);
+       return view('app.prebooking.edit',compact('summary'));
     }
 
     /**
@@ -108,10 +119,11 @@ class PreBookingSummaryController extends Controller
         $current_status      = PreBookingSummaryStatus::find($selected_status);
         $pre_booking_summary = PreBookingSummary::find($pre_booking_id);
 
+        $user_details = User::find($pre_booking_summary->user_id);
 
         if($current_status->name == 'approved'){
             // create a record in the booking
-            $additional_discount = $request->additional_discount ?? '0';
+            $additional_discount = $request->additional_discount ?? 0;
             $installments        = $request->installments;
             $total_amount = $pre_booking_summary->total_amount - $additional_discount;
             $booking_data = [
@@ -125,7 +137,9 @@ class PreBookingSummaryController extends Controller
                 'total_amount' => $total_amount,
                 'pax' => $pre_booking_summary->pax,
                 'admin_remarks' =>$admin_remarks,
-                'status' => 1
+                'status' => 1,
+                'booking_summaries_status' => 'approved',
+                'booking_summaries_status_remarks' => 'APPROVED BY ADMIN',
             ];
 
 
@@ -181,9 +195,51 @@ class PreBookingSummaryController extends Controller
                 'pre_booking_summary_status_id' => $status,
                 'admin_remarks' => $admin_remarks
             ]);
+            $property_details = Property::find($pre_booking_summary->property_id);
+
+            $details = [
+                'name' => $user_details->name,
+                'email' => $user_details->email,
+                'phone' => $user_details->phone,
+                'property_name' => $property_details->name,
+                'check_in' => $pre_booking_summary->check_in,
+                'check_out' => $pre_booking_summary->check_out,
+                'adult' => $pre_booking_summary->pax,
+                'amount' => $pre_booking_summary->total_amount,
+                'discount' => $additional_discount,
+                'total_amount' => $total_amount,
+                'paid' => 0,
+                'due' => $total_amount,
+                'admin_remarks' =>$admin_remarks,
+            ];
+
+            $bookings = BookingSummary::find($booking_summary->id);
+
+            Mail::to($user_details->email)->send(new ApprovalEmail($bookings));
             $request->session()->flash('success','Successfully Updated');
             return redirect(route('pre-bookings.index'));
-        }else{
+        }elseif($current_status->name == 'rejected'){
+            // echo 'rejected'; exit;
+            $pre_booking_summary->update([
+                'pre_booking_summary_status_id' => $status,
+                'admin_remarks' => $admin_remarks
+            ]);
+            Mail::to($user_details->email)->send(new RejectionMail());
+
+            $request->session()->flash('success','Successfully Updated');
+            return redirect(route('pre-bookings.index'));
+        }else if ($current_status->name == 'canceled'){
+
+            $pre_booking_summary->update([
+                'pre_booking_summary_status_id' => $status,
+                'admin_remarks' => $admin_remarks
+            ]);
+            Mail::to($user_details->email)->send(new BookingCancelEmail());
+
+            $request->session()->flash('success','Successfully Updated');
+            return redirect(route('pre-bookings.index'));
+        }
+        else{
             // update on the existing pre booking
             $pre_booking_summary->update([
                 'pre_booking_summary_status_id' => $status,
@@ -194,15 +250,143 @@ class PreBookingSummaryController extends Controller
 
         }
 
-
-
-
-
-
-
-
        return $request->all();
     }
+
+    public function update_details(Request $request, PreBookingSummary $preBookingSummary)
+    {
+        $pre_booking_id = $request->pre_booking_id;
+        $pre_booking_summary = PreBookingSummary::with(['user','property','pre_booking_details','pre_booking_details.hotel_chargable_type','pre_booking_summary_status'])
+            ->find($pre_booking_id);
+        $check_in = Carbon::parse($request->check_in);
+        $check_out = Carbon::parse($request->check_out);
+        $adults = $request->pax;
+
+        $temp_checkout_date = $check_out->subDay();
+
+        $nights = $check_in->diffInDays($check_out);
+        $days = $nights + 1;
+        $max_rooms = ceil($adults / 2);
+        $min_rooms = ceil($adults / 3);
+
+        $dateRange = CarbonPeriod::create($check_in, $temp_checkout_date);
+        
+        $property_id = $pre_booking_summary->property_id;
+        $propertDetails = Property::find($pre_booking_summary->property_id);
+        $property_chargable_items =
+            PropertyDefaultRate::with('hotel_charagable_type')
+                ->where('property_id', $property_id)
+                ->where('amount', '>', 0)
+                ->get();
+        $previous_dates = array();
+        $daterange_dates = array();
+        
+        foreach($pre_booking_summary->pre_booking_details as $k => $val) {
+            array_push($previous_dates, $val->date);
+        }
+
+        $pre_booking_details = PreBookingDetails::where('pre_booking_summaries_id', $pre_booking_summary->id)->first();
+        foreach ($dateRange as $date) {
+            array_push($daterange_dates, $date);
+            if (!in_array($date, $previous_dates))
+            {
+                $temp_data = [
+                    'date' => $date->format('d-m-Y'),
+                    'data' => []
+                ];
+                    $temp_data = [
+                        'hotel_chargable_type_id' => $pre_booking_details->hotel_chargable_type_id,
+                        'qty' => $pre_booking_details->qty,
+                        'rate' => $pre_booking_details->rate,
+                        'date' => Carbon::parse($date),
+                        'threshold' => $pre_booking_details->threshold,
+                        'pre_booking_summaries_id' => $pre_booking_summary->id,
+                    ];
+                    try {
+                        PreBookingDetails::create($temp_data);
+                    } catch (Throwable $e) {
+                        print_r($temp_data);
+                        return $e;
+                    }
+            }
+        }
+
+        foreach($pre_booking_summary->pre_booking_details as $k => $val) {
+            if (!in_array($val->date, $daterange_dates))
+            {
+                PreBookingDetails::destroy($val->id);
+            } 
+        }
+
+        $pre_booking_summary->update([
+            'user_id' => $pre_booking_summary->user_id,
+            'pre_booking_summary_id' => $request->id,
+            'property_id' => $pre_booking_summary->property_id,
+            'check_in' => $request->check_in,
+            'check_out' => $request->check_out,
+            'pax' => $request->pax,
+            'budget' => $request->budget,
+            'status' => 1
+        ]);
+        return redirect(route('pre-bookings.show',$pre_booking_id));
+    }
+    
+    public function update_qty_details(Request $request)
+    {
+        if ($request->ajax()) {
+            PreBookingDetails::find($request->pk)
+                ->update([
+                    $request->name => $request->value
+                ]);
+
+                $preBookingDetails = PreBookingDetails::find($request->pk);
+            if($request->name == 'rate') {
+                $qty = $preBookingDetails->qty;
+                $amount = $qty * $request->value;
+            } else {
+                $rate = $preBookingDetails->rate;
+                $amount = $rate * $request->value;
+            }
+
+                $preBookingSummary = PreBookingSummary::find($preBookingDetails->pre_booking_summaries_id);
+                // $preBookingDetails->update(['amount' => $result]);
+
+                // $prebooking_allData = PreBookingDetails::where('pre_booking_summaries_id', $preBookingDetails->pre_booking_summaries_id)->get();
+
+                // $result = PreBookingDetails::select('rate', 'qty', 'id')
+                //     ->selectRaw('rate * qty as multiplication_result')
+                //     ->where('pre_booking_summaries_id', $preBookingDetails->pre_booking_summaries_id)
+                //     ->get();
+
+                $result = PreBookingDetails::select(DB::raw('SUM(rate * qty) as total'))
+                    ->where('pre_booking_summaries_id', $preBookingDetails->pre_booking_summaries_id)
+                    ->first();
+                
+                    PreBookingSummary::find($preBookingDetails->pre_booking_summaries_id)
+                    ->update([
+                        'total_amount' => $result['total']
+                    ]);
+
+            // }
+  
+            return response()->json(['success' => true, 'total_amount' => $result['total'], 'amount' => $amount, 'this_id' => $request->pk ]);
+        }
+    }
+
+    public function delete($id)
+    {
+        $preBookingDetails = PreBookingDetails::where('id', $id)->first();
+        $preBookingSummary = PreBookingSummary::find($preBookingDetails->pre_booking_summaries_id);
+        $reduceValue= $preBookingDetails->rate * $preBookingDetails->qty;
+        $total_amount = $preBookingSummary->total_amount - $reduceValue;
+        $preBookingSummary->update([
+                        'total_amount' => $total_amount,
+                    ]);
+        PreBookingDetails::where('id', $id)->delete();
+
+        return response()->json(['success' => true, 'total_amount' => $total_amount, 'message' => 'Data deleted successfully']);
+    }
+
 
     /**
      * Remove the specified resource from storage.

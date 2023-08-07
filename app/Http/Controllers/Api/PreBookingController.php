@@ -16,7 +16,7 @@ class PreBookingController extends Controller
 {
     public function submit(Request $request)
     {
-
+        // print_r($request->all()); exit;
         $user = auth()->user();
         $user_id = $user->id;
         $user_budget = $request->user_budget;
@@ -28,6 +28,9 @@ class PreBookingController extends Controller
         $property_id = $request->property_id;
         $details = $request->details;
         $user_remark = $request->remarks;
+
+        $bride_name = $request->bride_name;
+        $groom_name = $request->groom_name;
 
         DB::beginTransaction();
 
@@ -42,7 +45,16 @@ class PreBookingController extends Controller
             'user_remarks' => $user_remark,
             'status' => 1,
             'pre_booking_summary_status_id' => 1,
+            'bride_name' => $bride_name,
+            'groom_name' => $groom_name,
         ];
+        // return response()->json([
+        //     'success' => true,
+        //     'message' => 'Successfully Saved',
+        //     'details' => $details
+
+        // ]);
+        // $prebooking = DB::table('pre_booking_summaries')->insert($temp_data);
 
         try {
             $pre_booking_summary = PreBookingSummary::create($temp_data);
@@ -76,9 +88,9 @@ class PreBookingController extends Controller
             DB::commit();
 
             //prejourney mail trigger
-            $details = ['email' => $user->email, 'mailbtnLink' => '', 'mailBtnText' => '',
-                'mailTitle' => 'Thank you!', 'mailSubTitle' => 'Your prebooking has been confirmed!', 'mailBody' => 'We are thrilled that you chose us to plan your destination wedding. Our representative will connect with you shortly'];
-            SendGenericEmail::dispatch($details);
+            // $details = ['email' => $user->email, 'mailbtnLink' => '', 'mailBtnText' => '',
+            //     'mailTitle' => 'Thank you!', 'mailSubTitle' => 'Your prebooking has been confirmed!', 'mailBody' => 'We are thrilled that you chose us to plan your destination wedding. Our representative will connect with you shortly'];
+            // SendGenericEmail::dispatch($details);
 
             return response()->json([
                 'success' => true,
