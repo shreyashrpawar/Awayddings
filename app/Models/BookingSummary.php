@@ -21,6 +21,8 @@ class BookingSummary extends Model
        'user_remarks',
        'admin_remarks',
        'status',
+       'booking_summaries_status',
+       'booking_summaries_status_remarks',
     ];
 
     public function user(){
@@ -43,4 +45,9 @@ class BookingSummary extends Model
     }
 
     protected $dates = ['check_in','check_out'];
+
+    public function bookingPaymentDetails()
+    {
+        return $this->hasOne(App\Models\BookingPaymentDetail::class, 'booking_summary_id');
+    }
 }

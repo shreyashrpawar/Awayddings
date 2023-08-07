@@ -19,6 +19,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::prefix('v1')->group(function () {
     Route::post('register',[\App\Http\Controllers\Api\UserController::class,'register']);
+    Route::get('/email/verify/{user}', [\App\Http\Controllers\Api\EmailVerificationController::class, 'verify'])
+    ->name('email.verify')
+    ->middleware('signed');
     Route::post('login',[\App\Http\Controllers\Api\UserController::class,'login']);
     Route::post('leads/capture',[\App\Http\Controllers\Api\LandingLeadsController::class,'store']);
     Route::get('property/random',[\App\Http\Controllers\Api\PropertyController::class,'getRandomProperty']);
@@ -36,9 +39,9 @@ Route::prefix('v1')->group(function () {
         Route::post('change-password',[\App\Http\Controllers\Api\ChangePasswordController::class,'changePassword']);
         Route::get('pre-booking',[\App\Http\Controllers\Api\PreBookingController::class,'index']);
         Route::get('me',[\App\Http\Controllers\Api\UserController::class,'userInformation']);
+        Route::get('getEventManagementData',[\App\Http\Controllers\Api\EventManagementController::class,'event_details']);
     });
 
     Route::get('top-destination',[\App\Http\Controllers\Api\PropertyController::class,'propertyCountWithLocation']);
-
 
 });
