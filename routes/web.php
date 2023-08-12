@@ -48,6 +48,14 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('pre_booking_qty_details/update_details/', [App\Http\Controllers\PreBookingSummaryController::class, 'update_qty_details'])->name('pre_booking_qty_details.update'); //Pre-booking edit url
 
+    //Event Management Pre booking
+    Route::resource('event-pre-booking',App\Http\Controllers\EventPreBookingSummaryController::class);
+    Route::post('event-pre-booking/update_details/{id}', [App\Http\Controllers\EventPreBookingSummaryController::class, 'update_details'])->name('event-pre-booking.update_details'); //Pre-booking edit url
+    Route::delete('event-pre-booking/delete/{id}', [App\Http\Controllers\EventPreBookingSummaryController::class, 'delete'])->name('delete');
+
+    Route::post('event-pre_booking_qty_details/update_details/', [App\Http\Controllers\EventPreBookingSummaryController::class, 'update_qty_details'])->name('pre_booking_qty_details.update'); //Pre-booking edit url
+    //Event Management Pre booking End
+
     Route::resource('vendors',App\Http\Controllers\VendorController::class);
     Route::get('property/vendor/{vendor_id}/associate',[App\Http\Controllers\VendorController::class,'showPropertyVendorAssociationPage']);
     Route::post('property/vendor/{vendor_id}/associate',[App\Http\Controllers\VendorController::class,'submitPropertyVendorAssociationForm']);

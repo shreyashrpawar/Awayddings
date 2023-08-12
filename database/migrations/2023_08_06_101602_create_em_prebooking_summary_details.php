@@ -20,18 +20,18 @@ class CreateEmPrebookingSummaryDetails extends Migration
             $table->time("start_time");
             $table->time("end_time");
             $table->unsignedBigInteger('em_artist_person_id')->nullable();
-            $table->unsignedBigInteger('em_addson_artist_person_id')->nullable();
             $table->unsignedBigInteger('em_decor_id')->nullable();
-            $table->double('addson_artist_amount');
             $table->double('artist_amount');
             $table->double('decor_amount');
             $table->double('total_amount');
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('em_prebooking_summaries_id')->references('id')->on('em_prebooking_summaries');
-            $table->foreign('em_addson_artist_person_id')->references('id')->on('em_artist_persons');
             $table->foreign('em_artist_person_id')->references('id')->on('em_artist_persons');
             $table->foreign('em_decor_id')->references('id')->on('em_decorations');
+
+
+            //Add event id as foreign key
         });
     }
 
