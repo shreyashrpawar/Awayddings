@@ -41,6 +41,22 @@
                 </ul>
             </div>
         </li>
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-toggle="collapse" href="#event_management_submit">
+                <i class="mdi mdi-seat-individual-suite menu-icon"></i>
+                <span class="menu-title">Event Management Bookings</span>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="event_management_submit" style="">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item"> <a class="nav-link" href="{{ route('event-pre-booking.index') }}">Pre Bookings</a></li>
+                
+                    <li class="nav-item"> <a class="nav-link" href="{{ route('event-bookings.index') }}">Bookings</a></li>
+                    
+                </ul>
+            </div>
+        </li>
         @can('user show')
         <li class="nav-item">
             <a class="nav-link" href="{{ route('users.index') }}">

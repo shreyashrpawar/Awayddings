@@ -5,7 +5,7 @@
         <div class="card-body">
             <div class="row ">
                 <div class="col-md-6 mb-4">
-                    <h4 class="card-title text-uppercase">Pre Booking Details
+                    <h4 class="card-title text-uppercase">Event Pre Booking Details
                         <span class="badge badge-pill badge-info">{{ $summary->pre_booking_summary_status->name }}</span>
                     </h4>
                 </div>
@@ -26,7 +26,7 @@
                         $display = 'display:none';
                 @endphp
                 <div class="col-md-3 mb-4 form-inline text-right" style="@php echo $display; @endphp">
-                    <a href="{{ route('pre-bookings.edit',$summary->id) }}{{-- url('pre-bookings.edit', ['id' => $summary->id]) --}}" class="btn btn-sm btn-primary">Edit</a>
+                    <a href="{{ route('event-pre-booking.edit',$summary->id) }}" class="btn btn-sm btn-primary">Edit</a>
                 </div>
 
 
@@ -65,83 +65,48 @@
                         <thead class="thead-dark">
                             <tr>
                                 <th>#</th>
+                                <th>Event</th>
                                 <th>Date</th>
+                                <th>Start Time - End Time</th>
                                 <th>Particular</th>
-                                <th>Quantity</th>
-                                <th>Rate</th>
                                 <th>Amount</th>
-                                <!-- <th>Action</th> -->
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                         @php
                             $total = 0;
-                            $old_date = '';
-                            $total_room = $summary->property->total_rooms;
+                            $key = 0;   
 
                         @endphp
-                        @foreach($summary->pre_booking_details as $key => $val)
+                        @foreach($data as $key => $detail)
                             @php
-                                $hotel_chargable_type_details = DB::table('hotel_chargable_types')->find($val->hotel_chargable_type_id);
-                                    $double_room = 0;
-                                    $triple_room = 0;
-                                    $current_room = 0;
-                                    $show_date = false;
-                                    if($old_date != $val->date){
-                                        $old_date = $val->date;
-                                        $show_date = true;
-                                    }
-                                if($val->hotel_chargable_type_id == 1){
-                                    $double_room = $val->qty;
-                                    $current_room =+ $val->qty;
-                                }elseif($val->hotel_chargable_type_id == 2){
-                                     $triple_room = $val->qty;
-                                     $current_room =+ $val->qty;
-                                }
-                                 if($val->hotel_chargable_type_id != 1 && $val->hotel_chargable_type_id != 2){
-                                    if($hotel_chargable_type_details->is_single_qty == 1){
-                                        $total = $total  + ($val->qty * $val->rate);
-                                    } else {
-                                         $threshold_rooms = ($total_room * $val->threshold)/100;
-                                         if($current_room >= $threshold_rooms){
-                                              $total = $total  + ($val->qty * $val->rate);
-                                         }
-                                    }
-                                    } else{
-                                         $total = $total  + ($val->qty * $val->rate);
-                                    }
+                                $total = $total  + $detail['amount'];
                             @endphp
 
                             <tr>
-                                <th>{{ 1 +$key }}</th>
-                                <td> @if($show_date)
+                                <th>{{ ++$key }}</th>
+                                <td>{{ $detail['event'] }}</td>
+                                <td> 
 
-                                        {{ $val->date->format('d-m-Y') }}
-                                     @else
-
-                                     @endif
+                                    {{ $detail['date'] }}
+                                     
                                 </td>
-                                <td>{{ $val->hotel_chargable_type->name }}</td>
+                                <td>{{ $detail['time'] }}</td>
+                                <td> {{ $detail['particular'] }}</td>
                                 <td>
-                                <a href="" class="update" data-name="qty" data-type="text" data-pk="{{ $val->id }}" data-title="Enter quantity">{{ $val->qty }}</a>
-
-
+                                    <a href="" class="update" data-name="total_amount" data-type="text" data-pk="{{ $detail['id'] }}" data-title="Enter amount">{{ $detail['amount'] }}</a>
                                 </td>
                                 <td>
-                                    <a href="" class="update" data-name="rate" data-type="text" data-pk="{{ $val->id }}" data-title="Enter rate">{{ $val->rate }}</a>
+                                    
+                                    <a href="#" class="btn btn-sm btn-outline-primary view-button" data-image="{{ $detail['image_url'] }}">View</a>
                                 </td>
-
-                                <td id="amount_{{ $val->id }}">{{ $val->qty * $val->rate }}</td>
-                                 <td
-                                 @if($hotel_chargable_type_details->is_single_qty == 1)
-                                        <i class="fa fa-minus-circle delete-icon" data-id="{{ $val->id }}" aria-hidden="true"></i>
-                                  @endif      
-                                 </td>
+                                 
 
                             </tr>
                         @endforeach
                         <tr>
-                            <th colspan="5" class="text-right" >Total</th>
+                            <th colspan="6" class="text-right" >Total</th>
                             <th id="total_amount_th">{{ $total }}</th>
                         </tr>
                         </tbody>
@@ -167,6 +132,20 @@
 
         </div>
     </div>
+
+    <div id="imageModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <img id="popupImage" src="" alt="Image" width="400" height="300">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -195,13 +174,13 @@
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h4 class="modal-title">Pre Booking Confirmation</h4>
+                    <h4 class="modal-title">Event Pre Booking Confirmation</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
                 <!-- Modal body -->
                 <div class="modal-body">
-                    <form action="{{ route('pre-bookings.update',$summary->id) }}" id="ConfirmBookingForm" method="POST">
+                    <form action="{{ route('event-pre-booking.update',$summary->id) }}" id="ConfirmBookingForm" method="POST">
                         @csrf
                         @method('put')
                         <input type="hidden" name="pre_booking_id" value="{{ $summary->id }}">
@@ -346,6 +325,11 @@
     <script>$.fn.poshytip={defaults:null}</script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jquery-editable/js/jquery-editable-poshytip.min.js"></script>
     <script>
+        $('.view-button').on('click', function() {
+            var imageUrl = $(this).data('image');
+            $('#popupImage').attr('src', imageUrl);
+            $('#imageModal').modal('show');
+        });
         $('.delete-icon').click(function() {
 
             var id = $(this).data('id');

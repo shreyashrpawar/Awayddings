@@ -18,6 +18,7 @@ class DecorResource extends JsonResource
             'id' =>  $this->id,
             'name' =>  $this->name,
             'image_url' =>$this->image->url,
+            'price' =>  $this->price
         ];
     }
 }
