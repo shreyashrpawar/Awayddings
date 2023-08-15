@@ -52,7 +52,7 @@
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item"> <a class="nav-link" href="{{ route('event-pre-booking.index') }}">Pre Bookings</a></li>
                 
-                    <li class="nav-item"> <a class="nav-link" href="{{ route('artists.index') }}">Artists</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{ route('event-bookings.index') }}">Bookings</a></li>
                     
                 </ul>
             </div>

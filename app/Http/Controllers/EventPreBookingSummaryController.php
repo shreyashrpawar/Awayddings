@@ -6,10 +6,10 @@ use App\Models\EventPreBookingSummary;
 use App\Models\EventPreBookingDetails;
 use Illuminate\Http\Request;
 
-use App\Models\BookingDetail;
-use App\Models\BookingPaymentDetail;
-use App\Models\BookingPaymentSummary;
-use App\Models\BookingSummary;
+use App\Models\EventBookingDetail;
+use App\Models\EventBookingPaymentDetail;
+use App\Models\EventBookingPaymentSummary;
+use App\Models\EventBookingSummary;
 use App\Models\PreBookingSummaryStatus;
 use App\Models\UserVendorAlignment;
 use App\Models\VendorPropertyAlignment;
@@ -25,6 +25,7 @@ use App\Mail\RejectionMail;
 use Illuminate\Support\Facades\Mail;
 use App\Jobs\SendCongratsEmail;
 use App\Mail\BookingCancelEmail;
+use App\Jobs\SendApprovalEmail;
 use DB;
 
 class EventPreBookingSummaryController extends Controller
@@ -230,7 +231,7 @@ class EventPreBookingSummaryController extends Controller
             $total_amount = $pre_booking_summary->total_amount - $additional_discount;
             $booking_data = [
                 'user_id' => $pre_booking_summary->user_id,
-                'pre_booking_summary_id' => $pre_booking_summary->id,
+                'em_prebooking_summaries_id' => $pre_booking_summary->id,
                 'property_id' => $pre_booking_summary->property_id,
                 'check_in' => $pre_booking_summary->check_in,
                 'check_out' => $pre_booking_summary->check_out,
@@ -248,16 +249,20 @@ class EventPreBookingSummaryController extends Controller
             $installment_details = $this->calculateInstallments($pre_booking_summary,$installments,$total_amount);
 
             // booking
-            $booking_summary =  Bookingsummary::create($booking_data);
-            foreach($pre_booking_summary->pre_booking_details as $key => $val){
+            $booking_summary =  EventBookingSummary::create($booking_data);
+            foreach($pre_booking_summary->event_pre_booking_details as $key => $val){
 
-                $booking_details =  BookingDetail::create([
-                    'booking_summaries_id' => $booking_summary->id,
+                $booking_details =  EventBookingDetail::create([
+                    'em_booking_summaries_id' => $booking_summary->id,
+                    'em_event_id' => $val->em_event_id,
                     'date' => Carbon::parse($val->date),
-                    'hotel_chargable_type_id' => $val->hotel_chargable_type_id,
-                    'rate' => $val->rate,
-                    'qty' => $val->qty,
-                    'threshold' => $val->threshold
+                    'start_time' => $val->start_time,
+                    'end_time' => $val->end_time,
+                    'em_artist_person_id' => $val->em_artist_person_id,
+                    'em_decor_id' => $val->em_decor_id,
+                    'artist_amount' => $val->artist_amount,
+                    'decor_amount' => $val->decor_amount,
+                    'total_amount' => $val->total_amount,
                 ]);
             }
 
@@ -265,7 +270,7 @@ class EventPreBookingSummaryController extends Controller
 
             // booking payment
             $booking_payment = [
-                'booking_summaries_id' => $booking_summary->id,
+                'em_booking_summaries_id' => $booking_summary->id,
                 'installment_no' => $installments,
                 'amount' => $total_amount,
                 'discount' => $additional_discount,
@@ -274,7 +279,7 @@ class EventPreBookingSummaryController extends Controller
                 'status' => 1
             ];
 
-            $booking_payments = BookingPaymentSummary::create($booking_payment);
+            $booking_payments = EventBookingPaymentSummary::create($booking_payment);
 
             // booking payment installment
 
@@ -283,14 +288,14 @@ class EventPreBookingSummaryController extends Controller
                 $installment_amount = $installment_details[$i]['installment_amount'];
 
                 $booking_temp = [
-                    'booking_payment_summaries_id' => $booking_payments->id,
+                    'em_booking_payment_summaries_id' => $booking_payments->id,
                     'date' => Carbon::parse($date),
                     'amount' => $installment_amount,
                     'installment_no' => $i+1,
                     'status' => 1
                 ];
 
-                $booking_payment_details = BookingPaymentDetail::create($booking_temp);
+                $booking_payment_details = EventBookingPaymentDetail::create($booking_temp);
             }
 
             $pre_booking_summary->update([
@@ -315,11 +320,14 @@ class EventPreBookingSummaryController extends Controller
                 'admin_remarks' =>$admin_remarks,
             ];
 
-            $bookings = BookingSummary::find($booking_summary->id);
+            $bookings = EventBookingSummary::find($booking_summary->id);
 
-            Mail::to($user_details->email)->send(new ApprovalEmail($bookings));
+            // Dispatch the SendApprovalEmail job to the queue
+            SendApprovalEmail::dispatch($bookings);
+
+            // Mail::to($user_details->email)->send(new ApprovalEmail($bookings));
             $request->session()->flash('success','Successfully Updated');
-            return redirect(route('pre-bookings.index'));
+            return redirect(route('event-pre-booking.index'));
         }elseif($current_status->name == 'rejected'){
             // echo 'rejected'; exit;
             $pre_booking_summary->update([
@@ -329,7 +337,7 @@ class EventPreBookingSummaryController extends Controller
             Mail::to($user_details->email)->send(new RejectionMail());
 
             $request->session()->flash('success','Successfully Updated');
-            return redirect(route('pre-bookings.index'));
+            return redirect(route('event-pre-booking.index'));
         }else if ($current_status->name == 'canceled'){
 
             $pre_booking_summary->update([
@@ -339,7 +347,7 @@ class EventPreBookingSummaryController extends Controller
             Mail::to($user_details->email)->send(new BookingCancelEmail());
 
             $request->session()->flash('success','Successfully Updated');
-            return redirect(route('pre-bookings.index'));
+            return redirect(route('event-pre-booking.index'));
         }
         else{
             // update on the existing pre booking
@@ -348,7 +356,7 @@ class EventPreBookingSummaryController extends Controller
                 'admin_remarks' => $admin_remarks
             ]);
             $request->session()->flash('success','Successfully Updated');
-            return redirect(route('pre-bookings.index'));
+            return redirect(route('event-pre-booking.index'));
 
         }
 

@@ -11,6 +11,14 @@ class EventPreBookingAddsonArtist extends Model
 {
     use HasFactory,SoftDeletes;
 
+    protected $fillable = [
+        'em_prebooking_summaries_id',
+        'em_addson_artist_id',
+        'em_addson_artist_person_id',
+        'addson_artist_amount',
+        'total_amount',
+    ];
+
     protected $table = 'em_prebooking_addson_artist';
 
     public function addson_artist_person()

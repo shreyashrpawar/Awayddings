@@ -10,6 +10,13 @@ class EventPreBookingAddsonDetails extends Model
 {
     use HasFactory,SoftDeletes;
 
+    protected $fillable = [
+        'em_prebooking_summaries_id',
+        'em_addon_facility_id',
+        'facility_details_id',
+        'total_amount',
+    ];
+
     protected $table = 'em_prebooking_addson_details';
 
     public function addson_facility()
