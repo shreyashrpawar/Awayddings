@@ -57,30 +57,30 @@ class EventManagementController extends Controller
             'events' => 'present|array',
             'events.*.date' => 'required|string',
             'events.*.event_id' => 'required',
-            'events.*.artist_person_id' => 'required',
+            //'events.*.artist_person_id' => 'required', optional
             'events.*.decor_person_id' => 'required',
             'events.*.start_time' => 'required|string',
             'events.*.end_time' => 'required|string',
-            'addition.addson_facilities' => 'present|array',
-            'addition.additional_artist' => 'present|array',
-            'addition.addson_facilities.*.em_addon_facility_id' => 'required',
-            'addition.addson_facilities.*.em_addon_facility_details_id' => 'required',
-            'addition.additional_artist.artist_id' => 'required',
-            'addition.additional_artist.artist_details_id' => 'required',
+            'addition.addson_facilities' => 'array',
+            //'addition.additional_artist' => 'present|array', optional
+            //'addition.addson_facilities.*.em_addon_facility_id' => 'required', optional
+            //'addition.addson_facilities.*.em_addon_facility_details_id' => 'required', optional
+            //'addition.additional_artist.artist_id' => 'required', optional
+            //'addition.additional_artist.artist_details_id' => 'required', optional
 
         ]);
 
         $user = auth()->user();
         $user_id = $user->id;
         $property_id = $request->property_id;
-        $user_budget = $request->user_budget;
+        $user_budget = $request->total_amount;
         $check_in_date = Carbon::parse($request->start_date);
         $check_out_date = Carbon::parse($request->end_date);
         $total_amount = $request->total_amount;
 
         $adults = $request->pax;
-        $events = json_decode($request->input('events'), true);
-        $addition = json_decode($request->input('addition'), true);
+        $events =$request->input('events');
+        $addition = $request->input('addition');
         // $addition = json_decode(json_encode($request->input('addition')), true);;
         $user_remark = $request->remarks;
 
