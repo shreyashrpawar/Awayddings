@@ -19,6 +19,7 @@ use App\Models\EventPreBookingSummary;
 use App\Models\EventPreBookingDetails;
 use App\Models\EventPreBookingAddsonDetails;
 use App\Models\EventPreBookingAddsonArtist;
+use App\Models\PreBookingSummary;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use DB;
@@ -27,6 +28,15 @@ class EventManagementController extends Controller
 {
     public function event_details(Request $request)
     {
+        $user = auth()->user();
+        $user_id = $user->id;
+
+        $pending_summary = PreBookingSummary::where('user_id', $user_id)
+        ->where('status', 1)
+        ->whereIn('pre_booking_summary_status_id', [1, 2])
+        ->whereDate('check_in', '>=', Carbon::now())
+        ->first();
+
         $event = Event::with(['decorations','artists'])->where('status', 1)->get();
 
         $additional_facility = EmAddonFacility::where('status', 1)->get();
@@ -36,7 +46,8 @@ class EventManagementController extends Controller
         $data =[
             'event' => $event,
             'additional_facility' =>$additional_facility,
-            'additional_artist' => $additional_artist
+            'additional_artist' => $additional_artist,
+            'prefilled_data' => $pending_summary
         ];
 
         return response()->json([
