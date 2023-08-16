@@ -162,8 +162,8 @@
                                 <thead class="thead-dark">
                                 <tr>
                                     <th>#</th>
-                                    <th>Event</th>
                                     <th>Date</th>
+                                    <th>Event</th>
                                     <th>Start Time - End Time</th>
                                     <th>Particular</th>
                                     <th>Amount</th>
@@ -179,29 +179,23 @@
                                 @endphp
                                 @foreach($bookings->booking_details as $key => $val)
                                     @php
-                                        $double_room = 0;
-                                        $triple_room = 0;
-                                        $current_room = 0;
+                                        //dd($val->artistPerson->name);
                                         $show_date = false;
                                         if($old_date != $val->date){
                                             $old_date = $val->date;
                                             $show_date = true;
                                         }
-                                    if($val->hotel_chargable_type_id == 1){
-                                        $double_room = $val->qty;
-                                        $current_room =+ $val->qty;
-                                    }elseif($val->hotel_chargable_type_id == 2){
-                                         $triple_room = $val->qty;
-                                         $current_room =+ $val->qty;
-                                    }
-                                     if($val->hotel_chargable_type_id != 1 && $val->hotel_chargable_type_id != 2){
-                                             $threshold_rooms = ($total_room * $val->threshold)/100;
-                                             if($current_room >= $threshold_rooms){
-                                                  $total = $total  + ($val->qty * $val->rate);
-                                             }
-                                        } else{
-                                             $total = $total  + ($val->qty * $val->rate);
+
+                                        if ($val->artistPerson) {
+                                            
+                                            $particular = 'Artist Person - '.$val->artistPerson->name;
+                                            $amount = $val->artist_amount;
+                                        } elseif ($val->decoration) {
+                                            $particular = 'Decoration - '.$val->decoration->name;
+                                            $amount = $val->decor_amount;
                                         }
+                                        $total = $total  + $amount;
+                                    
                                     @endphp
 
                                     <tr>
@@ -213,14 +207,14 @@
 
                                             @endif
                                         </td>
-                                        <td>{{-- $val->events->name --}}</td>
+                                        <td>{{ $val->events->name }}</td>
                                         <td> 
 
                                             {{ $val->start_time }} - {{ $val->end_time }}
                                             
                                         </td>
-                                        <td>{{ $val->event }}</td>
-                                        <td> {{ $val->event }}</td>
+                                        <td>{{ $particular }}</td>
+                                        <td> {{ $amount }}</td>
 
                                     </tr>
                                 @endforeach
@@ -369,7 +363,7 @@
             let payment_mode = $(this).data('payment_mode');
             let remarks = $(this).data('remarks');
             let status = $(this).data('status');
-            let updateUrl = `{{ url('bookings') }}`+'/'+id;
+            let updateUrl = `{{ url('event-bookings') }}`+'/'+id;
             
             if(status == 2){       
                 formModal.find('.modal-body #status').val(status);         
