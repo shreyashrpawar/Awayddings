@@ -10,6 +10,8 @@ use App\Models\EventBookingDetail;
 use App\Models\EventBookingPaymentDetail;
 use App\Models\EventBookingPaymentSummary;
 use App\Models\EventBookingSummary;
+use App\Models\EventPreBookingAddsonDetails;
+use App\Models\EventPreBookingAddsonArtist;
 use App\Models\PreBookingSummaryStatus;
 use App\Models\UserVendorAlignment;
 use App\Models\VendorPropertyAlignment;
@@ -99,6 +101,7 @@ class EventPreBookingSummaryController extends Controller
         foreach ($summary->event_pre_booking_details as $val) {
             $particular = '';
             $image_url = '';
+            $data_name = '';
             $amount = 0;
             if ($val->artistPerson) {
                 $image_url = ($val->artistPerson->image ? asset('storage/' . $val->artistPerson->image->url) : null );
@@ -106,10 +109,12 @@ class EventPreBookingSummaryController extends Controller
                 $particular = 'Artist Person - '.$val->artistPerson->name;
                 $amount = $val->artist_amount;
                 $image_url = $val->artistPerson;
+                $data_name = 'artistPerson';
             } elseif ($val->decoration) {
                 $image_url = ($val->decoration->image ? asset('storage/' . $val->decoration->image->url) : null );
                 $particular = 'Decoration - '.$val->decoration->name;
                 $amount = $val->decor_amount;
+                $data_name = 'decor';
             }
             $event = $val->events->name;
             
@@ -119,6 +124,7 @@ class EventPreBookingSummaryController extends Controller
                 'date' => $val->date->format('d-m-Y'),
                 'time' => $val->start_time . ' - ' . $val->end_time,
                 'particular' => $particular,
+                'data-name' => $data_name,
                 'amount' => $amount,
                 'image_url' => $image_url,
                 // Add other relevant fields here
@@ -128,12 +134,14 @@ class EventPreBookingSummaryController extends Controller
         foreach($summary->event_pre_booking_addson_details as $key => $val) {
             $particular = '';
             $image_url = '';
+            $data_name = '';
             $amount = $val->total_amount;
             if ($val->addson_facility) {
                 $particular = 'Facility - '.$val->addson_facility->name;
             } elseif ($val->facility_details) {
                 $particular = 'Facility Details - '.$val->facility_details->name;
             } 
+            $data_name = 'facility';
             // elseif ($val->addson_artist_person) {
             //     $particular = $val->addson_artist_person->name;
             //     $amount = $val->artist_amount;
@@ -145,6 +153,7 @@ class EventPreBookingSummaryController extends Controller
                 'date' => '', // You can set an empty date if it's not applicable
                 'time' => '', // You can set an empty time if it's not applicable
                 'particular' => $particular,
+                'data-name' => $data_name,
                 'amount' => $amount,
                 'image_url' => $image_url,
                 // Add other relevant fields here
@@ -155,16 +164,19 @@ class EventPreBookingSummaryController extends Controller
             // dd($val);
             $particular = '';
             $image_url = '';
+            $data_name = '';
             $amount = $val->addson_artist_amount;
             if ($val->addson_artist_person) {
                 $particular = 'Additional Artist Person - '.$val->addson_artist_person->name;
                 $image_url = ($val->addson_artist_person->image ? asset('storage/' . $val->addson_artist_person->image->url) : null );
+                $data_name = 'additionalArtistPerson';
             }
             $artistParticular = '';
     
             if ($val->addson_artist) {
                 $artistParticular = 'Additional Artist - '.$val->addson_artist->name;
                 $image_url = ($val->addson_artist->image ? $val->addson_artist->image->url : null );
+                $data_name = 'additionalArtist';
             }
             
             $data[] = [
@@ -173,6 +185,7 @@ class EventPreBookingSummaryController extends Controller
                 'date' => '', // You can set an empty date if it's not applicable
                 'time' => '', // You can set an empty time if it's not applicable
                 'particular' => $particular,
+                'data-name' => $data_name,
                 'amount' => $amount,
                 'image_url' => $image_url,
                 // Add other relevant fields here
@@ -213,6 +226,7 @@ class EventPreBookingSummaryController extends Controller
      */
     public function update(Request $request, EventPreBookingSummary $preBookingSummary)
     {
+        // dd($request->all());
 
         $status = $request->selected_status;
         $selected_status = $request->selected_status;
@@ -265,6 +279,21 @@ class EventPreBookingSummaryController extends Controller
                     'total_amount' => $val->total_amount,
                 ]);
             }
+            // foreach($pre_booking_summary->event_pre_booking_details as $key => $val){
+
+            //     $booking_details =  EventBookingDetail::create([
+            //         'em_booking_summaries_id' => $booking_summary->id,
+            //         'em_event_id' => $val->em_event_id,
+            //         'date' => Carbon::parse($val->date),
+            //         'start_time' => $val->start_time,
+            //         'end_time' => $val->end_time,
+            //         'em_artist_person_id' => $val->em_artist_person_id,
+            //         'em_decor_id' => $val->em_decor_id,
+            //         'artist_amount' => $val->artist_amount,
+            //         'decor_amount' => $val->decor_amount,
+            //         'total_amount' => $val->total_amount,
+            //     ]);
+            // }
 
             // booking details
 
@@ -476,6 +505,68 @@ class EventPreBookingSummaryController extends Controller
             'status' => 1
         ]);
         return redirect(route('event-pre-booking.show',$event_pre_booking_id));
+    }
+
+    public function update_qty_details(Request $request)
+    {
+        if ($request->ajax()) {
+
+            $amount = $request->value;
+            if($request->name == 'artistPerson') {
+                $preBookingDetails = EventPreBookingDetails::find($request->pk);
+                $summary_id = $preBookingDetails->em_prebooking_summaries_id;
+                $previous_value = $preBookingDetails->artist_amount;
+                $preBookingDetails->artist_amount = $request->value;
+                $preBookingDetails->total_amount = $request->value;
+            } else if($request->name == 'decor') {
+                $preBookingDetails = EventPreBookingDetails::find($request->pk);
+                $summary_id = $preBookingDetails->em_prebooking_summaries_id;
+                $previous_value = $preBookingDetails->decor_amount;
+                $preBookingDetails->decor_amount = $request->value;
+                $preBookingDetails->total_amount = $request->value;
+            } else if($request->name == 'facility') {
+                $preBookingDetails = EventPreBookingAddsonDetails::find($request->pk);
+                $summary_id = $preBookingDetails->em_prebooking_summaries_id;
+                $preBookingDetails->total_amount = $request->value;
+            }else if($request->name == 'additionalArtist') {
+                $preBookingDetails = EventPreBookingAddsonArtist::find($request->pk);
+                $summary_id = $preBookingDetails->em_prebooking_summaries_id;
+                $preBookingDetails->addson_artist_amount = $request->value;
+                $preBookingDetails->total_amount = $request->value;
+            }
+
+            $preBookingDetails->save();
+
+            $summary = EventPreBookingSummary::with([
+                'user',
+                'property',
+                'event_pre_booking_details',
+                'pre_booking_summary_status',
+                'event_pre_booking_details.artistPerson',
+                'event_pre_booking_addson_details',
+                'event_pre_booking_addson_artist_person',
+            ])->find($summary_id);
+
+            // Calculate the sum of total_amount from event_pre_booking_details
+            $eventPreBookingDetailsTotal = $summary->event_pre_booking_details->sum('total_amount');
+
+            // Calculate the sum of total_amount from event_pre_booking_addson_details
+            $eventPreBookingAddsonDetailsTotal = $summary->event_pre_booking_addson_details->sum('total_amount');
+
+            // Calculate the sum of total_amount from event_pre_booking_addson_artist_person
+            $eventPreBookingAddsonArtistPersonTotal = $summary->event_pre_booking_addson_artist_person->sum('total_amount');
+
+            // Calculate the grand total by adding up the above calculated sums
+            $grandTotal = $eventPreBookingDetailsTotal + $eventPreBookingAddsonDetailsTotal + $eventPreBookingAddsonArtistPersonTotal;
+
+            $summary->total_amount = $grandTotal;
+            $summary->save();
+
+                // $preBookingSummary = EventPreBookingSummary::find($preBookingDetails->em_prebooking_summaries_id);
+                
+  
+            return response()->json(['success' => true, 'total_amount' => $grandTotal, 'amount' => $amount, 'this_id' => $request->pk ]);
+        }
     }
 
     /**

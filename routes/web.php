@@ -53,7 +53,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('event-pre-booking/update_details/{id}', [App\Http\Controllers\EventPreBookingSummaryController::class, 'update_details'])->name('event-pre-booking.update_details'); //Pre-booking edit url
     Route::delete('event-pre-booking/delete/{id}', [App\Http\Controllers\EventPreBookingSummaryController::class, 'delete'])->name('delete');
 
-    Route::post('event-pre_booking_qty_details/update_details/', [App\Http\Controllers\EventPreBookingSummaryController::class, 'update_qty_details'])->name('pre_booking_qty_details.update'); //Pre-booking edit url
+    Route::post('event_pre_booking_qty_details/update_details/', [App\Http\Controllers\EventPreBookingSummaryController::class, 'update_qty_details'])->name('event_pre_booking_qty_details.update'); //Pre-booking edit url
     //Event Management Pre booking End
 
     Route::resource('event-bookings',App\Http\Controllers\EventBookingSummaryController::class);

@@ -95,7 +95,7 @@
                                 <td>{{ $detail['time'] }}</td>
                                 <td> {{ $detail['particular'] }}</td>
                                 <td>
-                                    <a href="" class="update" data-name="total_amount" data-type="text" data-pk="{{ $detail['id'] }}" data-title="Enter amount">{{ $detail['amount'] }}</a>
+                                    <a href="" class="update" data-summary={{ $summary->id }} data-name={{ $detail['data-name'] }} data-type="text" data-pk="{{ $detail['id'] }}" data-title="Enter amount">{{ $detail['amount'] }}</a>
                                 </td>
                                 <td>
                                     
@@ -243,7 +243,7 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('pre-bookings.update',$summary->id) }}" id="RejectPreBookingForm" method="POST">
+                    <form action="{{ route('event-pre-booking.update',$summary->id) }}" id="RejectPreBookingForm" method="POST">
                         @csrf
                         @method('put')
                         <input type="hidden" name="pre_booking_id" value="{{ $summary->id }}">
@@ -285,7 +285,7 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('pre-bookings.update',$summary->id) }}" id="RejectPreBookingForm" method="POST">
+                    <form action="{{ route('event-pre-booking.update',$summary->id) }}" id="RejectPreBookingForm" method="POST">
                         @csrf
                         @method('put')
                         <input type="hidden" name="pre_booking_id" value="{{ $summary->id }}">
@@ -377,10 +377,11 @@
         });
 
         $('.update').editable({
-                url: "{{ route('pre_booking_qty_details.update') }}",
+                url: "{{ route('event_pre_booking_qty_details.update') }}",
                 type: 'text',
                 pk: 1,
                 name: 'name',
+                summary: 1,
                 title: 'Enter name',
                 success: function(response, newValue) {
                     // Handle the successful response here

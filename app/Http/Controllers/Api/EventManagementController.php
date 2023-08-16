@@ -48,27 +48,27 @@ class EventManagementController extends Controller
 
     public function submit_em_data(Request $request)
     {
-        // $this->validate($request,[
-        //     'property_id' => 'required',
-        //     'start_date' => 'required',
-        //     'end_date' => 'required',
-        //     'pax' => 'required',
-        //     'total_amount' => 'required',
-        //     'events' => 'present|array',
-        //     'events.*.date' => 'required|string',
-        //     'events.*.event_id' => 'required',
-        //     'events.*.artist_person_id' => 'required',
-        //     'events.*.decor_person_id' => 'required',
-        //     'events.*.start_time' => 'required|string',
-        //     'events.*.end_time' => 'required|string',
-        //     'addition.addson_facilities' => 'present|array',
-        //     'addition.additional_artist' => 'present|array',
-        //     'addition.addson_facilities.*.em_addon_facility_id' => 'required',
-        //     'addition.addson_facilities.*.em_addon_facility_details_id' => 'required',
-        //     'addition.additional_artist.artist_id' => 'required',
-        //     'addition.additional_artist.artist_details_id' => 'required',
+        $this->validate($request,[
+            'property_id' => 'required',
+            'start_date' => 'required',
+            'end_date' => 'required',
+            'pax' => 'required',
+            'total_amount' => 'required',
+            'events' => 'present|array',
+            'events.*.date' => 'required|string',
+            'events.*.event_id' => 'required',
+            'events.*.artist_person_id' => 'required',
+            'events.*.decor_person_id' => 'required',
+            'events.*.start_time' => 'required|string',
+            'events.*.end_time' => 'required|string',
+            'addition.addson_facilities' => 'present|array',
+            'addition.additional_artist' => 'present|array',
+            'addition.addson_facilities.*.em_addon_facility_id' => 'required',
+            'addition.addson_facilities.*.em_addon_facility_details_id' => 'required',
+            'addition.additional_artist.artist_id' => 'required',
+            'addition.additional_artist.artist_details_id' => 'required',
 
-        // ]);
+        ]);
 
         $user = auth()->user();
         $user_id = $user->id;

@@ -9,6 +9,8 @@ class Kernel extends ConsoleKernel
 {
     protected $commands = [
         Commands\ApprovalExpirationCron::class,
+        Commands\EventEMIPaymentCron::class,
+        Commands\evetCancelBookingCron::class,
     ];
     /**
      * Define the application's command schedule.
@@ -18,11 +20,14 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('approvalExpiration:cron')
+        // $schedule->command('eventCancelBooking:cron')
         //          ->everyMinute();
         // $schedule->command('inspire')->hourly();
+
         $schedule->command('bookings:cancel')->dailyAt('12:00');
         $schedule->command('EMIPayment:cron')->dailyAt('12:00');
+        $schedule->command('eventEMIPayment:cron')->dailyAt('12:00');
+        $schedule->command('eventCancelBooking:cron')->dailyAt('12:00');
     }
 
     /**
