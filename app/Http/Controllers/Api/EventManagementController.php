@@ -19,6 +19,7 @@ use App\Models\EventPreBookingSummary;
 use App\Models\EventPreBookingDetails;
 use App\Models\EventPreBookingAddsonDetails;
 use App\Models\EventPreBookingAddsonArtist;
+use App\Models\PreBookingSummary;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use DB;
@@ -27,6 +28,14 @@ class EventManagementController extends Controller
 {
     public function event_details(Request $request)
     {
+        $user = auth()->user();
+        $user_id = $user->id;
+        $pending_summary = PreBookingSummary::where('user_id', $user_id)
+        ->where('status', 1)
+        ->whereIn('pre_booking_summary_status_id', [1, 2])
+        ->whereDate('check_in', '<=', Carbon::now())
+        ->first();
+
         $event = Event::with(['decorations','artists'])->where('status', 1)->get();
 
         $additional_facility = EmAddonFacility::where('status', 1)->get();
@@ -36,7 +45,8 @@ class EventManagementController extends Controller
         $data =[
             'event' => $event,
             'additional_facility' =>$additional_facility,
-            'additional_artist' => $additional_artist
+            'additional_artist' => $additional_artist,
+            'prefilled_data' => $pending_summary
         ];
 
         return response()->json([
@@ -48,39 +58,41 @@ class EventManagementController extends Controller
 
     public function submit_em_data(Request $request)
     {
-        // $this->validate($request,[
-        //     'property_id' => 'required',
-        //     'start_date' => 'required',
-        //     'end_date' => 'required',
-        //     'pax' => 'required',
-        //     'total_amount' => 'required',
-        //     'events' => 'present|array',
-        //     'events.*.date' => 'required|string',
-        //     'events.*.event_id' => 'required',
-        //     'events.*.artist_person_id' => 'required',
-        //     'events.*.decor_person_id' => 'required',
-        //     'events.*.start_time' => 'required|string',
-        //     'events.*.end_time' => 'required|string',
-        //     'addition.addson_facilities' => 'present|array',
-        //     'addition.additional_artist' => 'present|array',
-        //     'addition.addson_facilities.*.em_addon_facility_id' => 'required',
-        //     'addition.addson_facilities.*.em_addon_facility_details_id' => 'required',
-        //     'addition.additional_artist.artist_id' => 'required',
-        //     'addition.additional_artist.artist_details_id' => 'required',
 
-        // ]);
+        // print_r($request->all()); exit;
+        $this->validate($request,[
+            'property_id' => 'required',
+            'start_date' => 'required',
+            'end_date' => 'required',
+            'pax' => 'required',
+            'total_amount' => 'required',
+            'events' => 'present|array',
+            'events.*.date' => 'required|string',
+            'events.*.event_id' => 'required',
+            //'events.*.artist_person_id' => 'required', optional
+            'events.*.decor_person_id' => 'required',
+            'events.*.start_time' => 'required|string',
+            'events.*.end_time' => 'required|string',
+            'addition.addson_facilities' => 'array',
+            //'addition.additional_artist' => 'present|array', optional
+            //'addition.addson_facilities.*.em_addon_facility_id' => 'required', optional
+            //'addition.addson_facilities.*.em_addon_facility_details_id' => 'required', optional
+            //'addition.additional_artist.artist_id' => 'required', optional
+            //'addition.additional_artist.artist_details_id' => 'required', optional
+
+        ]);
 
         $user = auth()->user();
         $user_id = $user->id;
         $property_id = $request->property_id;
-        $user_budget = $request->user_budget;
+        $user_budget = $request->total_amount;
         $check_in_date = Carbon::parse($request->start_date);
         $check_out_date = Carbon::parse($request->end_date);
         $total_amount = $request->total_amount;
 
         $adults = $request->pax;
-        $events = json_decode($request->input('events'), true);
-        $addition = json_decode($request->input('addition'), true);
+        $events =$request->input('events');
+        $addition = $request->input('addition');
         // $addition = json_decode(json_encode($request->input('addition')), true);;
         $user_remark = $request->remarks;
 
@@ -95,7 +107,7 @@ class EventManagementController extends Controller
             'check_in' => $check_in_date,
             'check_out' => $check_out_date,
             'total_amount' => $total_amount,
-            'budget' => $user_budget,
+            'budget' => $total_amount,
             'user_remarks' => $user_remark,
             'bride_name' => $bride_name,
             'groom_name' => $groom_name,
@@ -114,7 +126,7 @@ class EventManagementController extends Controller
                 $artist_amount = 0;
                 $decor_amount = 0;
                 $total_amount = 0;
-                if ($val['artist_person_id']) {
+                if (isset($val['artist_person_id'])) {
 
                     $artist_amount = ArtistPerson::where('id', $val['artist_person_id'])->pluck('price')->first();
                     $total_amount = $artist_amount;

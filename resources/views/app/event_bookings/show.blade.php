@@ -162,8 +162,8 @@
                                 <thead class="thead-dark">
                                 <tr>
                                     <th>#</th>
-                                    <th>Event</th>
                                     <th>Date</th>
+                                    <th>Event</th>
                                     <th>Start Time - End Time</th>
                                     <th>Particular</th>
                                     <th>Amount</th>
@@ -175,52 +175,92 @@
                                     $total = 0;
                                     $old_date = '';
                                     $total_room = $bookings->property->total_rooms;
+                                    $key = 1;
 
                                 @endphp
-                                @foreach($bookings->booking_details as $key => $val)
+                                @foreach($bookings->booking_details as $val)
                                     @php
-                                        $double_room = 0;
-                                        $triple_room = 0;
-                                        $current_room = 0;
+                                        //dd($val->artistPerson->name);
                                         $show_date = false;
                                         if($old_date != $val->date){
                                             $old_date = $val->date;
                                             $show_date = true;
                                         }
-                                    if($val->hotel_chargable_type_id == 1){
-                                        $double_room = $val->qty;
-                                        $current_room =+ $val->qty;
-                                    }elseif($val->hotel_chargable_type_id == 2){
-                                         $triple_room = $val->qty;
-                                         $current_room =+ $val->qty;
-                                    }
-                                     if($val->hotel_chargable_type_id != 1 && $val->hotel_chargable_type_id != 2){
-                                             $threshold_rooms = ($total_room * $val->threshold)/100;
-                                             if($current_room >= $threshold_rooms){
-                                                  $total = $total  + ($val->qty * $val->rate);
-                                             }
-                                        } else{
-                                             $total = $total  + ($val->qty * $val->rate);
+
+                                        if ($val->artistPerson) {
+                                            
+                                            $particular = 'Artist Person - '.$val->artistPerson->name;
+                                            $amount = $val->artist_amount;
+                                        } elseif ($val->decoration) {
+                                            $particular = 'Decoration - '.$val->decoration->name;
+                                            $amount = $val->decor_amount;
                                         }
+                                        $total = $total  + $amount;
+                                    
                                     @endphp
 
                                     <tr>
-                                        <th>{{ 1 +$key }}</th>
+                                        <th>{{ $key++ }}</th>
                                         <td> @if($show_date)
 
                                                 {{ $val->date->format('d-m-Y') }}
                                             @else
-
+                                                NA
                                             @endif
                                         </td>
-                                        <td>{{-- $val->events->name --}}</td>
+                                        <td>{{ $val->events->name }}</td>
                                         <td> 
 
                                             {{ $val->start_time }} - {{ $val->end_time }}
                                             
                                         </td>
-                                        <td>{{ $val->event }}</td>
-                                        <td> {{ $val->event }}</td>
+                                        <td>{{ $particular }}</td>
+                                        <td> {{ $amount }}</td>
+
+                                    </tr>
+                                @endforeach
+                                @foreach($bookings->bookingAddsonDetails as  $val)
+                                    @php
+                                    $amount = $val->total_amount;
+                                    if ($val->addson_facility) {
+                                        $particular = 'Facility - '.$val->addson_facility->name;
+                                    } elseif ($val->facility_details) {
+                                        $particular = 'Facility Details - '.$val->facility_details->name;
+                                    } 
+                                    $total = $total  + $amount;
+                                    @endphp
+                                <tr>
+                                        <th>{{ $key++ }}</th>
+                                        <td> NA </td>
+                                        <td> NA </td>
+                                        <td> NA </td>
+                                        <td>{{ $particular }}</td>
+                                        <td> {{ $amount}}</td>
+
+                                    </tr>
+                                @endforeach
+                                @foreach($bookings->bookingAddsonArtistPerson as $val)
+                                    @php
+                                    $additional_particular = '';
+                                    if ($val->addson_artist_person) {
+                                        $additional_particular = 'Additional Artist Person - '.$val->addson_artist_person->name;
+                                    }
+                                    $artistParticular = '';
+                            
+                                    if ($val->addson_artist) {
+                                        $artistParticular = 'Additional Artist - '.$val->addson_artist->name;
+                                    }
+
+                                    $amount = $val->addson_artist_amount;
+                                    $total = $total  + $amount;
+                                    @endphp
+                                <tr>
+                                        <th>{{ $key++ }}</th>
+                                        <td> NA </td>
+                                        <td> NA </td>
+                                        <td> NA </td>
+                                        <td>{{ $additional_particular.', '.$artistParticular }}</td>
+                                        <td> {{ $amount}}</td>
 
                                     </tr>
                                 @endforeach
@@ -369,7 +409,7 @@
             let payment_mode = $(this).data('payment_mode');
             let remarks = $(this).data('remarks');
             let status = $(this).data('status');
-            let updateUrl = `{{ url('bookings') }}`+'/'+id;
+            let updateUrl = `{{ url('event-booking') }}`+'/'+id;
             
             if(status == 2){       
                 formModal.find('.modal-body #status').val(status);         
