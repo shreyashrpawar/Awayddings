@@ -52,4 +52,14 @@ class EventBookingSummary extends Model
     {
         return $this->hasOne(App\Models\EventBookingPaymentDetail::class, 'em_booking_payment_summaries_id');
     }
+
+    public function bookingAddsonDetails()
+    {
+        return $this->hasMany('App\Models\EventBookingAddsonDetails', 'em_booking_summaries_id', 'id');
+    }
+
+    public function bookingAddsonArtistPerson()
+    {
+        return $this->hasMany('App\Models\EventBookingAddsonArtist', 'em_booking_summaries_id', 'id'); // Load the related artistPerson
+    }
 }

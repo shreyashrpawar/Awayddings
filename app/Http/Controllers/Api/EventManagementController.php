@@ -30,11 +30,10 @@ class EventManagementController extends Controller
     {
         $user = auth()->user();
         $user_id = $user->id;
-
         $pending_summary = PreBookingSummary::where('user_id', $user_id)
         ->where('status', 1)
         ->whereIn('pre_booking_summary_status_id', [1, 2])
-        ->whereDate('check_in', '>=', Carbon::now())
+        ->whereDate('check_in', '<=', Carbon::now())
         ->first();
 
         $event = Event::with(['decorations','artists'])->where('status', 1)->get();
@@ -59,6 +58,8 @@ class EventManagementController extends Controller
 
     public function submit_em_data(Request $request)
     {
+
+        // print_r($request->all()); exit;
         $this->validate($request,[
             'property_id' => 'required',
             'start_date' => 'required',
@@ -106,7 +107,7 @@ class EventManagementController extends Controller
             'check_in' => $check_in_date,
             'check_out' => $check_out_date,
             'total_amount' => $total_amount,
-            'budget' => $user_budget,
+            'budget' => $total_amount,
             'user_remarks' => $user_remark,
             'bride_name' => $bride_name,
             'groom_name' => $groom_name,
@@ -125,7 +126,7 @@ class EventManagementController extends Controller
                 $artist_amount = 0;
                 $decor_amount = 0;
                 $total_amount = 0;
-                if ($val['artist_person_id']) {
+                if (isset($val['artist_person_id'])) {
 
                     $artist_amount = ArtistPerson::where('id', $val['artist_person_id'])->pluck('price')->first();
                     $total_amount = $artist_amount;

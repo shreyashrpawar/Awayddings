@@ -67,7 +67,7 @@
                                 <th>#</th>
                                 <th>Event</th>
                                 <th>Date</th>
-                                <th>Start Time - End Time</th>
+                                <th>Timing</th>
                                 <th>Particular</th>
                                 <th>Amount</th>
                                 <th>Action</th>
