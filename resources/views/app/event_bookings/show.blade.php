@@ -175,9 +175,10 @@
                                     $total = 0;
                                     $old_date = '';
                                     $total_room = $bookings->property->total_rooms;
+                                    $key = 1;
 
                                 @endphp
-                                @foreach($bookings->booking_details as $key => $val)
+                                @foreach($bookings->booking_details as $val)
                                     @php
                                         //dd($val->artistPerson->name);
                                         $show_date = false;
@@ -199,12 +200,12 @@
                                     @endphp
 
                                     <tr>
-                                        <th>{{ 1 +$key }}</th>
+                                        <th>{{ $key++ }}</th>
                                         <td> @if($show_date)
 
                                                 {{ $val->date->format('d-m-Y') }}
                                             @else
-
+                                                NA
                                             @endif
                                         </td>
                                         <td>{{ $val->events->name }}</td>
@@ -215,6 +216,51 @@
                                         </td>
                                         <td>{{ $particular }}</td>
                                         <td> {{ $amount }}</td>
+
+                                    </tr>
+                                @endforeach
+                                @foreach($bookings->bookingAddsonDetails as  $val)
+                                    @php
+                                    $amount = $val->total_amount;
+                                    if ($val->addson_facility) {
+                                        $particular = 'Facility - '.$val->addson_facility->name;
+                                    } elseif ($val->facility_details) {
+                                        $particular = 'Facility Details - '.$val->facility_details->name;
+                                    } 
+                                    $total = $total  + $amount;
+                                    @endphp
+                                <tr>
+                                        <th>{{ $key++ }}</th>
+                                        <td> NA </td>
+                                        <td> NA </td>
+                                        <td> NA </td>
+                                        <td>{{ $particular }}</td>
+                                        <td> {{ $amount}}</td>
+
+                                    </tr>
+                                @endforeach
+                                @foreach($bookings->bookingAddsonArtistPerson as $val)
+                                    @php
+                                    $additional_particular = '';
+                                    if ($val->addson_artist_person) {
+                                        $additional_particular = 'Additional Artist Person - '.$val->addson_artist_person->name;
+                                    }
+                                    $artistParticular = '';
+                            
+                                    if ($val->addson_artist) {
+                                        $artistParticular = 'Additional Artist - '.$val->addson_artist->name;
+                                    }
+
+                                    $amount = $val->addson_artist_amount;
+                                    $total = $total  + $amount;
+                                    @endphp
+                                <tr>
+                                        <th>{{ $key++ }}</th>
+                                        <td> NA </td>
+                                        <td> NA </td>
+                                        <td> NA </td>
+                                        <td>{{ $additional_particular.', '.$artistParticular }}</td>
+                                        <td> {{ $amount}}</td>
 
                                     </tr>
                                 @endforeach
@@ -363,7 +409,7 @@
             let payment_mode = $(this).data('payment_mode');
             let remarks = $(this).data('remarks');
             let status = $(this).data('status');
-            let updateUrl = `{{ url('event-bookings') }}`+'/'+id;
+            let updateUrl = `{{ url('event-booking') }}`+'/'+id;
             
             if(status == 2){       
                 formModal.find('.modal-body #status').val(status);         

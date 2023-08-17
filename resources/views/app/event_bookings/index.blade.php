@@ -52,7 +52,7 @@
                                 <td>
                                     <div class="btn-group">
                                         @can('booking show')
-                                            <a href="{{ route('event-bookings.show',$val->id) }}" class="btn btn-sm btn-outline-primary">View</a>
+                                            <a href="{{ route('event-booking.show',$val->id) }}" class="btn btn-sm btn-outline-primary">View</a>
                                         @endcan
 
                                     </div>

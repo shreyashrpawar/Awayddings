@@ -12,6 +12,8 @@ use App\Models\EventBookingPaymentSummary;
 use App\Models\EventBookingSummary;
 use App\Models\EventPreBookingAddsonDetails;
 use App\Models\EventPreBookingAddsonArtist;
+use App\Models\EventBookingAddsonArtist;
+use App\Models\EventBookingAddsonDetails;
 use App\Models\PreBookingSummaryStatus;
 use App\Models\UserVendorAlignment;
 use App\Models\VendorPropertyAlignment;
@@ -149,9 +151,9 @@ class EventPreBookingSummaryController extends Controller
             
             $data[] = [
                 'id' => $val->id,
-                'event' => '',
-                'date' => '', // You can set an empty date if it's not applicable
-                'time' => '', // You can set an empty time if it's not applicable
+                'event' => 'NA',
+                'date' => 'NA', // You can set an empty date if it's not applicable
+                'time' => 'NA', // You can set an empty time if it's not applicable
                 'particular' => $particular,
                 'data-name' => $data_name,
                 'amount' => $amount,
@@ -181,9 +183,9 @@ class EventPreBookingSummaryController extends Controller
             
             $data[] = [
                 'id' => $val->id,
-                'event' => '',
-                'date' => '', // You can set an empty date if it's not applicable
-                'time' => '', // You can set an empty time if it's not applicable
+                'event' => 'NA',
+                'date' => 'NA', // You can set an empty date if it's not applicable
+                'time' => 'NA', // You can set an empty time if it's not applicable
                 'particular' => $particular,
                 'data-name' => $data_name,
                 'amount' => $amount,
@@ -259,10 +261,9 @@ class EventPreBookingSummaryController extends Controller
                 'booking_summaries_status_remarks' => 'APPROVED BY ADMIN',
             ];
 
-
             $installment_details = $this->calculateInstallments($pre_booking_summary,$installments,$total_amount);
 
-            // booking
+            // booking summary
             $booking_summary =  EventBookingSummary::create($booking_data);
             foreach($pre_booking_summary->event_pre_booking_details as $key => $val){
 
@@ -279,23 +280,30 @@ class EventPreBookingSummaryController extends Controller
                     'total_amount' => $val->total_amount,
                 ]);
             }
-            // foreach($pre_booking_summary->event_pre_booking_details as $key => $val){
-
-            //     $booking_details =  EventBookingDetail::create([
-            //         'em_booking_summaries_id' => $booking_summary->id,
-            //         'em_event_id' => $val->em_event_id,
-            //         'date' => Carbon::parse($val->date),
-            //         'start_time' => $val->start_time,
-            //         'end_time' => $val->end_time,
-            //         'em_artist_person_id' => $val->em_artist_person_id,
-            //         'em_decor_id' => $val->em_decor_id,
-            //         'artist_amount' => $val->artist_amount,
-            //         'decor_amount' => $val->decor_amount,
-            //         'total_amount' => $val->total_amount,
-            //     ]);
-            // }
 
             // booking details
+
+            foreach($pre_booking_summary->event_pre_booking_addson_details as $key => $val) {
+
+                $booking_details =  EventBookingAddsonDetails::create([
+                    'em_booking_summaries_id' => $booking_summary->id,
+                    'em_addon_facility_id' => $val->em_addon_facility_id,
+                    'facility_details_id' => $val->facility_details_id,
+                    'total_amount' => $val->total_amount,
+                ]);
+                
+            }
+            foreach($pre_booking_summary->event_pre_booking_addson_artist_person as $key => $val) {
+                // dd($val);
+                $booking_details =  EventBookingAddsonArtist::create([
+                    'em_booking_summaries_id' => $booking_summary->id,
+                    'em_addson_artist_id' => $val->em_addson_artist_id,
+                    'em_addson_artist_person_id' => $val->em_addson_artist_person_id,
+                    'addson_artist_amount' => $val->addson_artist_amount,
+                    'total_amount' => $val->total_amount,
+                ]);
+                
+            }
 
             // booking payment
             $booking_payment = [
