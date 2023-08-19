@@ -51,8 +51,8 @@
                         <tr>
                             <th>Adult</th>
                             <td> {{ $summary->pax }}</td>
-                            <th>Budget</th>
-                            <td> {{ $summary->budget }}</td>
+                            <th>Total Amount</th>
+                            <td id="total_amount_listing_th"> {{ $summary->total_amount }}</td>
                         </tr>
                         <tr>
                             <th>Bride Name</th>
@@ -81,7 +81,7 @@
                         @endphp
                         @foreach($data as $key => $detail)
                             @php
-                                $total = $total  + $detail['amount'];
+                                //$total = $total  + $detail['amount'];
                             @endphp
 
                             <tr>
@@ -107,7 +107,7 @@
                         @endforeach
                         <tr>
                             <th colspan="6" class="text-right" >Total</th>
-                            <th id="total_amount_th">{{ $total }}</th>
+                            <th id="total_amount_th">{{ $summary->total_amount }}</th>
                         </tr>
                         </tbody>
 
@@ -185,17 +185,17 @@
                         @method('put')
                         <input type="hidden" name="pre_booking_id" value="{{ $summary->id }}">
                         <input type="hidden" name="selected_status" class="selected_status" value="{{ $summary->id }}">
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label for="">
                                 User Budget
                             </label>
-                            <input type="text" class="form-control" value="{{ $summary->budget }}" disabled>
-                        </div>
+                            <input type="text" class="form-control" value="{{-- $summary->budget --}}" disabled>
+                        </div> -->
                         <div class="form-group">
                             <label for="">
                                 Final Amount
                             </label>
-                            <input type="text" class="form-control" name="final_amount" value="{{ $total }}" readonly>
+                            <input type="text" class="form-control final_amount" name="final_amount" value="{{ $summary->total_amount }}" readonly>
                         </div>
                         <div class="form-group">
                             <label for="">
@@ -248,17 +248,17 @@
                         @method('put')
                         <input type="hidden" name="pre_booking_id" value="{{ $summary->id }}">
                         <input type="hidden" name="selected_status" class="selected_status" value="">
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label for="">
                                 User Budget
                             </label>
-                            <input type="text" class="form-control" value="{{ $summary->budget }}" disabled>
-                        </div>
+                            <input type="text" class="form-control" value="{{-- $summary->budget --}}" disabled>
+                        </div> -->
                         <div class="form-group">
                             <label for="">
                                 Final Amount
                             </label>
-                            <input type="text" class="form-control" name="final_amount" value="{{ $total }}" readonly>
+                            <input type="text" class="form-control final_amount" name="final_amount" value="{{ $summary->total_amount }}" readonly>
                         </div>
 
                         <div class="form-group">
@@ -290,17 +290,17 @@
                         @method('put')
                         <input type="hidden" name="pre_booking_id" value="{{ $summary->id }}">
                         <input type="hidden" name="selected_status" class="selected_status" value="">
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label for="">
                                 User Budget
                             </label>
-                            <input type="text" class="form-control" value="{{ $summary->budget }}" disabled>
-                        </div>
+                            <input type="text" class="form-control" value="{{-- $summary->budget --}}" disabled>
+                        </div> -->
                         <div class="form-group">
                             <label for="">
                                 Final Amount
                             </label>
-                            <input type="text" class="form-control" name="final_amount" value="{{ $total }}" readonly>
+                            <input type="text" class="form-control final_amount" name="final_amount" value="{{ $summary->total_amount }}" readonly>
                         </div>
 
                         <div class="form-group">
@@ -388,6 +388,8 @@
                     console.log('Success:', response);
                     console.log('New value:', newValue);
                     $("#total_amount_th").html(response.total_amount);
+                    $("#total_amount_listing_th").html(response.total_amount);
+                    $(".final_amount").val(response.total_amount);
                     $("#amount_"+response.this_id).html(response.amount);
 
                 }

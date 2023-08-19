@@ -31,7 +31,7 @@
                         <th>Check In</th>
                         <th>Check Out</th>
                         <th>PAX</th>
-                        <th>Client Budget</th>
+                        <th>Total amount</th>
 
                         <th>Status</th>
                         <th width="10%">Actions</th>
@@ -50,7 +50,7 @@
                                 <td>{{ $val->check_in->format('d-m-Y') }}</td>
                                 <td>{{ $val->check_out->format('d-m-Y') }}</td>
                                 <td>{{ $val->pax }}</td>
-                                <td>{{ $val->budget }}</td>
+                                <td>{{ $val->total_amount }}</td>
                                 <td>
                                     <span class="badge badge-pill badge-info text-uppercase">{{ $val->pre_booking_summary_status->name }}</span>
 
