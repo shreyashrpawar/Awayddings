@@ -46,8 +46,8 @@
                             <input type="text" class="form-control"  name="pax"  id="pax" value="{{ $summary->pax }}"   required>
                         </div>
                         <div class="form-group">
-                            <label for="">Budget </label>
-                            <input type="text" class="form-control"  name="budget" value="{{ $summary->budget }}" >
+                            <label for="">Total Amount </label>
+                            <input type="text" class="form-control"  name="total_amount" value="{{ $summary->total_amount }}" >
                         </div>
 
                     </div>
