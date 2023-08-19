@@ -33,7 +33,7 @@ class EventManagementController extends Controller
         $pending_summary = PreBookingSummary::where('user_id', $user_id)
         ->where('status', 1)
         ->whereIn('pre_booking_summary_status_id', [1, 2])
-        ->whereDate('check_in', '<=', Carbon::now())
+        ->whereDate('check_in', '>=', Carbon::now())
         ->first();
 
         $event = Event::with(['decorations','artists'])->where('status', 1)->get();

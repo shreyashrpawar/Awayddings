@@ -8,6 +8,7 @@ use App\Jobs\SendEmailToHotel;
 use App\Models\EventBookingPaymentDetail;
 use App\Models\EventBookingPaymentSummary;
 use App\Models\EventBookingSummary;
+use App\Models\EventPreBookingSummary;
 use Illuminate\Http\Request;
 use PDF;
 use Storage;
@@ -107,5 +108,85 @@ class EventBookingSummaryController extends Controller
     {
         SendInstallmentEmail::dispatch($details);
         return true;
+    }
+
+    public function generatePDF()
+    {
+        $summary = EventPreBookingSummary::with([
+            'user',
+            'property',
+            'event_pre_booking_details',
+            'pre_booking_summary_status',
+            'event_pre_booking_details.artistPerson',
+            'event_pre_booking_addson_details',
+            'event_pre_booking_addson_artist_person',
+        ])->find(14);
+
+        // foreach ($summary->event_pre_booking_details as $val) {
+        //     $particular = '';
+        //     $image_url = '';
+        //     $data_name = '';
+        //     $amount = 0;
+        //     if ($val->artistPerson) {
+        //         $image_url = ($val->artistPerson->image ? asset('storage/' . $val->artistPerson->image->url) : null );
+                
+        //         $particular = 'Artist Person - '.$val->artistPerson->name;
+        //         $amount = $val->artist_amount;
+        //         $image_url = $val->artistPerson;
+        //         $data_name = 'artistPerson';
+        //     } elseif ($val->decoration) {
+        //         $image_url = ($val->decoration->image ? asset('storage/' . $val->decoration->image->url) : null );
+        //         $particular = 'Decoration - '.$val->decoration->name;
+        //         $amount = $val->decor_amount;
+        //         $data_name = 'decor';
+        //     }
+        //     $event = $val->events->name;
+            
+        //     $pdfData[] = [
+        //         'title' => 'Welcome to Awayddings',
+        //         'date' => date('m/d/Y'),
+        //         'id' => $val->id,
+        //         'event' => $event,
+        //         'date' => $val->date->format('d-m-Y'),
+        //         'time' => $val->start_time . ' - ' . $val->end_time,
+        //         'particular' => $particular,
+        //         'data-name' => $data_name,
+        //         'amount' => $amount,
+        //         'image_url' => $image_url,
+        //         // Add other relevant fields here
+        //     ];
+        // }
+        foreach($summary->event_pre_booking_addson_artist_person as $key => $val) {
+            // dd($val);
+            $particular = '';
+            $image_url = '';
+            $data_name = '';
+            $amount = $val->addson_artist_amount;
+            if ($val->addson_artist_person) {
+                $particular = 'Additional Artist Person - '.$val->addson_artist_person->name;
+                $image_url = ($val->addson_artist_person->image ? asset('storage/' . $val->addson_artist_person->image->url) : null );
+                $data_name = 'additionalArtistPerson';
+            }
+            $artistParticular = '';
+    
+            if ($val->addson_artist) {
+                $artistParticular = 'Additional Artist - '.$val->addson_artist->name;
+                $image_url = ($val->addson_artist->image ? $val->addson_artist->image->url : null );
+                $data_name = 'additionalArtist';
+            }
+            
+            $pdfData[] = [
+                'title' => 'Welcome to Awayddings',
+                'id' => $val->id,
+                'image_url' => $image_url,
+                // Add other relevant fields here
+            ];
+            
+        }
+
+        $pdf = PDF::loadView('PDF.myPDF', ['pdfData' => $pdfData]);
+        return view('pdf.pdf_viewer', ['pdfContent' => $pdf->output()]);
+    
+        // return $pdf->download('itsolutionstuff.pdf');
     }
 }

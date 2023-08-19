@@ -509,7 +509,7 @@ class EventPreBookingSummaryController extends Controller
             'check_in' => $request->check_in,
             'check_out' => $request->check_out,
             'pax' => $request->pax,
-            'budget' => $request->budget,
+            'total_amount' => $request->total_amount,
             'status' => 1
         ]);
         return redirect(route('event-pre-booking.show',$event_pre_booking_id));
