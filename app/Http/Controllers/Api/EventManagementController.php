@@ -235,7 +235,7 @@ class EventManagementController extends Controller
         $cancelled_summary = EventPreBookingSummary::with(['user', 'pre_booking_summary_status', 'property', 'event_pre_booking_details', 'event_pre_booking_addson_details', 'event_pre_booking_addson_artist_person' ])
         ->where('user_id', $user_id)->whereIn('pre_booking_summary_status_id',[3,4])->get();
 
-        $approved_summary = EventBookingSummary::with(['user', 'booking_details','bookingAddsonDetails', 'booking_details', 'property', 'booking_payment_summary','bookingAddsonArtistPerson', 'booking_payment_summary.booking_payment_details'])
+        $approved_summary = EventBookingSummary::with(['user', 'booking_details','bookingAddsonDetails', 'property', 'booking_payment_summary','bookingAddsonArtistPerson', 'booking_payment_summary.booking_payment_details'])
             ->where('user_id', $user_id)->get();
 
         return response()->json([
@@ -244,7 +244,6 @@ class EventManagementController extends Controller
             'data' => [
                'pending' =>  EventPrebookingResource::collection($pending_summary),
                'cancelled' => EventPrebookingResource::collection($cancelled_summary),
-               'approved_new' => $approved_summary,
                'approved' => EventBookingResource::collection($approved_summary),
                'completed' => []
             ],
