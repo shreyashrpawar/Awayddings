@@ -31,7 +31,8 @@ class EventBookingResource extends JsonResource
             // 'groom_name' =>  $this->groom_name,
             'booking_details' => EventBookingDetailsResource::collection($this->booking_details),
             'addson_event_details' =>  AdditionalEventResource::collection($this->bookingAddsonDetails),
-             'addson_artist_person' => sizeof($this->bookingAddsonArtistPerson) == 0? null : new AdditionalArtistPersonResource($this->bookingAddsonArtistPerson[0])
+            'addson_artist_person' => sizeof($this->bookingAddsonArtistPerson) == 0? null : new AdditionalArtistPersonResource($this->bookingAddsonArtistPerson[0]),
+            'booking_payment_summary' => $this->booking_payment_summary
         ];
     }
 }
