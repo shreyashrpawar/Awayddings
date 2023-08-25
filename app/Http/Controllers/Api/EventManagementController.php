@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\EventBookingResource;
 use App\Http\Resources\EventManagementResource;
+use App\Http\Resources\EventPrebookingResource;
 use App\Http\Resources\EventResource;
 use App\Models\Artist;
 use App\Models\ArtistPerson;
@@ -12,6 +14,7 @@ use App\Models\EmAddonFacility;
 use App\Models\EmAddonFacilityDetails;
 use Illuminate\Http\Request;
 use App\Models\Event;
+use App\Models\EventBookingSummary;
 use App\Models\LightandSound;
 use App\Models\Location;
 use App\Models\TimeSlot;
@@ -222,11 +225,29 @@ class EventManagementController extends Controller
     }
     
 
-    public function get_previous_propertry_booking_data(Request $request)
+    public function get_event_bookings_history(Request $request)
     {
+        $user = auth()->user();
+        $user_id = $user->id;
+        $pending_summary = EventPreBookingSummary::with(['user', 'pre_booking_summary_status', 'property', 'event_pre_booking_details', 'event_pre_booking_addson_details', 'event_pre_booking_addson_artist_person' ])
+            ->where('user_id', $user_id)->where('pre_booking_summary_status_id', 1)->get();
+
+        $cancelled_summary = EventPreBookingSummary::with(['user', 'pre_booking_summary_status', 'property', 'event_pre_booking_details', 'event_pre_booking_addson_details', 'event_pre_booking_addson_artist_person' ])
+        ->where('user_id', $user_id)->whereIn('pre_booking_summary_status_id',[3,4])->get();
+
+        $approved_summary = EventBookingSummary::with(['user', 'booking_details','bookingAddsonDetails', 'booking_details', 'property', 'booking_payment_summary','bookingAddsonArtistPerson', 'booking_payment_summary.booking_payment_details'])
+            ->where('user_id', $user_id)->get();
+
         return response()->json([
             'success' => true,
-            'message' => 'Data successfully inserted',
+            'message' => 'Success',
+            'data' => [
+               'pending' =>  EventPrebookingResource::collection($pending_summary),
+               'cancelled' => EventPrebookingResource::collection($cancelled_summary),
+               'approved_new' => $approved_summary,
+               'approved' => EventBookingResource::collection($approved_summary),
+               'completed' => []
+            ],
         ]);
     }
 

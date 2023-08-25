@@ -41,7 +41,7 @@ Route::prefix('v1')->group(function () {
         Route::get('me',[\App\Http\Controllers\Api\UserController::class,'userInformation']);
         Route::get('getEventManagementData',[\App\Http\Controllers\Api\EventManagementController::class,'event_details']);
         Route::post('submit_em_data',[\App\Http\Controllers\Api\EventManagementController::class,'submit_em_data']);
-        Route::get('get_previous_propertry_booking_data',[\App\Http\Controllers\Api\EventManagementController::class,'get_previous_propertry_booking_data']);
+        Route::get('get_event_bookings_history',[\App\Http\Controllers\Api\EventManagementController::class,'get_event_bookings_history']);
         Route::get('get_property_with_location',[\App\Http\Controllers\Api\EventManagementController::class,'get_property_with_location']);
 
     });
