@@ -51,9 +51,6 @@ class EventPreBookingSummary extends Model
         return $this->hasMany('App\Models\EventPreBookingAddsonArtist', 'em_prebooking_summaries_id', 'id'); // Load the related artistPerson
     }
 
-
-
-    
     // public function bookingSummary()
     // {
     //     return $this->belongsTo(App\Models\BookingSummary::class,'booking_summary_id');
