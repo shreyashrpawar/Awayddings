@@ -25,7 +25,8 @@ class EventPreBookingSummary extends Model
         'pax',
         'pre_booking_summary_status_id',
         'bride_name',
-        'groom_name'
+        'groom_name',
+        'pdf_url'
     ];
     protected $dates = ['check_in','check_out'];
     public function user(){
@@ -51,9 +52,6 @@ class EventPreBookingSummary extends Model
         return $this->hasMany('App\Models\EventPreBookingAddsonArtist', 'em_prebooking_summaries_id', 'id'); // Load the related artistPerson
     }
 
-
-
-    
     // public function bookingSummary()
     // {
     //     return $this->belongsTo(App\Models\BookingSummary::class,'booking_summary_id');

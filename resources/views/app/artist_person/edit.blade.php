@@ -59,7 +59,7 @@
                         <label for="artist_image">Artist Image:</label>
                         <input type="file" id="artist_person_image" name="artist_person_image">
                         @if ($artist_person->image)
-                            <img src="{{ asset('storage/' . $artist_person->image->url) }}{{-- $artist_person->image->url --}}" alt="Artist Image" width="300" height="200">
+                            <img src="{{ $artist_person->image->url }}{{-- $artist_person->image->url --}}" alt="Artist Image" width="300" height="200">
                         @else
                             <p>No image available.</p>
                         @endif
