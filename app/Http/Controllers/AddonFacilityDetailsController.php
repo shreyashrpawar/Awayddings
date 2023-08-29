@@ -44,9 +44,13 @@ class AddonFacilityDetailsController extends Controller
                     // $facilityDetails->image()->create(['url' =>  Storage::disk('s3')->url($filePath)]);
                 }
     
-                $url = $image->store('images', 'public');
+                // $url = $image->store('images', 'public');
                 
-                $facilityDetails->image()->create(['url' => $url]);
+                // $facilityDetails->image()->create(['url' => $url]);
+                $name = time() . $image->getClientOriginalName();
+                $filePath = 'images/'. $name;
+                Storage::disk('s3')->put($filePath, file_get_contents($image),'public');
+                $facilityDetails->image()->create(['url' => Storage::disk('s3')->url($filePath)]);
             } else {
                 $request->session()->flash('error', 'File is not valid.');
                 return redirect()->back();

@@ -142,14 +142,18 @@ class ArtistsController extends Controller
                 }
     
                 // Save the new image to the desired location
-                $url = $image->store('images', 'public');
+                // $url = $image->store('images', 'public');
     
                 // Create and save the new image record
                 // $newImage = new Image(['url' => $url]);
                 // $newImage->save();
     
                 // Associate the new image with the artist
-                $artist->image()->create(['url' => $url]);
+                // $artist->image()->create(['url' => $url]);
+                $name = time() . $image->getClientOriginalName();
+                $filePath = 'images/'. $name;
+                Storage::disk('s3')->put($filePath, file_get_contents($image),'public');
+                $artist->image()->create(['url' => Storage::disk('s3')->url($filePath)]);
             } else {
                 $request->session()->flash('error', 'File is not valid.');
                 return redirect()->back();
@@ -326,14 +330,18 @@ class ArtistsController extends Controller
                 }
     
                 // Save the new image to the desired location
-                $url = $image->store('images', 'public');
+                // $url = $image->store('images', 'public');
     
                 // Create and save the new image record
                 // $newImage = new Image(['url' => $url]);
                 // $newImage->save();
     
                 // Associate the new image with the artist
-                $artist_person->image()->create(['url' => $url]);
+                // $artist_person->image()->create(['url' => $url]);
+                $name = time() . $image->getClientOriginalName();
+                $filePath = 'images/'. $name;
+                Storage::disk('s3')->put($filePath, file_get_contents($image),'public');
+                $artist_person->image()->create(['url' => Storage::disk('s3')->url($filePath)]);
             } else {
                 $request->session()->flash('error', 'File is not valid.');
                 return redirect()->back();

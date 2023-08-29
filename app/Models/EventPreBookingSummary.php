@@ -25,7 +25,8 @@ class EventPreBookingSummary extends Model
         'pax',
         'pre_booking_summary_status_id',
         'bride_name',
-        'groom_name'
+        'groom_name',
+        'pdf_url'
     ];
     protected $dates = ['check_in','check_out'];
     public function user(){

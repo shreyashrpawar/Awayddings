@@ -102,35 +102,60 @@ class EventPreBookingSummaryController extends Controller
         $event = '';
         foreach ($summary->event_pre_booking_details as $val) {
             $particular = '';
+            $artist = '';
+            $decoration = '';
             $image_url = '';
             $data_name = '';
             $amount = 0;
+            $event = $val->events->name;
             if ($val->artistPerson) {
-                $image_url = ($val->artistPerson->image ? asset('storage/' . $val->artistPerson->image->url) : null );
+                $image_url = ($val->artistPerson->image ?  $val->artistPerson->image->url : null );
                 
-                $particular = 'Artist Person - '.$val->artistPerson->name;
+                $artist = 'Artist Person - '.$val->artistPerson->name;
                 $amount = $val->artist_amount;
-                $image_url = $val->artistPerson;
+                // $image_url = $val->artistPerson;
                 $data_name = 'artistPerson';
-            } elseif ($val->decoration) {
-                $image_url = ($val->decoration->image ? asset('storage/' . $val->decoration->image->url) : null );
-                $particular = 'Decoration - '.$val->decoration->name;
+                $data[] = [
+                    'id' => $val->id,
+                    'event' => $event,
+                    'date' => $val->date,
+                    'time' => $val->start_time . ' - ' . $val->end_time,
+                    'particular' => $artist,
+                    'data-name' => $data_name,
+                    'amount' => $amount,
+                    'image_url' => $image_url,
+                    // Add other relevant fields here
+                ];
+            } 
+            if ($val->decoration) {
+                $image_url = ($val->decoration->image ?  $val->decoration->image->url : null );
+                $decoration = 'Decoration - '.$val->decoration->name;
                 $amount = $val->decor_amount;
                 $data_name = 'decor';
+                $data[] = [
+                    'id' => $val->id,
+                    'event' => $event,
+                    'date' => $val->date,
+                    'time' => $val->start_time . ' - ' . $val->end_time,
+                    'particular' => $decoration,
+                    'data-name' => $data_name,
+                    'amount' => $amount,
+                    'image_url' => $image_url,
+                    // Add other relevant fields here
+                ];
             }
-            $event = $val->events->name;
             
-            $data[] = [
-                'id' => $val->id,
-                'event' => $event,
-                'date' => $val->date->format('d-m-Y'),
-                'time' => $val->start_time . ' - ' . $val->end_time,
-                'particular' => $particular,
-                'data-name' => $data_name,
-                'amount' => $amount,
-                'image_url' => $image_url,
-                // Add other relevant fields here
-            ];
+            // $data[] = [
+            //     'id' => $val->id,
+            //     'event' => $event,
+            //     'date' => $val->date,
+            //     'time' => $val->start_time . ' - ' . $val->end_time,
+            //     'particular' => $particular,
+            //     'data-name' => $data_name,
+            //     'amount' => $amount,
+            //     'image_url' => $image_url,
+            //     // Add other relevant fields here
+            // ];
         }
         // dd($data);
         foreach($summary->event_pre_booking_addson_details as $key => $val) {
@@ -170,7 +195,7 @@ class EventPreBookingSummaryController extends Controller
             $amount = $val->addson_artist_amount;
             if ($val->addson_artist_person) {
                 $particular = 'Additional Artist Person - '.$val->addson_artist_person->name;
-                $image_url = ($val->addson_artist_person->image ? asset('storage/' . $val->addson_artist_person->image->url) : null );
+                $image_url = ($val->addson_artist_person->image ? $val->addson_artist_person->image->url : null );
                 $data_name = 'additionalArtistPerson';
             }
             $artistParticular = '';

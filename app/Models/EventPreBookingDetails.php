@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 
 class EventPreBookingDetails extends Model
 {
@@ -39,5 +41,10 @@ class EventPreBookingDetails extends Model
     public function decoration()
     {
         return $this->belongsTo(Decoration::class, 'em_decor_id', 'id');
+    }
+
+    public function getDateAttribute($value)
+    {
+        return Carbon::parse($value)->format('d-m-Y');
     }
 }

@@ -103,7 +103,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('addon_facility_details/{id}', [\App\Http\Controllers\AddonFacilityDetailsController::class, 'update'])->name('addon_facility_details.update');
     Route::post('facilityDetails_updateStatus', [\App\Http\Controllers\AddonFacilityDetailsController::class, 'facilityDetails_updateStatus'])->name('facilityDetails_updateStatus');
 
-    Route::get('generate-pdf', [\App\Http\Controllers\EventBookingSummaryController::class, 'generatePDF']);
+    Route::get('generate-pdf/{prebookingid}', [\App\Http\Controllers\EventBookingSummaryController::class, 'generatePDF']);
 
 });
 Route::prefix('settings')->middleware(['auth'])->group(function () {

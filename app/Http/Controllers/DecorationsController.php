@@ -142,14 +142,19 @@ class DecorationsController extends Controller
                 }
     
                 // Save the new image to the desired location
-                $url = $image->store('images', 'public');
+                // Storage::disk('s3')->url($filePath)
+                // $url = $image->store('images', 'public');
     
                 // Create and save the new image record
                 // $newImage = new Image(['url' => $url]);
                 // $newImage->save();
     
                 // Associate the new image with the decoration
-                $decoration->image()->create(['url' => $url]);
+                $name = time() . $image->getClientOriginalName();
+                $filePath = 'images/'. $name;
+                Storage::disk('s3')->put($filePath, file_get_contents($image),'public');
+                $decoration->image()->create(['url' => Storage::disk('s3')->url($filePath)]);
+                // $decoration->image()->create(['url' => $url]);
             } else {
                 $request->session()->flash('error', 'File is not valid.');
                 return redirect()->back();
