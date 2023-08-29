@@ -44,7 +44,7 @@
                         <label for="decoration_image">Decoration Image:</label>
                         <input type="file" id="decoration_image" name="decoration_image">
                         @if ($decoration->image)
-                            <img src="{{ asset('storage/' . $decoration->image->url) }}" alt="Decoration Image" width="300" height="200">
+                            <img src="{{ $decoration->image->url }}" alt="Decoration Image" width="300" height="200">
                         @else
                             <p>No image available.</p>
                         @endif
