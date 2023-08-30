@@ -180,7 +180,7 @@
                                 @endphp
                                 @foreach($bookings->booking_details as $val)
                                     @php
-                                        //dd($val->artistPerson->name);
+                                        //dd($val);
                                         $show_date = false;
                                         if($old_date != $val->date){
                                             $old_date = $val->date;
@@ -191,33 +191,55 @@
                                             
                                             $particular = 'Artist Person - '.$val->artistPerson->name;
                                             $amount = $val->artist_amount;
-                                        } elseif ($val->decoration) {
+                                            @endphp
+                                            <tr>
+                                                <th>{{ $key++ }}</th>
+                                                <td> 
+
+                                                        {{ $val->date->format('d-m-Y') }}
+                                                    
+                                                    
+                                                </td>
+                                                <td>{{ $val->events->name }}</td>
+                                                <td> 
+
+                                                    {{ $val->start_time }} - {{ $val->end_time }}
+                                                    
+                                                </td>
+                                                <td>{{ $particular }}</td>
+                                                <td> {{ $amount }}</td>
+
+                                            </tr>
+                                            @php
+                                        } 
+                                        if ($val->decoration) {
                                             $particular = 'Decoration - '.$val->decoration->name;
                                             $amount = $val->decor_amount;
+                                            //dd($val->decor_amount);
+                                            @endphp
+                                            <tr>
+                                                <th>{{ $key++ }}</th>
+                                                <td> 
+
+                                                        {{ $val->date->format('d-m-Y') }}
+                                                    
+                                                    
+                                                </td>
+                                                <td>{{ $val->events->name }}</td>
+                                                <td> 
+
+                                                    {{ $val->start_time }} - {{ $val->end_time }}
+                                                    
+                                                </td>
+                                                <td>{{ $particular }}</td>
+                                                <td> {{ $amount }}</td>
+
+                                            </tr>
+                                            @php
                                         }
                                         $total = $total  + $amount;
                                     
                                     @endphp
-
-                                    <tr>
-                                        <th>{{ $key++ }}</th>
-                                        <td> @if($show_date)
-
-                                                {{ $val->date->format('d-m-Y') }}
-                                            @else
-                                                NA
-                                            @endif
-                                        </td>
-                                        <td>{{ $val->events->name }}</td>
-                                        <td> 
-
-                                            {{ $val->start_time }} - {{ $val->end_time }}
-                                            
-                                        </td>
-                                        <td>{{ $particular }}</td>
-                                        <td> {{ $amount }}</td>
-
-                                    </tr>
                                 @endforeach
                                 @foreach($bookings->bookingAddsonDetails as  $val)
                                     @php

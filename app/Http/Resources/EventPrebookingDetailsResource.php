@@ -29,7 +29,7 @@ class EventPrebookingDetailsResource extends JsonResource
             'decor_image' => $this->decoration->image->url??null,
             'decor_amount' =>$this->decoration->price??null,
             'day_total' =>$this->total_amount,
-            'date' => $this->date->format('d/m/Y') 
+            'date' => $this->date
         ];
     }
 }
