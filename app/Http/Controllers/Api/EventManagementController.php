@@ -189,21 +189,21 @@ class EventManagementController extends Controller
                 try {
                     $prebookingdetails = EventPreBookingDetails::create($temp_data);
                     $dateString = $date->format('Y-m-d');
-                    $groupedPdfData[$dateString][] = [
-                        'details_id' => $prebookingdetails->id,
-                        'event' => $prebookingdetails->events->name,
-                        'date' => $date,
-                        'time' => $val['start_time'] . ' - ' . $val['end_time'],
-                        'artist' => $artist,
-                        'decor' => $decor,
-                        'artist_amount' => $artist_amount,
-                        'decor_amount' => $decor_amount,
-                        'start_time' => $val['start_time'],
-                        'end_time' => $val['end_time'],
-                        'decor_image_url' => ($prebookingdetails->decoration && $prebookingdetails->decoration->image ? $prebookingdetails->decoration->image->url : null),
-                        'artist_image_url' => ($prebookingdetails->artistPerson && $prebookingdetails->artistPerson->image ? $prebookingdetails->artistPerson->image->url : null),
+                    // $groupedPdfData[$dateString][] = [
+                    //     'details_id' => $prebookingdetails->id,
+                    //     'event' => $prebookingdetails->events->name,
+                    //     'date' => $date,
+                    //     'time' => $val['start_time'] . ' - ' . $val['end_time'],
+                    //     'artist' => $artist,
+                    //     'decor' => $decor,
+                    //     'artist_amount' => $artist_amount,
+                    //     'decor_amount' => $decor_amount,
+                    //     'start_time' => $val['start_time'],
+                    //     'end_time' => $val['end_time'],
+                    //     'decor_image_url' => ($prebookingdetails->decoration && $prebookingdetails->decoration->image ? $prebookingdetails->decoration->image->url : null),
+                    //     'artist_image_url' => ($prebookingdetails->artistPerson && $prebookingdetails->artistPerson->image ? $prebookingdetails->artistPerson->image->url : null),
 
-                    ];
+                    // ];
                     // print_r($groupedPdfData);
                 } catch (Throwable $e) {
                     print_r($temp_data);
