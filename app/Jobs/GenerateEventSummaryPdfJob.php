@@ -58,7 +58,7 @@ class GenerateEventSummaryPdfJob implements ShouldQueue
         $dompdf = new Dompdf($options);
 
         // Generate the PDF content using a Blade view
-        $pdfView = view('PDF.myPDF', compact('basicDetails', 'groupedPdfData', 'facilityData', 'pdfData', 'additional_data'));
+        $pdfView = view('pdf.myPDF', compact('basicDetails', 'groupedPdfData', 'facilityData', 'pdfData', 'additional_data'));
         $pdfHtml = $pdfView->render();
 
         // Load the HTML content into Dompdf
