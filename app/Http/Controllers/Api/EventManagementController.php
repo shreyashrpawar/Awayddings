@@ -284,8 +284,8 @@ class EventManagementController extends Controller
             DB::commit();
             // $details = ['data' => $pre_booking_summary->id];
             // generateEventSummaryPdf::dispatch($details);
-            $job = new GenerateEventSummaryPdfJob($basicDetails, $groupedPdfData, $facilityData, $pdfData);
-            dispatch($job);
+            // $job = new GenerateEventSummaryPdfJob($basicDetails, $groupedPdfData, $facilityData, $pdfData);
+            // dispatch($job);
             return response()->json([
                 'success' => true,
                 'message' => 'Data successfully inserted',
