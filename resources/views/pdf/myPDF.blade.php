@@ -28,7 +28,7 @@
 </style>
 </head>
 <body>
-    <div class="block">
+    <div class="block" id="#block">
         <div class="block-content">
             <h2>{{ $basicDetails['property_name'] }}</h2>
         </div>

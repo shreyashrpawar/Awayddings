@@ -134,6 +134,8 @@ class EventBookingSummaryController extends Controller
         ];
 
         $groupedPdfData = [];
+        $pdfData = [];
+        $facilityData = [];
         $dateWiseEventCounts = [];
 
         foreach ($summary->event_pre_booking_details as $val) {
@@ -146,11 +148,11 @@ class EventBookingSummaryController extends Controller
             $decor_amount = 0;
 
             if ($val->artistPerson) {
-                $artist_image_url = ($val->artistPerson->image ? asset('storage/' . $val->artistPerson->image->url) : null);
+                $artist_image_url = ($val->artistPerson->image ?  $val->artistPerson->image->url : null);
                 $artist =  $val->artistPerson->name;
                 $artist_amount = $val->artist_amount;
             } elseif ($val->decoration) {
-                $decor_image_url = ($val->decoration->image ? asset('storage/' . $val->decoration->image->url) : null);
+                $decor_image_url = ($val->decoration->image ?  $val->decoration->image->url : null);
                 $decor =  $val->decoration->name;
                 $decor_amount = $val->decor_amount;
             }
@@ -205,7 +207,7 @@ class EventBookingSummaryController extends Controller
             $amount = $val->addson_artist_amount;
             if ($val->addson_artist_person) {
                 $artist_person = $val->addson_artist_person->name;
-                $artist_person_image_url = ($val->addson_artist_person->image ? asset('storage/' . $val->addson_artist_person->image->url) : null );
+                $artist_person_image_url = ($val->addson_artist_person->image ? $val->addson_artist_person->image->url : null );
                 $data_name = 'additionalArtistPerson';
             }
             $artistParticular = '';

@@ -37,12 +37,12 @@ class AddonFacilityDetailsController extends Controller
                 if ($facilityDetails->image) {
                     Storage::disk('public')->delete($facilityDetails->image->url);
                     $facilityDetails->image->delete();
-                } else{
-                    $name = time() . $image->getClientOriginalName();
-                    $filePath = 'images/'. $name;
-                    Storage::disk('s3')->put($filePath, file_get_contents($image),'public');
+                } 
+                    // $name = time() . $image->getClientOriginalName();
+                    // $filePath = 'images/'. $name;
+                    // Storage::disk('s3')->put($filePath, file_get_contents($image),'public');
                     // $facilityDetails->image()->create(['url' =>  Storage::disk('s3')->url($filePath)]);
-                }
+                
     
                 // $url = $image->store('images', 'public');
                 
@@ -50,7 +50,7 @@ class AddonFacilityDetailsController extends Controller
                 $name = time() . $image->getClientOriginalName();
                 $filePath = 'images/'. $name;
                 Storage::disk('s3')->put($filePath, file_get_contents($image),'public');
-                $facilityDetails->image()->create(['url' => Storage::disk('s3')->url($filePath)]);
+                $facilityDetails->image()->create(['url' =>  Storage::disk('s3')->url($filePath)]);
             } else {
                 $request->session()->flash('error', 'File is not valid.');
                 return redirect()->back();
