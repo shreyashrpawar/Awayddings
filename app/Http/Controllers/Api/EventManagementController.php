@@ -28,6 +28,8 @@ use Carbon\CarbonPeriod;
 use DB;
 use PDF;
 use Storage;
+// use App\Jobs\generateEventSummaryPdf;
+use App\Jobs\GenerateEventSummaryPdfJob;
 
 class EventManagementController extends Controller
 {
@@ -104,6 +106,11 @@ class EventManagementController extends Controller
         $bride_name = $request->bride_name;
         $groom_name = $request->groom_name;
 
+        $groupedPdfData = [];
+        $pdfData = [];
+        $facilityData = [];
+        $dateWiseEventCounts = [];
+
         DB::beginTransaction();
 
         $temp_data = [
@@ -124,6 +131,18 @@ class EventManagementController extends Controller
 
         try {
             $pre_booking_summary = EventPreBookingSummary::create($temp_data);
+
+
+            $basicDetails = [
+                'title' => 'Welcome to Awayddings',
+                'prebooking_id' => $pre_booking_summary->id,
+                'user_name' => $pre_booking_summary->user->name,
+                'user_phone' => $pre_booking_summary->user->phone,
+                'property_name' => $pre_booking_summary->property->name,
+                'adult' => $pre_booking_summary->pax,
+                'duration' => $pre_booking_summary->check_in->format('d-m-Y') . ' - ' . $pre_booking_summary->check_out->format('d-m-Y'),
+                'amount' => $pre_booking_summary->total_amount,
+            ];
             
             foreach ($events as $key => $val) {
                 $date = $val['date'];
@@ -133,16 +152,27 @@ class EventManagementController extends Controller
                 $total_amount = 0;
                 if (isset($val['artist_person_id'])) {
 
-                    $artist_amount = ArtistPerson::where('id', $val['artist_person_id'])->pluck('price')->first();
+                    $artist_person = ArtistPerson::where('id', $val['artist_person_id'])->first();
+                    $artist_amount = $artist_person['price'];
+                    $artist = $artist_person['name'];
                     $total_amount = $artist_amount;
+                    // $artist_image_url = ($val->artistPerson->image ?  $val->artistPerson->image->url : null);
                 } 
                 if ($val['decor_person_id']) {
-                    $decor_amount = Decoration::where('id', $val['decor_person_id'])->pluck('price')->first();
+                    $decor_details = Decoration::where('id', $val['decor_person_id'])->first();
+                    $decor_amount = $decor_details['price'];
+                    $decor = $decor_details['name'];
                     $total_amount = $decor_amount;
+                    // $decor_image_url = ($val->decoration->image ? $val->decoration->image->url : null);
+
+                    // $decor_amount = Decoration::where('id', $val['decor_person_id'])->pluck('price')->first();
+                    // $total_amount = $decor_amount;
                 }
                 if(isset($val['artist_person_id']) && isset($val['decor_person_id'])) {
                     $total_amount = $artist_amount + $decor_amount;
                 }
+                $date = Carbon::parse($date);
+                // print_r($val['decor_person_id']); exit;
                 // $artist_amount = 
                 $temp_data = [
                     'date' => Carbon::parse($date),
@@ -157,7 +187,24 @@ class EventManagementController extends Controller
                     'total_amount' => $total_amount,
                 ];
                 try {
-                    EventPreBookingDetails::create($temp_data);
+                    $prebookingdetails = EventPreBookingDetails::create($temp_data);
+                    $dateString = $date->format('Y-m-d');
+                    $groupedPdfData[$dateString][] = [
+                        'details_id' => $prebookingdetails->id,
+                        'event' => $prebookingdetails->events->name,
+                        'date' => $date,
+                        'time' => $val['start_time'] . ' - ' . $val['end_time'],
+                        'artist' => $artist,
+                        'decor' => $decor,
+                        'artist_amount' => $artist_amount,
+                        'decor_amount' => $decor_amount,
+                        'start_time' => $val['start_time'],
+                        'end_time' => $val['end_time'],
+                        'decor_image_url' => ($prebookingdetails->decoration && $prebookingdetails->decoration->image ? $prebookingdetails->decoration->image->url : null),
+                        'artist_image_url' => ($prebookingdetails->artistPerson && $prebookingdetails->artistPerson->image ? $prebookingdetails->artistPerson->image->url : null),
+
+                    ];
+                    // print_r($groupedPdfData);
                 } catch (Throwable $e) {
                     print_r($temp_data);
                     return $e;
@@ -168,7 +215,8 @@ class EventManagementController extends Controller
                 foreach ($addition['addson_facilities'] as $facility) {
                     $em_addon_facility_id = $facility['em_addon_facility_id'];
                     $em_addon_facility_details_id = $facility['em_addon_facility_details_id'];
-                    $amount = EmAddonFacilityDetails::where('id', $em_addon_facility_details_id)->pluck('price')->first();
+                    $facility_details = EmAddonFacilityDetails::where('id', $em_addon_facility_details_id)->first();
+                    $amount = $facility_details['price'];
 
                     $temp_data = [
                         'em_prebooking_summaries_id' => $pre_booking_summary->id,
@@ -177,7 +225,16 @@ class EventManagementController extends Controller
                         'total_amount' => $amount,
                     ];
                     try {
-                        EventPreBookingAddsonDetails::create($temp_data);
+                        $addson_details = EventPreBookingAddsonDetails::create($temp_data);
+                        $facilityData[] = [
+                            'facility_id' => $addson_details->id,
+                            'facility' => $facility_details['name'],
+                            'facility_description' => $facility_details['description'],
+                            'amount' => $amount,
+                            'facility_image_url' => ($addson_details->addson_facility_details->image ? $addson_details->addson_facility_details->image->url : null),
+                            // Add other relevant fields here
+                        ];
+                        // print_r($facilityData); exit;
                     } catch (Throwable $e) {
                         print_r($temp_data);
                         return $e;
@@ -191,19 +248,32 @@ class EventManagementController extends Controller
             if (isset($addition['additional_artist'])) {
                 $additional_artist = $addition['additional_artist'];
                 $artist_id = $additional_artist['artist_id'];
+                $add_artist = Artist::where('id', $artist_id)->first();
+                $artist_name = $add_artist['name'];
+
                 $artist_person_id = $additional_artist['artist_details_id'];
-                $artist_amount = ArtistPerson::where('id', $artist_person_id)->pluck('price')->first();
+                $add_artist_person = ArtistPerson::where('id', $artist_person_id)->first();
+                $add_artist_person_amount = $add_artist_person['price'];
 
                 $temp_data = [
                     'em_prebooking_summaries_id' => $pre_booking_summary->id,
                     'em_addson_artist_id' => $artist_id,
                     'em_addson_artist_person_id' => $artist_person_id,
                     'addson_artist_amount' => $artist_amount,
-                    'total_amount' => $artist_amount,
+                    'total_amount' => $add_artist_person_amount,
                 ];
 
                 try {
-                    EventPreBookingAddsonArtist::create($temp_data);
+                    $addson_artist = EventPreBookingAddsonArtist::create($temp_data);
+                    $pdfData[] = [
+                        'additional_id' => $addson_artist->id,
+                        'artist_person' => $artist_person,
+                        'artist' => $artist_name,
+                        'amount' => $add_artist_person_amount,
+                        'artist_person_image_url' => ($addson_artist->addson_artist_person->image ? $addson_artist->addson_artist_person->image->url : null ),
+                        'artist_image_url' => ($addson_artist->addson_artist->image ? $addson_artist->addson_artist->image->url : null ),
+                    ];
+                    // print_r($pdfData); exit;
                 } catch (Throwable $e) {
                     print_r($temp_data);
                     return $e;
@@ -211,19 +281,11 @@ class EventManagementController extends Controller
                 // Now you can use $artist_id and $artist_details_id as needed
             }
 
-            // Generate the PDF content
-            // $pdfContent = $this->generatePDF($pre_booking_summary->id);
-
-            // // Save the PDF content to a file
-            // $pdfFileName = 'prebooking_' . $pre_booking_summary->id . '.pdf';
-            // $pdfFilePath = 'pdf/' . $pdfFileName; // The path in the S3 bucket
-            // Storage::disk('s3')->put($pdfFilePath, $pdfContent, 'public');
-
-            // // Update the PDF URL field in the database
-            // $pre_booking_summary->pdf_url = Storage::disk('s3')->url($pdfFilePath);
-            // $pre_booking_summary->save();
-
             DB::commit();
+            // $details = ['data' => $pre_booking_summary->id];
+            // generateEventSummaryPdf::dispatch($details);
+            $job = new GenerateEventSummaryPdfJob($basicDetails, $groupedPdfData, $facilityData, $pdfData);
+            dispatch($job);
             return response()->json([
                 'success' => true,
                 'message' => 'Data successfully inserted',
@@ -234,133 +296,133 @@ class EventManagementController extends Controller
         }
     }
 
-    public function generatePDF($prebookingid)
-    {
-        $summary = EventPreBookingSummary::with([
-            'user',
-            'property',
-            'event_pre_booking_details',
-            'pre_booking_summary_status',
-            'event_pre_booking_details.artistPerson',
-            'event_pre_booking_addson_details',
-            'event_pre_booking_addson_artist_person',
-        ])->find($prebookingid);
+    // public function generatePDF($prebookingid)
+    // {
+    //     $summary = EventPreBookingSummary::with([
+    //         'user',
+    //         'property',
+    //         'event_pre_booking_details',
+    //         'pre_booking_summary_status',
+    //         'event_pre_booking_details.artistPerson',
+    //         'event_pre_booking_addson_details',
+    //         'event_pre_booking_addson_artist_person',
+    //     ])->find($prebookingid);
 
-        $basicDetails = [
-            'title' => 'Welcome to Awayddings',
-            'prebooking_id' => $summary->id,
-            'user_name' => $summary->user->name,
-            'user_phone' => $summary->user->phone,
-            'property_name' => $summary->property->name,
-            'adult' => $summary->pax,
-            'duration' => $summary->check_in->format('d-m-Y') . ' - ' . $summary->check_out->format('d-m-Y'),
-            'amount' => $summary->total_amount,
-        ];
+    //     $basicDetails = [
+    //         'title' => 'Welcome to Awayddings',
+    //         'prebooking_id' => $summary->id,
+    //         'user_name' => $summary->user->name,
+    //         'user_phone' => $summary->user->phone,
+    //         'property_name' => $summary->property->name,
+    //         'adult' => $summary->pax,
+    //         'duration' => $summary->check_in->format('d-m-Y') . ' - ' . $summary->check_out->format('d-m-Y'),
+    //         'amount' => $summary->total_amount,
+    //     ];
 
-        $groupedPdfData = [];
-        $dateWiseEventCounts = [];
+    //     $groupedPdfData = [];
+    //     $dateWiseEventCounts = [];
 
-        foreach ($summary->event_pre_booking_details as $val) {
+    //     foreach ($summary->event_pre_booking_details as $val) {
 
-            $decor = '';
-            $artist = '';
-            $artist_image_url = '';
-            $decor_image_url = '';
-            $artist_amount = 0;
-            $decor_amount = 0;
+    //         $decor = '';
+    //         $artist = '';
+    //         $artist_image_url = '';
+    //         $decor_image_url = '';
+    //         $artist_amount = 0;
+    //         $decor_amount = 0;
 
-            if ($val->artistPerson) {
-                $artist_image_url = ($val->artistPerson->image ? asset('storage/' . $val->artistPerson->image->url) : null);
-                $artist =  $val->artistPerson->name;
-                $artist_amount = $val->artist_amount;
-            } elseif ($val->decoration) {
-                $decor_image_url = ($val->decoration->image ? asset('storage/' . $val->decoration->image->url) : null);
-                $decor =  $val->decoration->name;
-                $decor_amount = $val->decor_amount;
-            }
-            // dd($decor_amount);
+    //         if ($val->artistPerson) {
+    //             $artist_image_url = ($val->artistPerson->image ? asset('storage/' . $val->artistPerson->image->url) : null);
+    //             $artist =  $val->artistPerson->name;
+    //             $artist_amount = $val->artist_amount;
+    //         } elseif ($val->decoration) {
+    //             $decor_image_url = ($val->decoration->image ? asset('storage/' . $val->decoration->image->url) : null);
+    //             $decor =  $val->decoration->name;
+    //             $decor_amount = $val->decor_amount;
+    //         }
+    //         // dd($decor_amount);
 
-            $groupedPdfData[$val->date][] = [
-                'details_id' => $val->id,
-                'event' => $val->events->name,
-                'date' => $val->date,
-                'time' => $val->start_time . ' - ' . $val->end_time,
-                'artist' => $artist,
-                'decor' => $decor,
-                'artist_amount' => $artist_amount,
-                'decor_amount' => $decor_amount,
-                'start_time' => $val->start_time,
-                'end_time' => $val->end_time,
-                'decor_image_url' => $decor_image_url,
-                'artist_image_url' => $artist_image_url,
-            ];
-        }
+    //         $groupedPdfData[$val->date][] = [
+    //             'details_id' => $val->id,
+    //             'event' => $val->events->name,
+    //             'date' => $val->date,
+    //             'time' => $val->start_time . ' - ' . $val->end_time,
+    //             'artist' => $artist,
+    //             'decor' => $decor,
+    //             'artist_amount' => $artist_amount,
+    //             'decor_amount' => $decor_amount,
+    //             'start_time' => $val->start_time,
+    //             'end_time' => $val->end_time,
+    //             'decor_image_url' => $decor_image_url,
+    //             'artist_image_url' => $artist_image_url,
+    //         ];
+    //     }
 
-        foreach($summary->event_pre_booking_addson_details as $key => $val) {
-            $particular = '';
-            $image_url = '';
-            $data_name = '';
-            $amount = $val->total_amount;
-            $data_name = 'facility';
-            $image_url = ($val->addson_facility_details->image ? $val->addson_facility_details->image->url : null);
-            // elseif ($val->addson_artist_person) {
-            //     $particular = $val->addson_artist_person->name;
-            //     $amount = $val->artist_amount;
-            // }
-            // dd($val->addson_facility_details);
+    //     foreach($summary->event_pre_booking_addson_details as $key => $val) {
+    //         $particular = '';
+    //         $image_url = '';
+    //         $data_name = '';
+    //         $amount = $val->total_amount;
+    //         $data_name = 'facility';
+    //         $image_url = ($val->addson_facility_details->image ? $val->addson_facility_details->image->url : null);
+    //         // elseif ($val->addson_artist_person) {
+    //         //     $particular = $val->addson_artist_person->name;
+    //         //     $amount = $val->artist_amount;
+    //         // }
+    //         // dd($val->addson_facility_details);
             
-            $facilityData[] = [
-                'facility_id' => $val->id,
-                'facility' => $val->addson_facility->name,
-                'facility_description' => $val->addson_facility_details->description,
-                'amount' => $val->addson_facility_details->price,
-                'facility_image_url' => $image_url,
-                // Add other relevant fields here
-            ];
+    //         $facilityData[] = [
+    //             'facility_id' => $val->id,
+    //             'facility' => $val->addson_facility->name,
+    //             'facility_description' => $val->addson_facility_details->description,
+    //             'amount' => $val->addson_facility_details->price,
+    //             'facility_image_url' => $image_url,
+    //             // Add other relevant fields here
+    //         ];
             
-        }
+    //     }
 
-        foreach($summary->event_pre_booking_addson_artist_person as $key => $val) {
-            // dd($val);
-            $artist_person = '';
-            $artist = '';
-            $image_url = '';
-            $data_name = '';
-            $amount = $val->addson_artist_amount;
-            if ($val->addson_artist_person) {
-                $artist_person = $val->addson_artist_person->name;
-                $artist_person_image_url = ($val->addson_artist_person->image ? asset('storage/' . $val->addson_artist_person->image->url) : null );
-                $data_name = 'additionalArtistPerson';
-            }
-            $artistParticular = '';
+    //     foreach($summary->event_pre_booking_addson_artist_person as $key => $val) {
+    //         // dd($val);
+    //         $artist_person = '';
+    //         $artist = '';
+    //         $image_url = '';
+    //         $data_name = '';
+    //         $amount = $val->addson_artist_amount;
+    //         if ($val->addson_artist_person) {
+    //             $artist_person = $val->addson_artist_person->name;
+    //             $artist_person_image_url = ($val->addson_artist_person->image ? asset('storage/' . $val->addson_artist_person->image->url) : null );
+    //             $data_name = 'additionalArtistPerson';
+    //         }
+    //         $artistParticular = '';
     
-            if ($val->addson_artist) {
-                $artist = $val->addson_artist->name;
-                $artist_image_url = ($val->addson_artist->image ? $val->addson_artist->image->url : null );
-                $data_name = 'additionalArtist';
-            }
+    //         if ($val->addson_artist) {
+    //             $artist = $val->addson_artist->name;
+    //             $artist_image_url = ($val->addson_artist->image ? $val->addson_artist->image->url : null );
+    //             $data_name = 'additionalArtist';
+    //         }
             
-            $pdfData[] = [
-                'additional_id' => $val->id,
-                'artist_person' => $artist_person,
-                'artist' => $artist,
-                'amount' => $amount,
-                'artist_person_image_url' => $artist_person_image_url,
-                'artist_image_url' => $artist_image_url,
-                    ];
+    //         $pdfData[] = [
+    //             'additional_id' => $val->id,
+    //             'artist_person' => $artist_person,
+    //             'artist' => $artist,
+    //             'amount' => $amount,
+    //             'artist_person_image_url' => $artist_person_image_url,
+    //             'artist_image_url' => $artist_image_url,
+    //                 ];
             
-        }
-        $additional_data = array_merge($facilityData,$pdfData);
-        // dd($additional_data);
+    //     }
+    //     $additional_data = array_merge($facilityData,$pdfData);
+    //     // dd($additional_data);
 
-        $pdf = PDF::loadView('PDF.myPDF', [
-            'basicDetails' => $basicDetails,
-            'additional_data' => $additional_data,
-            'groupedPdfData' => $groupedPdfData
-        ]);
+    //     $pdf = PDF::loadView('PDF.myPDF', [
+    //         'basicDetails' => $basicDetails,
+    //         'additional_data' => $additional_data,
+    //         'groupedPdfData' => $groupedPdfData
+    //     ]);
     
-        return $pdf->output();
-    }
+    //     return $pdf->output();
+    // }
 
     public function get_property_with_location(Request $request)
     {
@@ -377,13 +439,13 @@ class EventManagementController extends Controller
         $user = auth()->user();
         $user_id = $user->id;
         $pending_summary = EventPreBookingSummary::with(['user', 'pre_booking_summary_status', 'property', 'event_pre_booking_details', 'event_pre_booking_addson_details', 'event_pre_booking_addson_artist_person' ])
-            ->where('user_id', $user_id)->where('pre_booking_summary_status_id', 1)->get();
+            ->where('user_id', $user_id)->where('pre_booking_summary_status_id', 1)->orderBy('created_at', 'desc')->get();
 
         $cancelled_summary = EventPreBookingSummary::with(['user', 'pre_booking_summary_status', 'property', 'event_pre_booking_details', 'event_pre_booking_addson_details', 'event_pre_booking_addson_artist_person' ])
-        ->where('user_id', $user_id)->whereIn('pre_booking_summary_status_id',[3,4])->get();
+        ->where('user_id', $user_id)->whereIn('pre_booking_summary_status_id',[3,4])->orderBy('created_at', 'desc')->get();
 
         $approved_summary = EventBookingSummary::with(['user', 'booking_details','bookingAddsonDetails', 'property', 'booking_payment_summary','bookingAddsonArtistPerson', 'booking_payment_summary.booking_payment_details'])
-            ->where('user_id', $user_id)->get();
+            ->where('user_id', $user_id)->orderBy('created_at', 'desc')->get();
 
         return response()->json([
             'success' => true,

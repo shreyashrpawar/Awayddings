@@ -109,13 +109,13 @@ class PreBookingController extends Controller
         $user = auth()->user();
         $user_id = $user->id;
         $pending_summary = PreBookingSummary::with(['user', 'pre_booking_summary_status', 'property', 'pre_booking_details', 'pre_booking_details.hotel_chargable_type'])
-            ->where('user_id', $user_id)->where('pre_booking_summary_status_id', 1)->get();
+            ->where('user_id', $user_id)->where('pre_booking_summary_status_id', 1)->orderBy('created_at', 'desc')->get();
 
         $cancelled_summary = PreBookingSummary::with(['user', 'pre_booking_summary_status', 'property', 'pre_booking_details', 'pre_booking_details.hotel_chargable_type'])
-            ->where('user_id', $user_id)->whereIn('pre_booking_summary_status_id', [3, 4])->get();
+            ->where('user_id', $user_id)->whereIn('pre_booking_summary_status_id', [3, 4])->orderBy('created_at', 'desc')->get();
 
         $approved_summary = BookingSummary::with(['user', 'booking_details', 'booking_details.hotel_chargable_type', 'property', 'booking_payment_summary', 'booking_payment_summary.booking_payment_details'])
-            ->where('user_id', $user_id)->get();
+            ->where('user_id', $user_id)->orderBy('created_at', 'desc')->get();
 
         return response()->json([
             'success' => true,
