@@ -26,7 +26,7 @@
                         $display = 'display:none';
                 @endphp
                 <div class="col-md-3 mb-4 form-inline text-right" style="@php echo $display; @endphp">
-                    <a href="{{ route('pre-bookings.edit',$summary->id) }}{{-- url('pre-bookings.edit', ['id' => $summary->id]) --}}" class="btn btn-sm btn-primary">Edit</a>
+                    <a href="{{ route('pre-bookings.edit',$summary->id) }}" class="btn btn-sm btn-primary">Edit</a>
                 </div>
 
 
@@ -59,6 +59,15 @@
                             <td> {{ $summary->bride_name }}</td>
                             <th>Groom Name</th>
                             <td> {{ $summary->groom_name }}</td>
+                             <!-- Empty column to align the button -->
+                             <td colspan="1"></td>
+                            <td>
+                                @if ($firstMatchingEventPrebookingId)
+                                    <div class="col-md-3 mb-4 form-inline text-right">
+                                        <a href="{{ route('event-pre-booking.show',$firstMatchingEventPrebookingId) }}" class="btn btn-sm btn-outline-primary">View Wedding planing Booking Details</a>
+                                    </div>
+                                @endif
+                            </td>
                         </tr>
                     </table>
                     <table class="table table-sm" id="preBookingDetails_table">

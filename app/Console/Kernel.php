@@ -10,7 +10,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\ApprovalExpirationCron::class,
         Commands\EventEMIPaymentCron::class,
-        Commands\evetCancelBookingCron::class,
+        Commands\EventCancelBookingCron::class,
     ];
     /**
      * Define the application's command schedule.

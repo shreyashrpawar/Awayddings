@@ -30,6 +30,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Jobs\SendCongratsEmail;
 use App\Mail\BookingCancelEmail;
 use App\Jobs\SendApprovalEmail;
+use App\Models\PreBookingSummary;
 use DB;
 
 class EventPreBookingSummaryController extends Controller
@@ -95,6 +96,28 @@ class EventPreBookingSummaryController extends Controller
             'event_pre_booking_addson_details',
             'event_pre_booking_addson_artist_person',
         ])->find($id);
+
+        $prebookings = PreBookingSummary::where('user_id', $summary->user->id)->get();
+
+        $EventCheckIn = $summary->check_in;
+        $EventCheckOut = $summary->check_out;
+
+        // Initialize an array to store matching event prebooking IDs
+        $firstMatchingPrebookingId = '';
+
+        // Check if the check-in date of the current prebooking falls within the duration of any existing event prebooking
+        foreach ($prebookings as $prebooking) {
+            $vanueCheckIn = $prebooking->check_in;
+            $vanueCheckout= $prebooking->check_out;
+
+            if ($vanueCheckIn >= $EventCheckIn && $EventCheckIn <= $vanueCheckout) {
+                // The check-in date of the current prebooking falls within the duration of an existing event prebooking
+                // Add the matching event prebooking ID to the array
+                $firstMatchingPrebookingId = $prebooking->id;
+                break;
+            }
+        }
+        // dd($firstMatchingPrebookingId);
         
         $total = 0;
         $key = 0; 
@@ -221,7 +244,7 @@ class EventPreBookingSummaryController extends Controller
         }
             
         $pre_booking_summary_status = PreBookingSummaryStatus::pluck('name','id')->all();
-       return view('app.event_prebooking.show',compact('summary','pre_booking_summary_status', 'data'));
+       return view('app.event_prebooking.show',compact('summary','pre_booking_summary_status', 'data', 'firstMatchingPrebookingId'));
     }
 
     /**
@@ -269,7 +292,10 @@ class EventPreBookingSummaryController extends Controller
             // create a record in the booking
             $additional_discount = $request->additional_discount ?? 0;
             $installments        = $request->installments;
-            $total_amount = $pre_booking_summary->total_amount - $additional_discount;
+            $total_amount = floatval($pre_booking_summary->total_amount);
+            $additional_discount = floatval($additional_discount);
+            $result = $total_amount - $additional_discount;
+            // $total_amount = $pre_booking_summary->total_amount - $additional_discount;
             $booking_data = [
                 'user_id' => $pre_booking_summary->user_id,
                 'em_prebooking_summaries_id' => $pre_booking_summary->id,
@@ -278,7 +304,7 @@ class EventPreBookingSummaryController extends Controller
                 'check_out' => $pre_booking_summary->check_out,
                 'amount' => $pre_booking_summary->total_amount,
                 'discount' => $additional_discount,
-                'total_amount' => $total_amount,
+                'total_amount' => $result,
                 'pax' => $pre_booking_summary->pax,
                 'admin_remarks' =>$admin_remarks,
                 'status' => 1,

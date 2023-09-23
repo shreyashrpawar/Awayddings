@@ -479,7 +479,8 @@ class PropertyController extends Controller
                 'name' => $val->hotel_charagable_type->name,
                 'category_id' => $val->hotel_charagable_type_id,
                 'price' => $val->amount,
-                'occupancy_threshold' => $val->chargable_percentage
+                'occupancy_threshold' => $val->chargable_percentage,
+                'chargable_type_is_starter' => $val->hotel_charagable_type->is_single_qty
             ];
             array_push($temp_rate, $temp_data);
         }

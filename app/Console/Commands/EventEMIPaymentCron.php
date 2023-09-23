@@ -57,7 +57,7 @@ class EventEMIPaymentCron extends Command
                 $bookings = EventBookingSummary::find($booking_payment->em_booking_summaries_id);
                 $user = User::find($bookings->user_id);
                 $details = ['email' => $user->email,'mailbtnLink' => '', 'mailBtnText' => '',
-                        'mailTitle' => 'Reminder For EMI Payments', 'mailSubTitle' => 'Reminder for EMI Payments from Awayddings.', 'mailBody' => 'I hope that you are well. I am contacting you on behalf of Awayddings with regard to the following invoice:'.$emi->amount.'This invoice is due for payment on '.$emi->date.'. Please could you kindly confirm receipt of this invoice and advise as to whether payment has been scheduled.!'];
+                        'mailTitle' => 'Reminder For EMI Payments', 'mailSubTitle' => 'Reminder for EMI Payments from Awayddings.', 'mailBody' => 'I hope that you are well. I am contacting you on behalf of Awayddings with regard to the following invoice: Rs. '.$emi->amount.' This invoice is due for payment on '.$emi->date.'. Please could you kindly confirm receipt of this invoice and advise as to whether payment has been scheduled.!'];
                 SendEmailEmiPayments::dispatch($details);
                 
                 $emi->email_sent = 1;

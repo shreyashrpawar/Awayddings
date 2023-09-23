@@ -59,6 +59,15 @@
                             <td> {{ $summary->bride_name }}</td>
                             <th>Groom Name</th>
                             <td> {{ $summary->groom_name }}</td>
+                             <!-- Empty column to align the button -->
+                             <td colspan="1"></td>
+                            <td>
+                                @if ($firstMatchingPrebookingId)
+                                    <div class="col-md-3 mb-4 form-inline text-right">
+                                        <a href="{{ route('pre-bookings.show',$firstMatchingPrebookingId) }}" class="btn btn-sm btn-outline-primary">View Vanue/ Resort booking Details</a>
+                                    </div>
+                                @endif
+                            </td>
                         </tr>
                     </table>
                     <table class="table table-sm" id="preBookingDetails_table">

@@ -153,7 +153,7 @@ class generateEventSummaryPdf implements ShouldQueue
         $additional_data = array_merge($facilityData,$pdfData);
         // dd($additional_data);
 
-        $pdf = PDF::loadView('PDF.myPDF', [
+        $pdf = PDF::loadView('pdf.myPDF', [
             'basicDetails' => $basicDetails,
             'additional_data' => $additional_data,
             'groupedPdfData' => $groupedPdfData

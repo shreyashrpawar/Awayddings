@@ -1,11 +1,13 @@
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
     <ul class="nav">
+        @hasrole('admin|superAdmin')
         <li class="nav-item">
             <a class="nav-link" href="{{ route('home') }}">
                 <i class="mdi mdi-clipboard-text-outline menu-icon"></i>
                 <span class="menu-title">Dashboard</span>
             </a>
         </li>
+        @endrole
         <li class="nav-item">
             <a class="nav-link collapsed" data-toggle="collapse" href="#ui-basic">
                 <i class="mdi mdi-office-building menu-icon"></i>
@@ -26,7 +28,7 @@
         <li class="nav-item">
             <a class="nav-link collapsed" data-toggle="collapse" href="#booking">
                 <i class="mdi mdi-seat-individual-suite menu-icon"></i>
-                <span class="menu-title">Bookings</span>
+                <span class="menu-title">Vanue/ Resort bookings</span>
                 <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="booking" style="">
@@ -42,10 +44,11 @@
             </div>
         </li>
 
+        @hasrole('admin|superAdmin')
         <li class="nav-item">
             <a class="nav-link collapsed" data-toggle="collapse" href="#event_management_submit">
                 <i class="mdi mdi-seat-individual-suite menu-icon"></i>
-                <span class="menu-title">Event Management Bookings</span>
+                <span class="menu-title">Wedding Planning bookings</span>
                 <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="event_management_submit" style="">
@@ -57,6 +60,7 @@
                 </ul>
             </div>
         </li>
+        @endrole
         @can('user show')
         <li class="nav-item">
             <a class="nav-link" href="{{ route('users.index') }}">
@@ -65,6 +69,7 @@
             </a>
         </li>
         @endcan
+        @hasrole('admin|superAdmin')
         <li class="nav-item">
             <a class="nav-link collapsed" data-toggle="collapse" href="#event_management">
                 <i class="mdi mdi-seat-individual-suite menu-icon"></i>
@@ -101,6 +106,7 @@
                 </ul>
             </div>
         </li>
+        @endrole
 
         @hasrole('admin|superAdmin')
         <li class="nav-item">

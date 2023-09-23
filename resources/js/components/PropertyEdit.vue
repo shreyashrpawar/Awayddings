@@ -219,7 +219,8 @@
                                                 >
                                             </div>
                                         </div>
-                                        <div class="col-md-4" v-if="mis.category_id != 1  && mis.category_id != 2 " >
+                                        <div class="col-md-4" v-if="mis.category_id != 1  && mis.category_id != 2 
+                                         &&  mis.chargable_type_is_starter != 1 >
                                             <div class="form-group">
                                                 <label>Charge applicable when room less than</label>
                                                 <input type="number" class="form-control"
