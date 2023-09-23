@@ -5,9 +5,6 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use DB;
 use App\Models\BookingDetail;
-use App\Models\BookingPaymentDetail;
-use App\Models\BookingPaymentSummary;
-use App\Models\PreBookingSummaryStatus;
 use App\Models\PreBookingSummary;
 use App\Models\BookingSummary;
 

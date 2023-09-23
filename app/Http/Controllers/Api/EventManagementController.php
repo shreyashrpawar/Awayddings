@@ -150,6 +150,8 @@ class EventManagementController extends Controller
                 $artist_amount = 0;
                 $decor_amount = 0;
                 $total_amount = 0;
+                $artist = '';
+                $decor = '';
                 if (isset($val['artist_person_id'])) {
 
                     $artist_person = ArtistPerson::where('id', $val['artist_person_id'])->first();
@@ -189,21 +191,21 @@ class EventManagementController extends Controller
                 try {
                     $prebookingdetails = EventPreBookingDetails::create($temp_data);
                     $dateString = $date->format('Y-m-d');
-                    // $groupedPdfData[$dateString][] = [
-                    //     'details_id' => $prebookingdetails->id,
-                    //     'event' => $prebookingdetails->events->name,
-                    //     'date' => $date,
-                    //     'time' => $val['start_time'] . ' - ' . $val['end_time'],
-                    //     'artist' => $artist,
-                    //     'decor' => $decor,
-                    //     'artist_amount' => $artist_amount,
-                    //     'decor_amount' => $decor_amount,
-                    //     'start_time' => $val['start_time'],
-                    //     'end_time' => $val['end_time'],
-                    //     'decor_image_url' => ($prebookingdetails->decoration && $prebookingdetails->decoration->image ? $prebookingdetails->decoration->image->url : null),
-                    //     'artist_image_url' => ($prebookingdetails->artistPerson && $prebookingdetails->artistPerson->image ? $prebookingdetails->artistPerson->image->url : null),
+                    $groupedPdfData[$dateString][] = [
+                        'details_id' => $prebookingdetails->id,
+                        'event' => $prebookingdetails->events->name,
+                        'date' => $date,
+                        'time' => $val['start_time'] . ' - ' . $val['end_time'],
+                        'artist' => $artist,
+                        'decor' => $decor,
+                        'artist_amount' => $artist_amount,
+                        'decor_amount' => $decor_amount,
+                        'start_time' => $val['start_time'],
+                        'end_time' => $val['end_time'],
+                        'decor_image_url' => ($prebookingdetails->decoration && $prebookingdetails->decoration->image ? $prebookingdetails->decoration->image->url : null),
+                        'artist_image_url' => ($prebookingdetails->artistPerson && $prebookingdetails->artistPerson->image ? $prebookingdetails->artistPerson->image->url : null),
 
-                    // ];
+                    ];
                     // print_r($groupedPdfData);
                 } catch (Throwable $e) {
                     print_r($temp_data);
@@ -284,8 +286,8 @@ class EventManagementController extends Controller
             DB::commit();
             // $details = ['data' => $pre_booking_summary->id];
             // generateEventSummaryPdf::dispatch($details);
-            // $job = new GenerateEventSummaryPdfJob($basicDetails, $groupedPdfData, $facilityData, $pdfData);
-            // dispatch($job);
+            $job = new GenerateEventSummaryPdfJob($basicDetails, $groupedPdfData, $facilityData, $pdfData);
+            dispatch($job);
             return response()->json([
                 'success' => true,
                 'message' => 'Data successfully inserted',
@@ -439,13 +441,13 @@ class EventManagementController extends Controller
         $user = auth()->user();
         $user_id = $user->id;
         $pending_summary = EventPreBookingSummary::with(['user', 'pre_booking_summary_status', 'property', 'event_pre_booking_details', 'event_pre_booking_addson_details', 'event_pre_booking_addson_artist_person' ])
-            ->where('user_id', $user_id)->where('pre_booking_summary_status_id', 1)->orderBy('created_at', 'desc')->get();
+            ->where('user_id', $user_id)->where('pre_booking_summary_status_id', 1)->get();
 
         $cancelled_summary = EventPreBookingSummary::with(['user', 'pre_booking_summary_status', 'property', 'event_pre_booking_details', 'event_pre_booking_addson_details', 'event_pre_booking_addson_artist_person' ])
-        ->where('user_id', $user_id)->whereIn('pre_booking_summary_status_id',[3,4])->orderBy('created_at', 'desc')->get();
+        ->where('user_id', $user_id)->whereIn('pre_booking_summary_status_id',[3,4])->get();
 
         $approved_summary = EventBookingSummary::with(['user', 'booking_details','bookingAddsonDetails', 'property', 'booking_payment_summary','bookingAddsonArtistPerson', 'booking_payment_summary.booking_payment_details'])
-            ->where('user_id', $user_id)->orderBy('created_at', 'desc')->get();
+            ->where('user_id', $user_id)->get();
 
         return response()->json([
             'success' => true,

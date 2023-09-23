@@ -258,7 +258,7 @@
                                 
                                     <tr>
                                         <th>{{ 1+ $loop->index }}</th>
-                                        <td id="installment_date{{ $val->installment_no }}" data-installment_date="{{ $val->date }}">{{ $val->date }}</td>
+                                        <td id="installment_date{{ $val->installment_no }}" data-installment_date="{{ $val->date }}">{{ \Carbon\Carbon::parse($val->date)->format('d-m-Y') }}</td>
                                         <td>{{ $val->installment_no }}</td>
                                         <td>{{ number_format($val->amount, 2, '.', ',') }}</td>
                                         <td>

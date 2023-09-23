@@ -10,7 +10,7 @@ use App\Models\EventBookingSummary;
 
 use Carbon\Carbon;
 
-class evetCancelBookingCron extends Command
+class EventCancelBookingCron extends Command
 {
     /**
      * The name and signature of the console command.

@@ -23,6 +23,7 @@ use App\Mail\RejectionMail;
 use Illuminate\Support\Facades\Mail;
 use App\Jobs\SendCongratsEmail;
 use App\Mail\BookingCancelEmail;
+use App\Models\EventPreBookingSummary;
 use DB;
 
 class PreBookingSummaryController extends Controller
@@ -81,8 +82,32 @@ class PreBookingSummaryController extends Controller
     {
         $summary = PreBookingSummary::with(['user','property','pre_booking_details','pre_booking_details.hotel_chargable_type','pre_booking_summary_status'])
             ->find($id);
+
+        $eventPrebookings = EventPreBookingSummary::where('user_id', $summary->user->id)->get();
+
+        $vanueCheckIn = $summary->check_in;
+        $vanueCheckOut = $summary->check_out;
+
+        // Initialize an array to store matching event prebooking IDs
+        $firstMatchingEventPrebookingId = '';
+
+        // Check if the check-in date of the current prebooking falls within the duration of any existing event prebooking
+        foreach ($eventPrebookings as $eventPrebooking) {
+            $eventCheckIn = $eventPrebooking->check_in;
+            $eventCheckOut = $eventPrebooking->check_out;
+
+            if ($vanueCheckIn >= $eventCheckIn && $eventCheckIn <= $vanueCheckOut) {
+                // The check-in date of the current prebooking falls within the duration of an existing event prebooking
+                // Add the matching event prebooking ID to the array
+                $firstMatchingEventPrebookingId = $eventPrebooking->id;
+                break;
+            }
+        }
+        // dd($matchingEventPrebookingIds);
+        
+        
         $pre_booking_summary_status = PreBookingSummaryStatus::pluck('name','id')->all();
-       return view('app.prebooking.show',compact('summary','pre_booking_summary_status'));
+       return view('app.prebooking.show',compact('summary','pre_booking_summary_status', 'firstMatchingEventPrebookingId'));
 
     }
 

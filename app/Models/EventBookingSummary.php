@@ -25,6 +25,8 @@ class EventBookingSummary extends Model
         'user_remarks',
         'admin_remarks',
         'status',
+        'booking_summaries_status',
+        'booking_summaries_status_remarks',
     ];
 
     public function user(){

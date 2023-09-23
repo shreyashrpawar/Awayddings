@@ -218,7 +218,8 @@
                                                 >
                                             </div>
                                         </div>
-                                        <div class="col-md-4" v-if="mis.category_id != 1  && mis.category_id != 2 ">
+                                        <div class="col-md-4" v-if="mis.category_id != 1  && mis.category_id != 2 
+                                         &&  mis.chargable_type_is_starter != 1">
                                             <div class="form-group">
                                                 <label>Charge applicable when room less than</label>
                                                 <input type="number" class="form-control"
@@ -339,14 +340,14 @@ export default {
         getPropertyChargableCategories() {
             axios.get('/api/property-chargable-category')
                 .then(resp => {
-                    console.log(resp.data.data);
                     this.property_chargable_categories = resp.data.data;
                     this.property_chargable_categories.forEach(pcc => {
                         this.form.property_charges.push({
                             'category_id': pcc.id,
                             'price': 0,
                             'name': pcc.name,
-                            'occupancy_threshold': 0
+                            'occupancy_threshold': 0,
+                            'chargable_type_is_starter' : pcc.is_single_qty
                         })
                     })
                 })
