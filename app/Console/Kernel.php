@@ -20,8 +20,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('eventCancelBooking:cron')
-        //          ->everyMinute();
+        // $schedule->command('bookings:cancel')->everyMinute();
+        // $schedule->command('EMIPayment:cron')->everyMinute();
+                 
         // $schedule->command('inspire')->hourly();
 
         $schedule->command('bookings:cancel')->dailyAt('12:00');

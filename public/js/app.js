@@ -5655,7 +5655,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this = this;
 
       axios.get('/api/property-chargable-category').then(function (resp) {
-        console.log(resp.data.data);
+        //console.log(resp.data.data);
         _this.property_chargable_categories = resp.data.data;
 
         _this.property_chargable_categories.forEach(function (pcc) {
@@ -5663,7 +5663,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             'category_id': pcc.id,
             'price': 0,
             'name': pcc.name,
-            'occupancy_threshold': 0
+            'occupancy_threshold': 0,
+            'chargable_type_is_starter' : pcc.is_single_qty
           });
         });
       });
@@ -31262,6 +31263,7 @@ var render = function () {
                               ]),
                               _vm._v(" "),
                               mis.category_id != 1 && mis.category_id != 2
+                             &&  mis.chargable_type_is_starter != 1
                                 ? _c("div", { staticClass: "col-md-4" }, [
                                     _c("div", { staticClass: "form-group" }, [
                                       _c("label", [
@@ -32440,6 +32442,7 @@ var render = function () {
                               ]),
                               _vm._v(" "),
                               mis.category_id != 1 && mis.category_id != 2
+                              && mis.chargable_type_is_starter != 1
                                 ? _c("div", { staticClass: "col-md-4" }, [
                                     _c("div", { staticClass: "form-group" }, [
                                       _c("label", [
