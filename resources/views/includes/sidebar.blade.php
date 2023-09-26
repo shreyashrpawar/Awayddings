@@ -28,7 +28,7 @@
         <li class="nav-item">
             <a class="nav-link collapsed" data-toggle="collapse" href="#booking">
                 <i class="mdi mdi-seat-individual-suite menu-icon"></i>
-                <span class="menu-title">Vanue/ Resort bookings</span>
+                <span class="menu-title">Venue/ Resort bookings</span>
                 <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="booking" style="">

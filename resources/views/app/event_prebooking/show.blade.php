@@ -64,7 +64,7 @@
                             <td>
                                 @if ($firstMatchingPrebookingId)
                                     <div class="col-md-3 mb-4 form-inline text-right">
-                                        <a href="{{ route('pre-bookings.show',$firstMatchingPrebookingId) }}" class="btn btn-sm btn-outline-primary">View Vanue/ Resort booking Details</a>
+                                        <a href="{{ route('pre-bookings.show',$firstMatchingPrebookingId) }}" class="btn btn-sm btn-outline-primary">View Venue/ Resort booking Details</a>
                                     </div>
                                 @endif
                             </td>
