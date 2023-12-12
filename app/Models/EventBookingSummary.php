@@ -29,6 +29,11 @@ class EventBookingSummary extends Model
         'booking_summaries_status_remarks',
     ];
 
+    protected $casts = [
+        'check_in' => 'datetime',
+        'check_out' => 'datetime'
+    ];
+
     public function user(){
         return $this->belongsTo('App\Models\User');
     }
@@ -48,7 +53,6 @@ class EventBookingSummary extends Model
         return $this->belongsTo('App\Models\EventCustomerBookingInvoice','id','em_booking_payment_summaries_id');
     }
 
-    protected $dates = ['check_in','check_out'];
 
     public function bookingPaymentDetails()
     {

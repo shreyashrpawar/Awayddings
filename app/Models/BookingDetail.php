@@ -17,7 +17,9 @@ class BookingDetail extends Model
         'threshold'
     ];
 
-    protected $dates= ['date'];
+    protected $casts = [
+        'date' => 'datetime'
+    ];
 
     public function hotel_chargable_type(){
         return $this->belongsTo('App\Models\HotelChargableType','hotel_chargable_type_id','id');

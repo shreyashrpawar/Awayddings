@@ -26,7 +26,10 @@ class EventPreBookingDetails extends Model
         'total_amount',
         'em_event_id',
     ];
-    protected $dates= ['date'];
+
+    protected $casts = [
+        'date' => 'datetime'
+    ];
 
     public function events()
     {

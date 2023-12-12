@@ -28,7 +28,12 @@ class EventPreBookingSummary extends Model
         'groom_name',
         'pdf_url'
     ];
-    protected $dates = ['check_in','check_out'];
+
+    protected $casts = [
+        'check_in' => 'datetime',
+        'check_out' => 'datetime'
+    ];
+
     public function user(){
         return $this->belongsTo('App\Models\User');
     }
