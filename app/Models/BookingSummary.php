@@ -58,6 +58,6 @@ class BookingSummary extends Model
 
     public function bookingPaymentDetails()
     {
-        return $this->hasOne(App\Models\BookingPaymentDetail::class, 'booking_summary_id');
+        return $this->hasOne(BookingPaymentDetail::class, 'booking_summary_id');
     }
 }
