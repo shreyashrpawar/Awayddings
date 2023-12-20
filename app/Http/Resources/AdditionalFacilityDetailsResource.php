@@ -18,7 +18,7 @@ class AdditionalFacilityDetailsResource extends JsonResource
              'id' =>  $this->id,
               'price' => $this->price,
               'description' => $this->description,
-              'image_url' =>$this->image->url,
+              'image_url' =>$this->image ? $this->image->url : '',
               //'artistsPersion' => ArtistPersonResource::collection($this->artist_person)
         ];
     }
