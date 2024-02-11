@@ -32,7 +32,7 @@ class LeadController extends Controller
      */
     public function index(Request $request)
     {
-        $leads = Leads::whereNull('deleted_at')->orderBy('id', 'desc')->get();
+        $leads = Leads::whereNull('deleted_at')->where('status', '!=', 'lost_general_inquiry')->orderBy('id', 'desc')->get();
         $leads_statuses = Leads::distinct('status')->get(['status'])->toArray();
         return view('app.leads.index', compact('leads', 'leads_statuses'));
     }
