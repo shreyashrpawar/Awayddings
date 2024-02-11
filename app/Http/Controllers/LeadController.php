@@ -16,6 +16,7 @@ use App\Models\RoomInclusion;
 use App\Models\User;
 use App\Models\UserVendorAlignment;
 use App\Models\VendorPropertyAlignment;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -32,7 +33,9 @@ class LeadController extends Controller
      */
     public function index(Request $request)
     {
-        $leads = Leads::whereNull('deleted_at')->where('status', '!=', 'lost_general_inquiry')->orderBy('id', 'desc')->get();
+        $leads = Leads::whereNull('deleted_at')->where('status', '!=', 'lost_general_inquiry')->whereBetween('created_at',
+            [Carbon::now()->subMonth(12), Carbon::now()]
+        )->orderBy('id', 'desc')->get();
         $leads_statuses = Leads::distinct('status')->get(['status'])->toArray();
         return view('app.leads.index', compact('leads', 'leads_statuses'));
     }
@@ -67,5 +70,14 @@ class LeadController extends Controller
     {
         Leads::find($id)->delete();
         return back()->with('success','Leads deleted successfully!');
+    }
+
+    public function lostLeads(Request $request)
+    {
+        $leads = Leads::whereNull('deleted_at')->where('status', '=', 'lost_general_inquiry')->whereBetween('created_at',
+            [Carbon::now()->subMonth(4), Carbon::now()]
+        )->orderBy('id', 'desc')->get();
+        $leads_statuses = Leads::distinct('status')->get(['status'])->toArray();
+        return view('app.leads.index', compact('leads', 'leads_statuses'));
     }
 }

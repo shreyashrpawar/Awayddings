@@ -26,6 +26,7 @@ Route::middleware(['guest'])->group(function () {
 
 Auth::routes(['register' => false]);
 Route::resource('users',\App\Http\Controllers\UserController::class);
+Route::get('/leads/lost-leads', [App\Http\Controllers\LeadController::class, 'lostLeads' ])->name('lost-leads');
 Route::resource('leads',\App\Http\Controllers\LeadController::class);
 Route::get('/email/verify/{user}', [\App\Http\Controllers\EmailVerificationController::class, 'verify'])
     ->name('email.verify')
@@ -36,7 +37,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('pre-bookings/test_booking_cancel_cron',[App\Http\Controllers\HomeController::class, 'test_cancel_booking_cron']);
     Route::get('test_emi_cron',[App\Http\Controllers\HomeController::class, 'test_emi_cron']);
-    
+
     Route::get('/change-password', [App\Http\Controllers\ChangePasswordController::class, 'index'])->name('change-password');
     Route::post('/change-password/submit', [App\Http\Controllers\ChangePasswordController::class, 'changePassword'])->name('change-password.submit');
     Route::delete('property/media',[App\Http\Controllers\PropertyController::class,'deletePropertyMedia']);
@@ -87,7 +88,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('lightandsound_update_status', [\App\Http\Controllers\LightandSoundsController::class, 'lightandsound_updateStatus'])->name('lightandsound_update_status');
 
     Route::resource('timeslots',App\Http\Controllers\TimeSlotsController::class);
-    Route::post('timeslots/update/{id}', [App\Http\Controllers\TimeSlotsController::class, 'update'])->name('timeslots.update'); 
+    Route::post('timeslots/update/{id}', [App\Http\Controllers\TimeSlotsController::class, 'update'])->name('timeslots.update');
     Route::post('timeslot_update_status', [\App\Http\Controllers\TimeSlotsController::class, 'timeslot_updateStatus'])->name('timeslot_update_status');
 
     // Route::resource('EmAddonFacility',App\Http\Controllers\AddonFacilityController::class);

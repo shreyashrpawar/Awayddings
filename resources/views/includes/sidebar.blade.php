@@ -54,9 +54,9 @@
             <div class="collapse" id="event_management_submit" style="">
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item"> <a class="nav-link" href="{{ route('event-pre-booking.index') }}">Pre Bookings</a></li>
-                
+
                     <li class="nav-item"> <a class="nav-link" href="{{ route('event-booking.index') }}">Bookings</a></li>
-                    
+
                 </ul>
             </div>
         </li>
@@ -79,9 +79,9 @@
             <div class="collapse" id="event_management" style="">
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item"> <a class="nav-link" href="{{ route('events.index') }}">Events</a></li>
-                
+
                     <!-- <li class="nav-item"> <a class="nav-link" href="{{ route('timeslots.index') }}">Timeslots</a></li> -->
-                    <!-- <li class="nav-item"> 
+                    <!-- <li class="nav-item">
                         <a class="nav-link collapsed" data-toggle="collapse" href="#artist">
                             <i class="mdi mdi-seat-individual-suite menu-icon"></i>
                             <span class="menu-title">Artist</span>
@@ -90,7 +90,7 @@
                         <div class="collapse" id="artist" style="">
                             <ul class="nav flex-column sub-menu">
                                 <li class="nav-item"> <a class="nav-link" href="{{ route('artists.index') }}">Artists</a></li>
-                            
+
                                 <li class="nav-item"> <a class="nav-link" href="{{ route('artist_person') }}">Artist Person</a></li>
 
                             </ul>
@@ -101,7 +101,7 @@
                     <li class="nav-item"> <a class="nav-link" href="{{ route('decorations.index') }}">Decorations</a></li>
                     <!-- <li class="nav-item"> <a class="nav-link" href="{{-- route('lightandsounds.index') --}}">Light and Sounds</a></li> -->
                     <li class="nav-item"> <a class="nav-link" href="{{ route('addon_facilities.index') }}">Facilty</a></li>
-                    
+
 
                 </ul>
             </div>
@@ -113,6 +113,14 @@
             <a class="nav-link" href="{{ route('leads.index') }}">
                 <i class="mdi mdi-account-group-outline menu-icon"></i>
                 <span class="menu-title">Ads Leads</span>
+            </a>
+        </li>
+        @endrole
+        @hasrole('admin|superAdmin')
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('lost-leads') }}">
+                <i class="mdi mdi-account-group-outline menu-icon"></i>
+                <span class="menu-title">Lost Leads</span>
             </a>
         </li>
         @endrole
