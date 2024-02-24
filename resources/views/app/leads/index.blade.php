@@ -72,7 +72,7 @@
                                 <td>{{ $val->bride_groom }}</td>
                                 <td>{{ $val->wedding_date }}</td>
                                 <td>{{ $val->pax }}</td>
-                                <td>{{ strlen($val->remarks) > 0 ? 'Yes': 'No'}}</td>
+                                <td>{{ strlen($val->remarks) > 0 ? $val->remarks: 'No Remarks Found'}}</td>
                                 <td>{{ date('d-m-Y', strtotime($val->created_at))}}</td>
                                 <td>
                                     @if($val->status == 'new')
@@ -166,21 +166,16 @@
                               method="post">
                             {{ method_field('PATCH') }}
                             {{ csrf_field() }}
-                            <label>Current Status: <b>{{strtoupper($val->status)}}</b></label>
+                            <label>Current Status: <b>{{ucwords(str_replace('_', ' ', $val->status))}}</b></label>
                             <div class="form-group">
                                 <label>Update Status to</label>
                                 <select name="lead_status" id="lead_status" class="form-control">
-                                    <option value="recce_planned">
-                                        Recce Planned
+                                <option value="" disabled selected>Select Status</option>
+                                @foreach(Leads::STATUS_OPTIONS as $option)
+                                    <option value="{{$option}}" {{ $val->status == $option ? 'selected' : '' }}>
+                                        {{ ucwords(str_replace('_', ' ', $option)) }}
                                     </option>
-                                    <option value="recce_done">Recce Done
-                                    </option>
-                                    <option value="under_discussion">Under Discussion</option>
-                                    <option value="booked">Booked</option>
-                                    <option value="lost_general_inquiry">Lost General Inquiry</option>
-                                    <option value="call_not_picked">Call Not Picked</option>
-                                    <option value="call_back">Call Back</option>
-                                    <option value="send_to_decor">Send To Decor Team</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="form-group">
@@ -290,7 +285,8 @@
                 "searching": true,
                 "ordering": true,
                 "info": true,
-                "buttons": ["csv", "pdf", "print"]
+                "stateSave": true ,
+                "buttons": ["csv", "pdf", "print"],  
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
         });
     </script>
