@@ -51,25 +51,25 @@
                     <tbody>
                     @foreach($leads as $key => $val)
                         @if($val->status == 'new')
-                            <tr style="background: whitesmoke">
+                            <tr  id="row_{{ $val->id }}" style="background: whitesmoke">
                         @elseif( $val->status == 'recce_planned' or $val->status == 'potential_recce' or $val->status == 'recce_done')
-                            <tr style="background: #7cfffc">
+                            <tr id="row_{{ $val->id }}" style="background: #7cfffc">
                         @elseif( $val->status == 'lost_general_inquiry')
-                            <tr style="background: #ff8989">
+                            <tr id="row_{{ $val->id }}" style="background: #ff8989">
                         @elseif( $val->status == 'under_discussion')
-                            <tr style="background: #ffea99">
+                            <tr id="row_{{ $val->id }}" style="background: #ffea99">
                         @elseif( $val->status == 'call_not_picked')
-                            <tr style="background: lightsteelblue">
+                            <tr id="row_{{ $val->id }}" style="background: lightsteelblue">
                         @elseif( $val->status == 'call_back' or  $val->status == 'send_to_decor')
-                            <tr style="background: lightgreen">
+                            <tr id="row_{{ $val->id }}" style="background: lightgreen">
                         @else
-                            <tr style="background: #b9fd84">
+                            <tr id="row_{{ $val->id }}" style="background: #b9fd84">
                                 @endif
                                 <th>{{ $loop->index + 1}}</th>
                                 <td>{{ $val->name }}</td>
                                 <td>{{ $val->email }}</td>
                                 <td>{{ $val->mobile }}</td>
-                                <td>{{ $val->bride_groom }}</td>
+                                <td >{{ $val->bride_groom }}</td>
                                 <td>{{ $val->wedding_date }}</td>
                                 <td>{{ $val->pax }}</td>
                                 <td>{{ strlen($val->remarks) > 0 ? $val->remarks: 'No Remarks Found'}}</td>
@@ -163,18 +163,19 @@
                     <div class="modal-body">
                         <form id="edit-lead-form-{{$val->id}}"
                               action="{{ route('leads.update', ['lead' => $val->id]) }}"
-                              method="post">
+                              method="post" class="update-lead-form">
                             {{ method_field('PATCH') }}
                             {{ csrf_field() }}
                             <label>Current Status: <b>{{ucwords(str_replace('_', ' ', $val->status))}}</b></label>
                             <div class="form-group">
                                 <label>Update Status to</label>
                                 <select name="lead_status" id="lead_status" class="form-control">
-                                <option value="" disabled selected>Select Status</option>
-                                @foreach(Leads::STATUS_OPTIONS as $option)
-                                    <option value="{{$option}}" {{ $val->status == $option ? 'selected' : '' }}>
-                                        {{ ucwords(str_replace('_', ' ', $option)) }}
-                                    </option>
+                                    <option value="" disabled selected>Select Status</option>
+                                    @foreach($leads_statuses as $status => $options)
+                                        <option value="{{ $status }}" data-background="{{ $options['background'] }}"
+                                        data-badge="{{ $options['badge'] }}" {{ $val->status == $status ? 'selected' : '' }}>
+                                        {{ ucwords(str_replace('_', ' ', $status)) }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -289,5 +290,92 @@
                 "buttons": ["csv", "pdf", "print"],  
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
         });
-    </script>
+
+    
+    // Event listener for Update
+
+     $(document).ready(function () {
+    $('.update-lead-form').submit(function (event) {
+        event.preventDefault();
+        var formData = $(this).serialize();
+        var url = $(this).attr('action');
+        
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: formData,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') 
+            },
+            success: function (response) {
+                var updatedLead = response.lead; 
+                updateLeadInTable(updatedLead); // Update lead data in the table
+                updateRemarkInModal(updatedLead); // Update lead data in the modal
+                $('#editLead-' + updatedLead.id).modal('hide');  //Close the modal after editing 
+            },
+            error: function (xhr, status, error) {
+                console.error('Error updating lead:', error);
+            }
+        });
+    });  
+
+    //update remark, badge , status, background color in datatable
+
+    function updateLeadInTable(updatedLead) {
+   
+    var parentRow = $('#row_' + updatedLead.id);
+    var childRow = parentRow.next('.child');
+    var dtrDetails = childRow.find('.dtr-details');   
+    var remarkSpan = dtrDetails.find('.dtr-title:contains("Remark")').next('.dtr-data');
+    var statusSpan = dtrDetails.find('.dtr-title:contains("Status")').next('.dtr-data');
+    remarkSpan.attr('data-original', updatedLead.remarks);
+    remarkSpan.text(updatedLead.remarks);
+  
+    statusSpan.find('.badge').text(updatedLead.status);
+    parentRow.css('background-color', updatedLead.background);
+    statusSpan.find('.badge').removeClass().addClass('badge').addClass(updatedLead.badge);
+     // Update remark in Parent Row
+    var remarksCell = parentRow.find('td:nth-child(8)');
+    remarksCell.text(updatedLead.remarks);
+    // Update Status in Parent Row
+    var statusCell = parentRow.find('td:nth-child(10)');
+    statusCell.html('<span class="badge ' + updatedLead.badge + '">' + updatedLead.status + '</span>');
+    }
+
+    //update remark in view remark modal
+
+    function updateRemarkInModal( updatedLead) {
+
+        var modal = $('#viewRemark-' + updatedLead.id);
+        var modalBody = modal.find('.modal-body');
+        modalBody.find('p').text(updatedLead.remarks);
+        
+     
+    }
+
+    // Event listener for when the child row is expanded
+
+    var table = $('#example1').DataTable();
+     
+    $('#example1 tbody').on('click', 'th.dtr-control', function() {
+        var row = table.row($(this).closest('tr'));
+        
+        if (row.child.isShown()) {
+            // Child row is expanded
+            $(document).trigger('childRowExpanded', row.data());
+            var parentRow = $(this).closest('tr');
+            var remarksCell = parentRow.find('td:nth-child(8)');
+            var remarkSpan = row.child().find('.dtr-title:contains("Remark")').next('.dtr-data');
+            remarkSpan.text(remarksCell.text());
+            var statusCell = parentRow.find('td:nth-child(10)'); // Get the status cell from parent row
+            var childStatusSpan = row.child().find('.dtr-title:contains("Status")').next('.dtr-data').find('.badge');
+            var childStatus = statusCell.find('.badge').text(); // Get the status from parent row
+            childStatusSpan.text(childStatus); // Update the status in the child row
+            var childBadge = statusCell.find('.badge').attr('class'); 
+            childStatusSpan.removeClass().addClass(childBadge);// Get the badge class from parent row
+        } 
+    });
+
+});
+</script>
 @endsection

@@ -238,7 +238,7 @@ return [
         'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
         'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
-        'Leads' => App\Models\Leads::class,
+        'Leads' => App\Models\Leads::class,    //Lead Model Alias
 
     ],
 

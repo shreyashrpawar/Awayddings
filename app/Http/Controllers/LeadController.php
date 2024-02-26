@@ -36,7 +36,7 @@ class LeadController extends Controller
         $leads = Leads::whereNull('deleted_at')->where('status', '!=', 'lost_general_inquiry')->whereBetween('created_at',
             [Carbon::now()->subMonth(12), Carbon::now()]
         )->orderBy('id', 'desc')->get();
-        $leads_statuses = Leads::distinct('status')->get(['status'])->toArray();
+        $leads_statuses =  $leadsStatuses = Leads::STATUS_OPTIONS;
         return view('app.leads.index', compact('leads', 'leads_statuses'));
     }
 
@@ -46,7 +46,26 @@ class LeadController extends Controller
         $lead->status = $request->lead_status;
         $lead->remarks = $request->lead_remarks;
         $lead->save();
-        return back()->with('success', 'Lead updated successfully!');
+        $leadStatus = $lead->status;
+        
+        $leadOptions = Leads::STATUS_OPTIONS[$leadStatus] ?? null;
+        $leadBackground = $leadOptions['background'] ?? null;
+        $leadBadge = $leadOptions['badge'] ?? null;
+    
+        $responseData = [
+            'id' => $lead->id,
+            'status' => $leadStatus,
+            'remarks' => $lead->remarks,
+            'background' => $leadBackground,
+            'badge' => $leadBadge,
+        ];
+    
+        // Return the updated lead data along with success message
+        return response()->json([
+            'success' => true,
+            'message' => 'Lead updated successfully!',
+            'lead' => $responseData,
+        ]);
     }
 
     public function store(Request $request)

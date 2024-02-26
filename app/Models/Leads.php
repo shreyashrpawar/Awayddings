@@ -14,13 +14,37 @@ class Leads extends Model
     
 
     const STATUS_OPTIONS = [
-        'recce_planned',
-        'recce_done',
-        'under_discussion',
-        'booked',
-        'lost_general_inquiry',
-        'call_not_picked',
-        'call_back',
-        'send_to_decor'
+        'recce_planned' => [
+            'background' => '#7cfffc',
+            'badge' => 'badge-info',
+        ],
+        'recce_done' => [
+            'background' => '#7cfffc',
+            'badge' => 'badge-info',
+        ],
+        'under_discussion' => [
+            'background' => '#ffea99',
+            'badge' => 'badge-warning',
+        ],
+        'booked' => [
+            'background' => '#b9fd84',
+            'badge' => 'badge-success',
+        ],
+        'lost_general_inquiry' => [
+            'background' => '#ff8989',
+            'badge' => 'badge-danger',
+        ],
+        'call_not_picked' => [
+            'background' => 'lightsteelblue',
+            'badge' => 'badge-secondary',
+        ],
+        'call_back' => [
+            'background' => 'lightgreen',
+            'badge' => 'badge-success',
+        ],
+        'send_to_decor' => [
+            'background' => 'lightgreen',
+            'badge' => 'badge-success',
+        ],
     ];
 }
