@@ -12,6 +12,13 @@
         .custom-select {
             width: 55px !important;
         }
+        .toast {
+            position: fixed;
+            top: 10%; /* Place the toast at 50% from the top of the viewport */
+            left: 55%; /* Place the toast at 50% from the left of the viewport */
+            transform: translate(-50%, -50%); /* Center the toast horizontally and vertically */
+            z-index: 1000; /* Ensure the toast appears above other elements */
+        }
     </style>
 @endsection
 @section('contents')
@@ -260,6 +267,17 @@
             </div>
         </div>
     </div>
+    <div class="toast border border-success rounded" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="true" data-delay="1200">
+        <div class="toast-header bg-success text-white">
+            <strong class="mr-auto">Success</strong>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    <div class="toast-body">
+        <i class="fas fa-check-circle mr-2"></i> Lead updated successfully.
+    </div>
+</div>
 @endsection
 
 @section('js')
@@ -312,6 +330,7 @@
                 updateLeadInTable(updatedLead); // Update lead data in the table
                 updateRemarkInModal(updatedLead); // Update lead data in the modal
                 $('#editLead-' + updatedLead.id).modal('hide');  //Close the modal after editing 
+                $('.toast').toast('show'); 
             },
             error: function (xhr, status, error) {
                 console.error('Error updating lead:', error);
