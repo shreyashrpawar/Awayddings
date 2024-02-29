@@ -65,12 +65,13 @@ class HomeController extends Controller
             $property_id =  VendorPropertyAlignment::where('vendor_id',$vendor_id)->pluck('property_id')->all();
             $bookings->whereIn('property_id',$property_id);
         }
-
+        $startDate = Carbon::now()->subMonth(12);
+        $endDate = Carbon::now();
         $leads_count = Leads::select(DB::raw('count(*) as count, status'))
-            ->groupBy('status')
-            ->orderBy('count', 'DESC')
-            ->get()
-            ->toArray();
+        ->whereNull('deleted_at')
+        ->whereBetween('created_at', [$startDate, $endDate])
+        ->groupBy('status')
+        ->get();
         $bookings_count = $bookings->count();
 
         return view('home', compact('properties_count','pre_bookings_count','bookings_count', 'leads_count'));
