@@ -32,7 +32,7 @@ class PermissionsController extends Controller
         $request->validate([
             'newRole' => 'required|string|unique:roles,name|max:255',
         ]);
-        dd('here');
+
         Role::create(['name' => $request->newRole]);
 
         return redirect()->route('permissions.index')
