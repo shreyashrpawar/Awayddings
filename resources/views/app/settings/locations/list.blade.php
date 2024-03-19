@@ -17,9 +17,11 @@
                 <div class="col-md-6">
                     <h4 class="card-title text-uppercase">Locations List</h4>
                 </div>
+                @can('Settings-Locations-create')
                 <div class="col-md-6 text-right">
                     <a href="{{ route('locations.create') }}" class="btn btn-sm btn-primary">Add</a>
                 </div>
+                @endcan
             </div>
             <div class="table-responsive">
                 <table class="table" id="example1">
@@ -49,7 +51,9 @@
                             <td>
                                 <div class="btn-group">
                                     <a href="{{ route('locations.show',$val->id) }}" class="btn btn-sm btn-outline-primary">View</a>
+                                    @can('Settings-Locations-update')
                                     <a href="{{ route('locations.edit',$val->id) }}" class="btn btn-sm btn-outline-warning">Edit</a>
+                                    @endcan
                                 </div>
 
                             </td>

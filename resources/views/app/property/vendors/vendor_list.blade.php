@@ -19,9 +19,11 @@
                 <div class="col-md-6">
                     <h4 class="card-title text-uppercase">Vendors List</h4>
                 </div>
+                @can('property-vendors-create')
                 <div class="col-md-6 text-right">
                     <a href="{{ route('vendors.create') }}" class="btn btn-sm btn-primary">Add</a>
                 </div>
+                @endcan
             </div>
 
 
@@ -55,10 +57,13 @@
                                 @endif
                             </td>
                             <td>
+
                                 <div class="btn-group">
                                     <a href="{{ route('vendors.show',$val->id) }}" class="btn btn-sm btn-outline-primary">View</a>
+                                    @can('property-vendors-update')
                                     <a href="{{ route('vendors.edit',$val->id) }}" class="btn btn-sm btn-outline-success">Edit</a>
                                     <a href="{{ url('property/vendor/'.$val->id.'/associate') }}" class="btn btn-sm btn-outline-warning">Associate</a>
+                                    @endcan
                                 </div>
 
                             </td>

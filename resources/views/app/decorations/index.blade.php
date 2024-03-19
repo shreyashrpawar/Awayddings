@@ -17,9 +17,11 @@
                 <div class="col-md-6">
                     <h4 class="card-title text-uppercase">Decorations</h4>
                 </div>
+                @can('Event-Management-Decorations-create')  
                 <div class="col-md-6 text-right">
                     <a href="{{ route('decorations.create') }}" class="btn btn-sm btn-primary">Add</a>
                 </div>
+                @endcan
             </div>
             <div class="table-responsive">
                 <table class="table" id="example1">
@@ -53,18 +55,25 @@
                                         No Events
                                     @endif
                                 </td>
-                                
+                               
                                 <td>
+                                @can('Event-Management-Decorations-update')  
                                     <button class="status-toggle btn btn-sm {{ $val->status == 1 ? 'btn-outline-success' : 'btn-outline-danger' }}" data-id="{{ $val->id }}">
                                         {{ $val->status == 1 ? 'Active' : 'Inactive' }}
                                     </button>
+                                    @else
+                                        <button class="btn btn-sm {{ $val->status == 1 ? 'btn-outline-success disabled' : 'btn-outline-danger disabled' }}" disabled>
+                                            {{ $val->status == 1 ? 'Active' : 'Inactive' }}
+                                        </button>
+                                @endcan    
                                 </td>
 
                                 <td>
+                                @can('Event-Management-Decorations-update')  
                                     <div class="btn-group">
                                         <a href="{{ route('decorations.edit',$val->id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
                                     </div>
-
+                                @endcan  
                                 </td>
                             </tr>
 

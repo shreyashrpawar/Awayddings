@@ -58,7 +58,7 @@
                                 </td>
                                 <td>
                                     <div class="btn-group">
-                                        @can('property show')
+                                        @can('property-read')
                                             <a href="{{ route('pre-bookings.show',$val->id) }}" class="btn btn-sm btn-outline-primary">View</a>
                                         @endcan
 

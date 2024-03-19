@@ -10,7 +10,7 @@
                     </h4>
                 </div>
 
-                @can('pre-booking update')
+                @can('Wedding-Planning-Bookings-Pre-Bookings-update')
                     <div class="col-md-3 mb-4 form-inline">
                         <label for="" class="font-weight-bold text-uppercase">Current status &nbsp;</label>
                         <select name="new_status" id="new_status" class="form-control form-control-sm">
@@ -25,10 +25,11 @@
                     if($summary->pre_booking_summary_status_id == 3 || $summary->pre_booking_summary_status_id == 4)
                         $display = 'display:none';
                 @endphp
+                @can('Wedding-Planning-Bookings-Pre-Bookings-update')
                 <div class="col-md-3 mb-4 form-inline text-right" style="@php echo $display; @endphp">
                     <a href="{{ route('event-pre-booking.edit',$summary->id) }}" class="btn btn-sm btn-primary">Edit</a>
                 </div>
-
+                @endcan
 
                 <div class="col-md-12">
                     <table class="table table-sm" id="pre_booking_details_table">
@@ -61,6 +62,8 @@
                             <td> {{ $summary->groom_name }}</td>
                              <!-- Empty column to align the button -->
                              <td colspan="1"></td>
+
+                            @can('Venue/Resort-Booking-Bookings-read')
                             <td>
                                 @if ($firstMatchingPrebookingId)
                                     <div class="col-md-3 mb-4 form-inline text-right">
@@ -68,6 +71,7 @@
                                     </div>
                                 @endif
                             </td>
+                            @endcan
                         </tr>
                     </table>
                     <table class="table table-sm" id="preBookingDetails_table">

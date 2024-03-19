@@ -17,9 +17,11 @@
                 <div class="col-md-6">
                     <h4 class="card-title text-uppercase">Room Inclusion List</h4>
                 </div>
+                @can('Settings-Room-Inclusion-create')
                 <div class="col-md-6 text-right">
                     <a href="{{ route('room-inclusion.create') }}" class="btn btn-sm btn-primary">Add</a>
                 </div>
+                @endcan
             </div>
             <div class="table-responsive">
                 <table class="table" id="example1">
@@ -49,7 +51,9 @@
                                 <td>
                                     <div class="btn-group">
                                         <a href="{{ route('room-inclusion.show',$val->id) }}" class="btn btn-sm btn-outline-primary">View</a>
+                                        @can('Settings-Room-Inclusion-update')
                                         <a href="{{ route('room-inclusion.edit',$val->id) }}" class="btn btn-sm btn-outline-warning">Edit</a>
+                                        @endcan
                                     </div>
 
                                 </td>

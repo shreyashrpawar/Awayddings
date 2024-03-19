@@ -17,9 +17,11 @@
                 <div class="col-md-6">
                     <h4 class="card-title text-uppercase">Addon Facilities Listing</h4>
                 </div>
+                @can('Event-Management-Facility-create')
                 <div class="col-md-6 text-right">
                     <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#addFacilityDetailsModal">Add New Facility Details</button>
                 </div>
+                @endcan
             </div>
             <div class="table-responsive">
                 <table class="table" id="example1">
@@ -44,14 +46,22 @@
                                     {{ $val->description }}
                                 </td>
                                 <td>
+                                @can('Event-Management-Facility-update')
                                     <button class="status-toggle btn btn-sm {{ $val->status == 1 ? 'btn-outline-success' : 'btn-outline-danger' }}" data-id="{{ $val->id }}">
                                         {{ $val->status == 1 ? 'Active' : 'Inactive' }}
                                     </button>
+                                    @else
+                                        <button class="btn btn-sm {{ $val->status == 1 ? 'btn-outline-success disabled' : 'btn-outline-danger disabled' }}" disabled>
+                                            {{ $val->status == 1 ? 'Active' : 'Inactive' }}
+                                        </button>
+                                @endcan   
                                 </td>
                                 <td>
+                                @can('Event-Management-Facility-update')
                                     <div class="btn-group">
                                         <a href="{{ route('addon_facility_details.edit', $val->id) }}" class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#editFacilityDetailsModal{{ $val->id }}">Edit</a>
                                     </div>
+                                @endcan
                                 </td>
                             </tr>
 

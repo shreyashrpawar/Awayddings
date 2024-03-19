@@ -112,6 +112,13 @@ Route::prefix('settings')->middleware(['auth'])->group(function () {
     Route::resource('amenities',App\Http\Controllers\Settings\HotelAmenitiesController::class);
     Route::resource('room-inclusion',App\Http\Controllers\Settings\HotelFacilitiesController::class);
 });
+Route::prefix('permissions-settings')->middleware(['auth','role:superAdmin'])->group(function () {
+    Route::resource('permissions', App\Http\Controllers\PermissionsController::class); 
+    Route::post('permissions/update', [App\Http\Controllers\PermissionsController::class, 'updatePermissions'])->name('permissions.updatePermissions');
+    Route::post('create-role', [App\Http\Controllers\PermissionsController::class, 'createRole'])->name('permissions.create-role');
+    Route::post('update-role', [App\Http\Controllers\PermissionsController::class, 'updateRole'])->name('permissions.update-role');
+});
+
 
 Route::prefix('api')->middleware(['auth'])->group(function () {
     Route::get('property/{id}',[App\Http\Controllers\PropertyController::class,'getPropertyDetails']);

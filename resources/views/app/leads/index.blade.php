@@ -29,11 +29,13 @@
                     <h4 class="card-title text-uppercase">Leads List</h4>
                 </div>
                 <div class="col-md-6 text-right">
+                @can('Ads-Leads-create')  
                     <button type="button" class="btn btn-sm btn-primary"
                             data-toggle="modal"
                             data-target="#addNewLead">Add<i
                             class="mdi mdi-plus ml-1"></i>
                     </button>
+                @endcan
                 </div>
             </div>
 
@@ -98,19 +100,22 @@
                                 </td>
                                 <td>
                                     <div class="btn-group">
+                                    @can('Ads-Leads-update') 
                                         @if($val->status != 'lost_general_inquiry')
-                                            <button type="button" class="btn btn-sm btn-outline-primary"
+                                            <button type="button" class="btn btn-sm btn-outline-primary actionbtn"
                                                     data-toggle="modal"
                                                     data-target="#editLead-{{$val->id}}">Action<i
                                                     class="mdi mdi-pencil ml-1"></i>
                                             </button>
                                         @endif
+                                    @endcan
                                         <button type="button" class="btn btn-sm btn-primary"
                                                 data-toggle="modal"
                                                 data-target="#viewRemark-{{$val->id}}">View<i
                                                 class="mdi mdi-eye ml-1"></i>
                                         </button>
-                                        @can('delete leads')
+                                        @if($val->status != 'lost_general_inquiry')
+                                        @can('Ads-Leads-delete') 
                                             @if(request()->has('trashed'))
                                                 <a href="{{ route('leads.restore', $val->id) }}"
                                                    class="btn btn-success">Restore</a>
@@ -124,6 +129,23 @@
                                                 </form>
                                             @endif
                                         @endcan
+                                        @else
+                                        @can('Lost-Leads-delete')
+                                        @if(request()->has('trashed'))
+                                                <a href="{{ route('leads.restore', $val->id) }}"
+                                                   class="btn btn-success">Restore</a>
+                                            @else
+                                                <form method="POST" action="{{ route('leads.destroy', $val->id) }}">
+                                                    @csrf
+                                                    <input name="_method" type="hidden" value="DELETE">
+                                                    <button type="submit" class="btn btn-danger delete" title='Delete'>
+                                                        Delete
+                                                    </button>
+                                                </form>
+                                            @endif
+                                        
+                                        @endcan
+                                        @endif
                                     </div>
                                 </td>
                             </tr>
@@ -133,7 +155,22 @@
             </div>
         </div>
     </div>
-
+    <div class="fixed-bottom " style="background-color: rgba(0, 0, 0, 0.85); padding: 15px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h6 class="mb-2" style="color:white">Status Legend</h6>
+                <div class="legend">
+                    @foreach($leads_statuses as $status => $options)
+                        <span class="badge {{ $options['badge'] }} mr-2"   {{ $options['background'] }}; color: black;">{{ ucwords(str_replace('_', ' ', $status)) }}</span>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    
+    
     @foreach($leads as $key => $val)
         <div class="modal fade" id="viewRemark-{{$val->id}}" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
              style="display: none;" aria-hidden="true">
@@ -395,6 +432,28 @@
         } 
     });
 
+    $('#example1 tbody').on('click', '.actionbtn', function () {
+        var currentDate = new Date().toLocaleDateString('en-IN');
+        var userName = '{{ Auth::user()->name }}'; 
+        // Get the logged-in user's name 
+        var modalId = $(this).data('target');
+        var modal = $(modalId);
+
+        // Find the remark textarea within the modal
+        var remarkTextArea = modal.find('textarea[name="lead_remarks"]');
+       
+        // Append the current date and user's name to the remarks
+        var currentRemarks = remarkTextArea.val();
+        var updatedRemarks = currentRemarks;
+        
+        // Check if the current date already exists in the remarks
+            if (!updatedRemarks.endsWith(currentDate + ' - ' + userName + ' : ')) {
+                // Append the current date and user's name to the remarks
+                updatedRemarks += '\n' + currentDate + ' - ' + userName + ' : ';
+            }
+            // Update the remarks in the textarea
+            remarkTextArea.val(updatedRemarks);
+        });
 });
 </script>
 @endsection

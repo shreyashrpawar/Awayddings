@@ -36,7 +36,7 @@ class LeadController extends Controller
         $leads = Leads::whereNull('deleted_at')->where('status', '!=', 'lost_general_inquiry')->whereBetween('created_at',
             [Carbon::now()->subMonth(12), Carbon::now()]
         )->orderBy('id', 'desc')->get();
-        $leads_statuses =  $leadsStatuses = Leads::STATUS_OPTIONS;
+        $leads_statuses = Leads::STATUS_OPTIONS;
         return view('app.leads.index', compact('leads', 'leads_statuses'));
     }
 

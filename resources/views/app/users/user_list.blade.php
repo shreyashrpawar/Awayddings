@@ -19,9 +19,11 @@
                 <div class="col-md-6">
                     <h4 class="card-title text-uppercase">Users List</h4>
                 </div>
+                @can('Registered-Users-create')
                 <div class="col-md-6 text-right">
                     <a href="{{ route('users.create') }}" class="btn btn-sm btn-primary"> Add</a>
                 </div>
+                @endcan
             </div>
 
 
@@ -67,6 +69,7 @@
                                 @endif
                             </td>
                             <td>
+                            @can('Registered-Users-delete')
                                 <div class="btn-group">
                                     @if(request()->has('trashed'))
                                         <a href="{{ route('users.restore', $val->id) }}" class="btn btn-success">Restore</a>
@@ -78,7 +81,7 @@
                                         </form>
                                     @endif
                                 </div>
-
+                            @endcan
                             </td>
                         </tr>
 

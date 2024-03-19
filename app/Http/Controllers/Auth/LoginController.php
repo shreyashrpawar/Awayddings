@@ -9,6 +9,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Models\Role;
 
 class LoginController extends Controller
 {
@@ -59,7 +60,7 @@ class LoginController extends Controller
         $messages    = ["{$this->username()}.exists" => 'The account you are trying to login is not registered or it has been disabled.'];
         $user        = User::where($field, $request->email)->where('status',1)->first();
         if($user){
-            $currentRole =  $user->hasAnyRole(['vendor','admin', 'superAdmin']);
+            $currentRole =  $user->hasAnyRole(Role::pluck('name')->toArray());
             if ($currentRole)
             {
                 $this->validate($request,[

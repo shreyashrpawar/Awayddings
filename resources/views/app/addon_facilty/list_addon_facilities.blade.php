@@ -17,9 +17,11 @@
                 <div class="col-md-6">
                     <h4 class="card-title text-uppercase">Addon Facilities Listing</h4>
                 </div>
+                @can('Event-Management-Facility-create')
                 <div class="col-md-6 text-right">
                     <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#addFacilityModal">Add New Facility</button>
                 </div>
+                @endcan
             </div>
             <div class="table-responsive">
                 <table class="table" id="example1">
@@ -40,14 +42,23 @@
                                     {{ $val->name }}
                                 </td>
                                 <td>
+                                @can('Event-Management-Facility-update')
                                     <button class="status-toggle btn btn-sm {{ $val->status == 1 ? 'btn-outline-success' : 'btn-outline-danger' }}" data-id="{{ $val->id }}">
                                         {{ $val->status == 1 ? 'Active' : 'Inactive' }}
                                     </button>
+                                    @else
+                                        <button class="btn btn-sm {{ $val->status == 1 ? 'btn-outline-success disabled' : 'btn-outline-danger disabled' }}" disabled>
+                                            {{ $val->status == 1 ? 'Active' : 'Inactive' }}
+                                        </button>
+                                @endcan    
                                 </td>
                                 <td>
+                                @can('Event-Management-Facility-update')
                                     <div class="btn-group">
                                         <button class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#editFacilityModal{{ $val->id }}">Edit</button>
                                     </div>
+                                @endcan
+
                                     <div class="btn-group">
                                         <a href="{{ route('addon_facility_details.index', ['facility_id' => $val->id]) }}" class="btn btn-sm btn-outline-info">View Details</a>
                                     </div>

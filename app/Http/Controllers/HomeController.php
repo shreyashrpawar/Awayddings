@@ -39,6 +39,9 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
+
+        if ($user->can('dashboard-read')) {
+
         $roles = $user->getRoleNames();
         $q = Property::orderBy('id', 'DESC');
         if (in_array("vendor", $roles->toArray())){
@@ -75,6 +78,9 @@ class HomeController extends Controller
         $bookings_count = $bookings->count();
 
         return view('home', compact('properties_count','pre_bookings_count','bookings_count', 'leads_count'));
+    } else {
+        return view('home-custom');
+    }
     }
 
     public function test_emi_cron(Request $request)

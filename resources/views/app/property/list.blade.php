@@ -17,9 +17,11 @@
                 <div class="col-md-6">
                     <h4 class="card-title text-uppercase">Property List</h4>
                 </div>
+                @can('property-create')
                 <div class="col-md-6 text-right">
                     <a href="{{ route('property.create') }}" class="btn btn-sm btn-primary">Add</a>
                 </div>
+                @endcan
             </div>
             <div class="table-responsive">
                 <table class="table" id="example1">
@@ -53,17 +55,12 @@
                                 </td>
                                 <td>
                                     <div class="btn-group">
-                                        @can('property show')
+                                        @can('property-read')
                                         <a href="{{ route('property.show',$val->id) }}" class="btn btn-sm btn-outline-primary">View</a>
                                         @endcan
-                                        @can('property update')
+                                        @can('property-update')
                                         <a href="{{ route('property.edit',$val->id) }}" class="btn btn-sm btn-outline-warning">Edit</a>
-                                        @endcan
-                                        @can('property rate')
                                         <a href="{{ route('rate.show',$val->id) }}" class="btn btn-sm btn-outline-info">Rates</a>
-                                        @endcan
-
-                                        @can('property status')
                                             @if($val->status == 0)
                                                 <button class="btn btn-sm btn-outline-success activeButton" value="{{ $val->id }}" >Enable</button>
                                             @else

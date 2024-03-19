@@ -17,9 +17,11 @@
                 <div class="col-md-6">
                     <h4 class="card-title text-uppercase">Amenities List</h4>
                 </div>
+                @can('Settings-Amenities-create')
                 <div class="col-md-6 text-right">
                     <a href="{{ route('amenities.create') }}" class="btn btn-sm btn-primary">Add</a>
                 </div>
+                @endcan
             </div>
             <div class="table-responsive">
                 <table class="table" id="example1">
@@ -48,7 +50,9 @@
                                 <td>
                                     <div class="btn-group">
                                         <a href="{{ route('amenities.show',$val->id) }}" class="btn btn-sm btn-outline-primary">View</a>
+                                        @can('Settings-Amenities-update')
                                         <a href="{{ route('amenities.edit',$val->id) }}" class="btn btn-sm btn-outline-warning">Edit</a>
+                                        @endcan
                                     </div>
 
                                 </td>

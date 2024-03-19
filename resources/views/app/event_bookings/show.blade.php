@@ -79,7 +79,7 @@
                         </div>
                     </div>
                 </div>
-                @can('booking update')
+                @can('Wedding-Planning-Bookings-Bookings-update')
                     <div class="col-md-6">
                         <div class="card">
                             <div class="card-header bg-warning">
@@ -142,7 +142,7 @@
                         <li class="nav-item">
                             <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Booking Details</a>
                         </li>
-                        @can('booking update')
+                        @can('Wedding-Planning-Bookings-Bookings-update')
                             <li class="nav-item">
                                 <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Payment Details</a>
                             </li>
@@ -306,7 +306,7 @@
                                     <th>Status</th>
                                     <th>Payment Mode</th>
                                     <th>Remarks</th>
-                                    @can('booking update')
+                                    @can('Wedding-Planning-Bookings-Bookings-update')
                                         <th>Actions</th>
                                     @endcan
                                 </tr>
@@ -333,7 +333,7 @@
                                         </td>
                                         <td>{{ $val->payment_mode }}</td>
                                         <td>{{ $val->remarks }}</td>
-                                        @can('booking update')
+                                        @can('Wedding-Planning-Bookings-Bookings-update')
                                             <td>
                                                 @if ($count == 1+ $loop->index)
                                                     <button class="btn btn-sm btn-outline-primary installmentStatus" data-id="{{ $val->id }}" data-installment_no="{{ $val->installment_no }}" data-payment_mode="{{ $val->payment_mode ?? '' }}" data-status="{{ $val->status ?? '' }}" data-remarks="{{ $val->remarks ?? '' }}">Edit</button>

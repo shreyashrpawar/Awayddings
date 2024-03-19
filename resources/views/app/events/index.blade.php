@@ -17,68 +17,73 @@
                 <div class="col-md-6">
                     <h4 class="card-title text-uppercase">Events</h4>
                 </div>
+                @can('Event-Management-Events-create')
                 <div class="col-md-6 text-right">
                     <a href="{{ route('events.create') }}" class="btn btn-sm btn-primary">Add</a>
                 </div>
+                @endcan
             </div>
             <div class="table-responsive">
-                <table class="table" id="example1">
-                    <thead class="thead-dark">
-                    <tr>
-                        <th width="5%">#</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Artists</th>
-                        <th>Decorations</th>
-                        <th>Status</th>
-                        <th width="10%">Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @if($events->count() > 0)
-                        @foreach($events as $key => $val)
-                            <tr>
-                                <th>{{ 1+ $key }}</th>
-                                <td>
-                                    {{ $val->name }}
-                                </td>
-                                <td>{{ (strlen($val->description) > 50 ? substr($val->description, 0, 50) . '...': $val->description) }}</td>
-                                <td>
-                                    @foreach($val->artists as $artist)
-                                        {{ $artist->name }}@if(!$loop->last), @endif
-                                    @endforeach
-                                </td>
-
-                                <td>
-                                    @foreach($val->decorations as $decoration)
-                                        {{ $decoration->name }}@if(!$loop->last), @endif
-                                    @endforeach
-                                </td>
-                                
-                                <td>
-                                    <button class="status-toggle btn btn-sm {{ $val->status == 1 ? 'btn-outline-success' : 'btn-outline-danger' }}" data-id="{{ $val->id }}">
-                                        {{ $val->status == 1 ? 'Active' : 'Inactive' }}
-                                    </button>
-                                </td>
-
-                                <td>
-                                    <div class="btn-group">
-                                        <a href="{{ route('events.edit',$val->id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
-                                    </div>
-
-                                </td>
-                            </tr>
-
+        <table class="table" id="example1">
+    <thead class="thead-dark">
+        <tr>
+            <th width="5%">#</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Artists</th>
+            <th style="max-width: 200px;">Decorations</th>
+            <th>Status</th>
+            <th width="10%">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if($events->count() > 0)
+            @foreach($events as $key => $val)
+                <tr>
+                    <th>{{ 1 + $key }}</th>
+                    <td>{{ $val->name }}</td>
+                    <td>{{ (strlen($val->description) > 50 ? substr($val->description, 0, 50) . '...' : $val->description) }}</td>
+                    <td>
+                        @foreach($val->artists as $artist)
+                            {{ $artist->name }}@if(!$loop->last), @endif
                         @endforeach
-                    @else
-                        <tr>
-                            <td colspan="9" class="text-center">No Result Found</td>
-                        </tr>
-                    @endif
-
-
-                    </tbody>
-                </table>
+                    </td>
+                    <td>
+                        @if($val->decorations->isNotEmpty())
+                            @foreach($val->decorations as $decoration)
+                                {{ $decoration->name }}@if(!$loop->last), @endif
+                            @endforeach
+                        @else
+                            No decorations
+                        @endif
+                    </td>
+                    <td>
+                        @can('Event-Management-Events-update')
+                            <button class="status-toggle btn btn-sm {{ $val->status == 1 ? 'btn-outline-success' : 'btn-outline-danger' }}" data-id="{{ $val->id }}">
+                                {{ $val->status == 1 ? 'Active' : 'Inactive' }}
+                            </button>
+                        @else
+                            <button class="btn btn-sm {{ $val->status == 1 ? 'btn-outline-success disabled' : 'btn-outline-danger disabled' }}" disabled>
+                                {{ $val->status == 1 ? 'Active' : 'Inactive' }}
+                            </button>
+                        @endcan    
+                    </td>
+                    <td>
+                        @can('Event-Management-Events-update')
+                            <div class="btn-group">
+                                <a href="{{ route('events.edit',$val->id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                            </div>
+                        @endcan
+                    </td>
+                </tr>
+            @endforeach
+        @else
+            <tr>
+                <td colspan="7" class="text-center">No Result Found</td>
+            </tr>
+        @endif
+    </tbody>
+</table>
             </div>
         </div>
     </div>
