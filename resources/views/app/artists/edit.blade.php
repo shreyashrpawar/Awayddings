@@ -6,13 +6,12 @@
 
 <div class="card">
     <div class="card-body">
-        <h4 class="card-title">Artist Add</h4>
+        <h4 class="card-title">Artist Update</h4>
         <hr>
         <form id="timeSlotForm" action="{{ route('artists.update',$artist->id) }}" method="POST"   enctype="multipart/form-data">
             @csrf
-            @method('PUT')
             <input type="hidden" name="artist_id" value="{{ $artist->id }}">
-            <input type="hidden" name="selected_status" class="selected_status" value="{{ $artist->id }}">
+            <input type="hidden" name="status" class="status" value="{{ $artist->status }}">
 
             <div class="row">
 
@@ -33,7 +32,7 @@
                     </div>
                 </div>
                 <!-- <div class="col-md-6">
-                    
+
 
                     <div class="form-group">
                         <label for="">Status <span style="color:red">*</span></label>
@@ -63,7 +62,7 @@
     <script src="{{ mix('js/app.js') }}"></script>
     <script>
         $(document).ready(function() {
-            
+
         });
     </script>
 @endsection

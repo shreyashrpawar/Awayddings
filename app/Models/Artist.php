@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Image;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Artist extends Model
 {
@@ -17,23 +20,6 @@ class Artist extends Model
         'status',
     ];
 
-    // Update the $morphClass property to use the new table name
-    protected $morphClass = 'em_artists';
-
-    public function image()
-    {
-        return $this->morphOne(Image::class, 'imageable');
-    }
-
-    public function artist_person(){
-        return $this->hasMany('App\Models\ArtistPerson','artist_id','id');
-    }
-
-    public function events()
-    {
-        return $this->belongsToMany(Event::class,'em_artist_event');
-    }
-
     protected $hidden = [
         'created_at',
         'updated_at',
@@ -41,4 +27,21 @@ class Artist extends Model
     ];
 
     protected $table = 'em_artists';
+
+    protected $morphClass = 'em_artists';
+
+    public function image(): MorphOne
+    {
+        return $this->morphOne(Image::class, 'imageable');
+    }
+
+    public function persons(): HasMany
+    {
+        return $this->hasMany(ArtistPerson::class);
+    }
+
+    public function events(): BelongsToMany
+    {
+        return $this->belongsToMany(Event::class, 'em_artist_event');
+    }
 }

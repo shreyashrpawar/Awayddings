@@ -447,10 +447,12 @@
         var updatedRemarks = currentRemarks;
         
         // Check if the current date already exists in the remarks
-            if (!updatedRemarks.endsWith(currentDate + ' - ' + userName + ' : ')) {
-                // Append the current date and user's name to the remarks
-                updatedRemarks += '\n' + currentDate + ' - ' + userName + ' : ';
-            }
+        if (currentRemarks.trim() !== '' && !updatedRemarks.endsWith(currentDate + ' - ' + userName + ' : ')) {
+            updatedRemarks += ' , ' + '\n' + currentDate + ' - ' + userName + ' : ';
+        } else if (currentRemarks.trim() === '') {
+            // If remarks are empty, append the current date and user's name without starting from the next line
+            updatedRemarks = currentDate + ' - ' + userName + ' : ';
+        }
             // Update the remarks in the textarea
             remarkTextArea.val(updatedRemarks);
         });

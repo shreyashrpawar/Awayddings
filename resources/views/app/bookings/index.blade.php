@@ -38,28 +38,22 @@
                     <tbody>
                     @if($bookings->count() > 0)
                         @foreach($bookings as $key => $val)
-                            <tr>
-                                <th>{{ 1+ $key }}</th>
-                                <td>
-                                    {{ $val->user->name }}
-                                </td>
-                                <td>{{ $val->property->name }}</td>
-                                <td>{{ $val->check_in->format('d-m-Y') }}</td>
-                                <td>{{ $val->check_out->format('d-m-Y') }}</td>
-                                <td>{{ $val->pax }}</td>
-                                <td>{{ $val->total_amount }}</td>
-
-                                <td>
-                                    <div class="btn-group">
-                                        @can('Venue/Resort-Booking-Bookings-read')
-                                            <a href="{{ route('bookings.show',$val->id) }}" class="btn btn-sm btn-outline-primary">View</a>
-                                        @endcan
-
-                                    </div>
-
-                                </td>
-                            </tr>
-
+                        <tr>
+                            <th>{{ 1 + $key }}</th>
+                            <td>{{ optional($val->user)->name }}</td>
+                            <td>{{ optional($val->property)->name }}</td>
+                            <td>{{ optional($val->check_in)->format('d-m-Y') }}</td>
+                            <td>{{ optional($val->check_out)->format('d-m-Y') }}</td>
+                            <td>{{ $val->pax }}</td>
+                            <td>{{ $val->total_amount }}</td>
+                            <td>
+                                <div class="btn-group">
+                                    @can('Venue/Resort-Booking-Bookings-read')
+                                        <a href="{{ route('bookings.show', $val->id) }}" class="btn btn-sm btn-outline-primary">View</a>
+                                    @endcan
+                                </div>
+                            </td>
+                        </tr>
                         @endforeach
                     @else
                         <tr>

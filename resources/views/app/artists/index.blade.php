@@ -30,7 +30,7 @@
                         <th width="5%">#</th>
                         <th>Name</th>
                         <th>Event</th>
-                       
+
                         <th>Status</th>
                         <th width="10%">Actions</th>
                     </tr>
@@ -54,11 +54,11 @@
                                 </td>
                                 <td>
                                 @can('Event-Management-Artists-update')
-                                        <button class="status-toggle btn btn-sm {{ $val->status == 1 ? 'btn-outline-success' : 'btn-outline-danger' }}" data-id="{{ $val->id }}">
+                                        <button class="status-toggle btn btn-sm {{ $val->status == 1 ? 'btn-outline-success' : 'btn-outline-danger' }}" data-id="{{ $val->id }}"   data-name="{{$val->name}}" data-url="{{ route('artists.update',$val->id) }}">
                                             {{ $val->status == 1 ? 'Active' : 'Inactive' }}
                                         </button>
                                     @else
-                                        <button class="btn btn-sm {{ $val->status == 1 ? 'btn-outline-success disabled' : 'btn-outline-danger disabled' }}" disabled>
+                                        <button class="btn btn-sm {{ $val->status == 1 ? 'btn-outline-success disabled' : 'btn-outline-danger disabled' }}" data-name="{{$val->name}}" disabled>
                                             {{ $val->status == 1 ? 'Active' : 'Inactive' }}
                                         </button>
                                 @endcan
@@ -156,15 +156,16 @@
 
           $('.status-toggle').on('click', function() {
                 const button = $(this);
-                const id = button.data('id');
+                const url = button.data('url');
+                const name = button.data('name');
                 const currentStatus = button.hasClass('btn-outline-success') ? 1 : 0;
                 const newStatus = currentStatus === 1 ? 0 : 1;
 
                 $.ajax({
                     type: 'POST',
-                    url: '{{ route('artist_update_status') }}',
+                    url: url,
                     data: {
-                        id: id,
+                        artist_name: name,
                         status: newStatus,
                         _token: '{{ csrf_token() }}',
                     },

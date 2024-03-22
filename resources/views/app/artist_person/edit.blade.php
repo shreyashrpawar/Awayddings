@@ -10,9 +10,8 @@
         <hr>
         <form id="timeSlotForm" action="{{ route('artist_person_update',$artist_person->id) }}" method="POST"   enctype="multipart/form-data">
             @csrf
-            @method('POST')
             <input type="hidden" name="artist_person_id" value="{{ $artist_person->id }}">
-            <input type="hidden" name="selected_status" class="selected_status" value="{{ $artist_person->id }}">
+            <input type="hidden" name="status" class="status" value="{{ $artist_person->status }}">
 
             <div class="row">
 
@@ -24,7 +23,7 @@
                             <option value="" disabled>Select Artist</option>
                             @if($artists->count() > 0)
                                 @foreach($artists as $key => $val)
-                                <option value="{{ $val->id }}" <?php echo ($artist_person->id == $val->id ? 'selected' : '') ?>>{{ $val->name }}</option>
+                                <option value="{{ $val->id }}" @if($val->id == $artist_person->artist_id) selected @endif>{{ $val->name }}</option>
                                 @endforeach
                             @endif
                         </select>
@@ -66,17 +65,6 @@
                     </div>
                 </div>
 
-                <!-- <div class="col-md-6">
-
-                    <div class="form-group">
-                        <label for="">Status <span style="color:red">*</span></label>
-                        <select name="artist_status" id="artist_status" class="form-control" required>
-                            <option value="" disabled >Select Status</option>
-                            <option value="0" <?php// echo ($artist_person->status == 0 ? 'selected' : '') ?>>Inactive</option>
-                            <option value="1" <?php// echo ($artist_person->status == 1 ? 'selected' : '') ?>>Active</option>
-                        </select>
-                    </div>
-                </div> -->
             </div>
 
             <div class="form-group" style="margin: 10px;">
@@ -96,7 +84,7 @@
     <script src="{{ mix('js/app.js') }}"></script>
     <script>
         $(document).ready(function() {
-            
+
         });
     </script>
 @endsection

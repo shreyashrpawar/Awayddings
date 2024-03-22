@@ -18,7 +18,7 @@
                     <h4 class="card-title text-uppercase">Pre Booking List</h4>
                 </div>
                 <div class="col-md-6 text-right">
-{{--                    <a href="{{ route('property.create') }}" class="btn btn-sm btn-primary">Add</a>--}}
+                    {{--<a href="{{ route('property.create') }}" class="btn btn-sm btn-primary">Add</a>--}}
                 </div>
             </div>
             <div class="table-responsive">
@@ -41,32 +41,26 @@
                     <tbody>
                     @if($booking_summary->count() > 0)
                         @foreach($booking_summary as $key => $val)
-                            <tr>
-                                <th>{{ 1+ $key }}</th>
-                                <td>
-                                    {{ $val->user->name }}
-                                </td>
-                                <td>{{  $val->user->phone  }}</td>
-                                <td>{{ $val->property->name }}</td>
-                                <td>{{ $val->check_in->format('d-m-Y') }}</td>
-                                <td>{{ $val->check_out->format('d-m-Y') }}</td>
-                                <td>{{ $val->pax }}</td>
-                                <td>{{ $val->budget }}</td>
-                                <td>
-                                    <span class="badge badge-pill badge-info text-uppercase">{{ $val->pre_booking_summary_status->name }}</span>
-
-                                </td>
-                                <td>
-                                    <div class="btn-group">
-                                        @can('property-read')
-                                            <a href="{{ route('pre-bookings.show',$val->id) }}" class="btn btn-sm btn-outline-primary">View</a>
-                                        @endcan
-
-                                    </div>
-
-                                </td>
-                            </tr>
-
+                        <tr>
+                <th>{{ 1 + $key }}</th>
+                <td>{{ optional($val->user)->name }}</td>
+                <td>{{ optional($val->user)->phone }}</td>
+                <td>{{ optional($val->property)->name }}</td>
+                <td>{{ $val->check_in->format('d-m-Y') }}</td>
+                <td>{{ $val->check_out->format('d-m-Y') }}</td>
+                <td>{{ $val->pax }}</td>
+                <td>{{ $val->budget }}</td>
+                <td>
+                    <span class="badge badge-pill badge-info text-uppercase">{{ optional($val->pre_booking_summary_status)->name }}</span>
+                </td>
+                <td>
+                    <div class="btn-group">
+                        @can('property-read')
+                            <a href="{{ route('pre-bookings.show', $val->id) }}" class="btn btn-sm btn-outline-primary">View</a>
+                        @endcan
+                    </div>
+                </td>
+            </tr>
                         @endforeach
                     @else
                         <tr>

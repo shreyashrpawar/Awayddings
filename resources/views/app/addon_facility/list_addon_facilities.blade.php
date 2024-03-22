@@ -43,7 +43,8 @@
                                 </td>
                                 <td>
                                 @can('Event-Management-Facility-update')
-                                    <button class="status-toggle btn btn-sm {{ $val->status == 1 ? 'btn-outline-success' : 'btn-outline-danger' }}" data-id="{{ $val->id }}">
+                                    <button class="status-toggle btn btn-sm {{ $val->status == 1 ? 'btn-outline-success' : 'btn-outline-danger' }}" data-id="{{ $val->id }}" data-url="{{ route('addon_facilities.update', $val->id) }}" data-name="{{$val->name}}">
+
                                         {{ $val->status == 1 ? 'Active' : 'Inactive' }}
                                     </button>
                                     @else
@@ -55,12 +56,12 @@
                                 <td>
                                 @can('Event-Management-Facility-update')
                                     <div class="btn-group">
-                                        <button class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#editFacilityModal{{ $val->id }}">Edit</button>
+                                        <button class="btn btn-sm btn-outline-primary" data-toggle="modal"  data-target="#editFacilityModal{{ $val->id }}">Edit</button>
                                     </div>
                                 @endcan
 
                                     <div class="btn-group">
-                                        <a href="{{ route('addon_facility_details.index', ['facility_id' => $val->id]) }}" class="btn btn-sm btn-outline-info">View Details</a>
+                                        <a href="{{ route('addon_facility_details.index', $val->id) }}" class="btn btn-sm btn-outline-info">View Details</a>
                                     </div>
                                 </td>
                             </tr>
@@ -114,7 +115,7 @@
                                 <div class="modal-body">
                                     <form action="{{ route('addon_facilities.update', $facility->id) }}" method="post">
                                         @csrf
-                                        @method('PUT')
+                                        <input type="hidden" name="status" value="{{$facility->status}}">
                                         <div class="form-group">
                                             <label for="facility_name">Facility Name:</label>
                                             <input type="text" class="form-control" id="facility_name" name="facility_name" value="{{ $facility->name }}" required>
@@ -166,15 +167,16 @@
 
             $('.status-toggle').on('click', function() {
                 const button = $(this);
-                const id = button.data('id');
+                const url = button.data('url');
+                const name = button.data('name')
                 const currentStatus = button.hasClass('btn-outline-success') ? 1 : 0;
                 const newStatus = currentStatus === 1 ? 0 : 1;
 
                 $.ajax({
                     type: 'POST',
-                    url: '{{ route('facility_updateStatus') }}',
+                    url: url,
                     data: {
-                        id: id,
+                        facility_name : name,
                         status: newStatus,
                         _token: '{{ csrf_token() }}',
                     },

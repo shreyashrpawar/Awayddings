@@ -15,7 +15,7 @@
         <div class="card-body">
             <div class="row form-group">
                 <div class="col-md-6">
-                    <h4 class="card-title text-uppercase">Addon Facilities Listing</h4>
+                    <h4 class="card-title text-uppercase">Addon Facilities Listing - {{$emAddonFacility->name}}</h4>
                 </div>
                 @can('Event-Management-Facility-create')
                 <div class="col-md-6 text-right">
@@ -47,11 +47,12 @@
                                 </td>
                                 <td>
                                 @can('Event-Management-Facility-update')
-                                    <button class="status-toggle btn btn-sm {{ $val->status == 1 ? 'btn-outline-success' : 'btn-outline-danger' }}" data-id="{{ $val->id }}">
+                                    <button class="status-toggle btn btn-sm {{ $val->status == 1 ? 'btn-outline-success' : 'btn-outline-danger' }}" data-id="{{ $val->id }}"  data-description="{{$val->description}}" data-price="{{$val->price}}" data-url="{{ route('addon_facility_details.update', $val->id) }}">
+                            
                                         {{ $val->status == 1 ? 'Active' : 'Inactive' }}
                                     </button>
                                     @else
-                                        <button class="btn btn-sm {{ $val->status == 1 ? 'btn-outline-success disabled' : 'btn-outline-danger disabled' }}" disabled>
+                                        <button class="btn btn-sm {{ $val->status == 1 ? 'btn-outline-success disabled' : 'btn-outline-danger disabled' }}" data-id="{{ $val->id }}"  data-description="{{$val->description}}" disabled>
                                             {{ $val->status == 1 ? 'Active' : 'Inactive' }}
                                         </button>
                                 @endcan   
@@ -59,7 +60,7 @@
                                 <td>
                                 @can('Event-Management-Facility-update')
                                     <div class="btn-group">
-                                        <a href="{{ route('addon_facility_details.edit', $val->id) }}" class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#editFacilityDetailsModal{{ $val->id }}">Edit</a>
+                                        <a href="#" class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#editFacilityDetailsModal{{ $val->id }}">Edit</a>
                                     </div>
                                 @endcan
                                 </td>
@@ -92,9 +93,7 @@
                                     <div class="form-group">
                                         <label for="facility_id">Select Addon Facility:</label>
                                         <select name="facility_id" id="facility_id" class="form-control" required>
-                                            @foreach($facilities as $facility)
-                                                <option value="{{ $facility->id }}">{{ $facility->name }}</option>
-                                            @endforeach
+                                            <option value="{{$emAddonFacility->id}}">{{$emAddonFacility->name}}</option>
                                         </select>
                                     </div>
                                     <div class="form-group">
@@ -129,9 +128,9 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <form action="{{ route('addon_facility_details.update', $detail->id) }}" method="post">
+                                    <form action="{{ route('addon_facility_details.update', $detail->id) }}" method="post" enctype="multipart/form-data">
                                         @csrf
-                                        @method('PUT')
+                                        <input type="hidden" name="status" value="{{$detail->status}}">
                                         <div class="form-group">
                                             <label for="price">Price:</label>
                                             <input type="number" class="form-control" id="price" name="price" value="{{ $detail->price }}" required>
@@ -159,7 +158,7 @@
                 @endforeach
 
             </div>
-            
+
         </div>
     </div>
 @endsection
@@ -182,31 +181,22 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+
         $(function () {
-            $("#example1").DataTable({
-                "responsive": true, "lengthChange": false, "autoWidth": false,
-                "buttons": ["csv", "pdf", "print"]
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-            $('#example2').DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "searching": true,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
-            });
             $('.status-toggle').on('click', function() {
                 const button = $(this);
-                const id = button.data('id');
+                const url = button.data('url');
+                const price = button.data('price');
+                const description = button.data('description');
                 const currentStatus = button.hasClass('btn-outline-success') ? 1 : 0;
                 const newStatus = currentStatus === 1 ? 0 : 1;
 
                 $.ajax({
                     type: 'POST',
-                    url: '{{ route('facilityDetails_updateStatus') }}',
+                    url: url,
                     data: {
-                        id: id,
+                        price: price,
+                        description: description,
                         status: newStatus,
                         _token: '{{ csrf_token() }}',
                     },

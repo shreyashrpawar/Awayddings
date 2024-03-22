@@ -61,7 +61,9 @@
                 <div class="numbers">{{ $properties_count ?? '0' }}</div>
                 <div class="cardName">Listed Properties</div>
             </div>
+            @can('property-read')
             <a href="{{ route('property.index') }}" class="btn btn-sm btn-success mt-2 rounded-pill">More info <i class="fas fa-arrow-circle-right"></i></a>
+            @endcan
         </div>
 
         <div class="card">
@@ -69,7 +71,9 @@
                 <div class="numbers">{{ $pre_bookings_count ?? '0' }}</div>
                 <div class="cardName">Total Pre Bookings</div>
             </div>
+            @can('Venue/Resort-Booking-Pre-Bookings-read')
             <a href="{{ route('pre-bookings.index') }}" class="btn btn-sm btn-success mt-2 rounded-pill">More info <i class="fas fa-arrow-circle-right"></i></a>
+            @endcan
         </div>
 
         <div class="card">
@@ -77,8 +81,9 @@
                 <div class="numbers">{{ $bookings_count ?? '0' }}</div>
                 <div class="cardName">Confirmed Bookings</div>
             </div>
-
+            @can('Venue/Resort-Booking-Bookings-read')
             <a href="{{ route('bookings.index') }}" class="btn btn-sm btn-success mt-2 rounded-pill">More info <i class="fas fa-arrow-circle-right"></i></a>
+            @endcan
         </div>
     </div>
 

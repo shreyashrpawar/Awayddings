@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Image;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class EmAddonFacilityDetails extends Model
 {
@@ -16,18 +18,6 @@ class EmAddonFacilityDetails extends Model
         'status',
     ];
 
-    protected $morphClass = 'em_addon_facility_details';
-
-    public function image()
-    {
-        return $this->morphOne(Image::class, 'imageable');
-    }
-    
-    public function facility()
-    {
-        return $this->belongsTo(EmAddonFacility::class);
-    }
-
     protected $hidden = [
         'created_at',
         'updated_at',
@@ -35,4 +25,16 @@ class EmAddonFacilityDetails extends Model
     ];
 
     protected $table = 'em_addon_facility_details';
+    protected string $morphClass = 'em_addon_facility_details';
+
+    public function image(): MorphOne
+    {
+        return $this->morphOne(Image::class, 'imageable');
+    }
+
+    public function facility(): BelongsTo
+    {
+        return $this->belongsTo(EmAddonFacility::class);
+    }
+
 }

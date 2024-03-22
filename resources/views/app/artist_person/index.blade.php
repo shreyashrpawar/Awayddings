@@ -45,11 +45,12 @@
                                 <td>{{ $val->price }}</td>
                                 <td>
                                 @can('Event-Management-Artist-Person-update')    
-                                    <button class="status-toggle btn btn-sm {{ $val->status == 1 ? 'btn-outline-success' : 'btn-outline-danger' }}" data-id="{{ $val->id }}">
+                                    <button class="status-toggle btn btn-sm {{ $val->status == 1 ? 'btn-outline-success' : 'btn-outline-danger' }}" data-id="{{ $val->id }}" data-url="{{ route('artist_person_update',$val->id) }}" data-person="{{json_encode($val->toArray())}}">
+
                                         {{ $val->status == 1 ? 'Active' : 'Inactive' }}
                                     </button>
                                     @else
-                                        <button class="btn btn-sm {{ $val->status == 1 ? 'btn-outline-success disabled' : 'btn-outline-danger disabled' }}" disabled>
+                                        <button class="btn btn-sm {{ $val->status == 1 ? 'btn-outline-success disabled' : 'btn-outline-danger disabled' }}" data-person="{{json_encode($val->toArray())}}" disabled>
                                             {{ $val->status == 1 ? 'Active' : 'Inactive' }}
                                         </button>
                                 @endcan        
@@ -147,15 +148,19 @@
 
           $('.status-toggle').on('click', function() {
                 const button = $(this);
-                const id = button.data('id');
+                const url = button.data('url');
+                const data = button.data('person');
                 const currentStatus = button.hasClass('btn-outline-success') ? 1 : 0;
                 const newStatus = currentStatus === 1 ? 0 : 1;
 
                 $.ajax({
                     type: 'POST',
-                    url: '{{ route('artist_person_update_status') }}',
+                    url: url,
                     data: {
-                        id: id,
+                        artist_person_name: data.name,
+                        artist_person_link: data.artist_person_link,
+                        artist_person_price: data.price,
+                        artist_id: data.artist_id,
                         status: newStatus,
                         _token: '{{ csrf_token() }}',
                     },
