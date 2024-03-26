@@ -42,13 +42,11 @@
                         @foreach($pre_booking_summary as $key => $val)
                             <tr>
                                 <th>{{ 1+ $key }}</th>
-                                <td>
-                                    {{ $val->user->name }}
-                                </td>
-                                <td>{{  $val->user->phone  }}</td>
-                                <td>{{ $val->property->name }}</td>
-                                <td>{{ $val->check_in->format('d-m-Y') }}</td>
-                                <td>{{ $val->check_out->format('d-m-Y') }}</td>
+                                <td>{{ optional($val->user)->name }}</td>
+                                <td>{{ optional($val->user)->phone }}</td>
+                                <td>{{ optional($val->property)->name }}</td>
+                                <td>{{ optional($val->check_in)->format('d-m-Y') }}</td>
+                                <td>{{ optional($val->check_out)->format('d-m-Y') }}</td>
                                 <td>{{ $val->pax }}</td>
                                 <td>{{ $val->total_amount }}</td>
                                 <td>

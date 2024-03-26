@@ -53,8 +53,8 @@ class EventPreBookingSummaryController extends Controller
             $q->whereIn('property_id',$property_id);
         }
 
-        $pre_booking_summary = $q->get();
-        // dd($pre_booking_summary);
+        $pre_booking_summary = $q->get(); 
+        
         return view('app.event_prebooking.index',compact('pre_booking_summary'));
     }
 
