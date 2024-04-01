@@ -21,10 +21,11 @@
     <div class="card">
         <div class="card-body">
         <div class="text-right">
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editRolesModal">
+          <!-- option to add/edit roles is disabled -->
+        <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editRolesModal">
                Add/Edit Roles
                <i class="mdi mdi-plus ml-1"></i>       
-        </button>
+        </button> -->
         </div>
             <h5 class="card-title">Permission Settings</h5>
             <form action="{{ route('permissions.updatePermissions') }}"  method="POST">
@@ -92,8 +93,8 @@
         </div>
     </div>
 </div>
-
-<div class="modal fade" id="editRolesModal" tabindex="-1" aria-labelledby="editRolesModalLabel" aria-hidden="true">
+<!-- modal to add and edit role names -->
+<!-- <div class="modal fade" id="editRolesModal" tabindex="-1" aria-labelledby="editRolesModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -103,7 +104,6 @@
         </button>
       </div>
       <div class="modal-body">
-        <!-- Add New Role Form -->
         <form action="{{ route('permissions.create-role') }}" method="post">
           @csrf
           <div class="form-group">
@@ -116,14 +116,14 @@
         <hr>
         
         
-        <!-- Select and Remove Existing Role -->
+       
         <form action="{{ route('permissions.update-role') }}" method="post">
           @csrf
           <div class="form-group">
             <label for="existingRole">Select Role to Edit:</label>
             <select class="form-control" id="existingRole" name="existingRole">
               @foreach($roles as $role)
-                @if($role->name !== 'superAdmin')
+                @if($role->name !== 'superAdmin' && $role->name !=='user')
                 <option value="{{ $role->id }}">{{ $role->name }}</option>
                 @endif
               @endforeach
@@ -138,7 +138,7 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 
 @endsection
 
