@@ -4,7 +4,7 @@
         Customer Name: {{ $customer_name }} <br/>
         Customer Phone: {{ $customer_mobile }} <br/>
         Customer Email: {{ $customer_email }} <br/>
-        Bride & Groom Name: {{ $customer_location }} <br/>
+        Bride & Groom Name: {{ $couple_name }} <br/>
         Customer Wedding Date: {{ $customer_date }} <br/>
         pax: {{ $customer_pax }}
     </body>

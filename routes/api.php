@@ -18,12 +18,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::prefix('v1')->group(function () {
+    Route::post('/send-otp', [\App\Http\Controllers\Api\TwoFactorController::class, 'sendOTP']);
+    Route::post('/verify-otp', [\App\Http\Controllers\Api\TwoFactorController::class, 'verifyOTP']);
     Route::post('register',[\App\Http\Controllers\Api\UserController::class,'register']);
     Route::get('/email/verify/{user}', [\App\Http\Controllers\Api\EmailVerificationController::class, 'verify'])
     ->name('email.verify')
     ->middleware('signed');
     Route::post('login',[\App\Http\Controllers\Api\UserController::class,'login']);
     Route::post('leads/capture',[\App\Http\Controllers\Api\LandingLeadsController::class,'store']);
+    Route::post('/capture-mobile',[\App\Http\Controllers\Api\LandingLeadsController::class,'captureMobile']);
     Route::get('property/random',[\App\Http\Controllers\Api\PropertyController::class,'getRandomProperty']);
     Route::get('properties',[\App\Http\Controllers\Api\PropertyController::class,'searchProperty']);
     Route::get('properties/{id}',[\App\Http\Controllers\Api\PropertyController::class,'propertyDetails']);
