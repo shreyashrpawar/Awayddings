@@ -30,5 +30,8 @@ return [
         'secret' => env('MAIL_AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'ap-south-1'),
     ],
+    '2factor' => [
+        'api_key' => env('2FACTOR_API_KEY'),
+    ],
 
 ];
