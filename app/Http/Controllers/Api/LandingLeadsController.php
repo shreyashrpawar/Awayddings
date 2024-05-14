@@ -63,6 +63,7 @@ class LandingLeadsController extends Controller
    
        // Find the lead record with the given mobile number
        $lead = Leads::where('mobile', $mobileNumber)->first();
+     
        if ($lead) {
            // Create a new lead with the same details as the existing one
            $leadData = [
