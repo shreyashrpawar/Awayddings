@@ -63,7 +63,6 @@ class LandingLeadsController extends Controller
    
        // Find the lead record with the given mobile number
        $lead = Leads::where('mobile', $mobileNumber)->first();
-
        if ($lead) {
            // Create a new lead with the same details as the existing one
            $leadData = [
@@ -73,7 +72,7 @@ class LandingLeadsController extends Controller
                'bride_groom' => $lead->bride_groom,
                'wedding_date' => $lead->wedding_date,
                'pax' => $lead->pax,
-               'status' => 'new',
+               'status' => $lead->status,
                'origin' => 'google_ads'
            ];
        
