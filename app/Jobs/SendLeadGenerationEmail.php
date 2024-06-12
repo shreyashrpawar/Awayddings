@@ -35,6 +35,6 @@ class SendLeadGenerationEmail implements ShouldQueue
     {
         $email = new LeadGenerateMail($this->details );
 
-        Mail::to('hello@awayddings.com')->send($email);
+        Mail::to('hello.kesari@wayddings.com')->send($email);
     }
 }
