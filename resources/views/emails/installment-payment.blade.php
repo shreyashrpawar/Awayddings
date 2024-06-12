@@ -86,7 +86,7 @@
                                                     <br/><br/>
                                                     Payment remark: <b>{{ $remarks ?? '' }}</b></div>
                                                 @endif
-                                                
+
                                                 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%"><tr><td height="20" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td></tr></table>
 
                                                 @if ($mailBtnText !='')
@@ -116,7 +116,7 @@
                                                         </tr>
                                                     </table>
                                                 @endif
-                                                
+
                                                 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%"><tr><td height="35" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td></tr></table>
                                             </td>
                                             <td class="content-spacing" style="font-size:0pt; line-height:0pt; text-align:left" width="20"></td>
@@ -146,7 +146,7 @@
                                         <br />
                                         <a href="https://www.awayddings.com/" target="_blank" class="link-1" style="color:#666666; text-decoration:none"><span class="link-1" style="color:#666666; text-decoration:none">www.awayddings.com</span></a>
                                         <span class="mobile-block"><span class="hide-for-mobile">|</span></span>
-                                        <a href="mailto:hello@awayddings.com" target="_blank" class="link-1" style="color:#666666; text-decoration:none"><span class="link-1" style="color:#666666; text-decoration:none">hello@awayddings.com</span></a>
+                                        <a href="mailto:hello.kesari@wayddings.com" target="_blank" class="link-1" style="color:#666666; text-decoration:none"><span class="link-1" style="color:#666666; text-decoration:none">hello.kesari@wayddings.com</span></a>
                                         <span class="mobile-block"><span class="hide-for-mobile">|</span></span>
                                         Phone: <a href="tel:+919921003303" target="_blank" class="link-1" style="color:#666666; text-decoration:none"><span class="link-1" style="color:#666666; text-decoration:none">+91 9921003303</span></a>
                                     </div>
