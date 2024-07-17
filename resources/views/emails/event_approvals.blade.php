@@ -222,6 +222,7 @@
                     <span class="mobile-block">
                       <span class="hide-for-mobile">|</span>
                     </span>
+
                     <a href="mailto:hello.kesari@awayddings.com" target="_blank" class="link-1" style="color:#666666; text-decoration:none">
                       <span class="link-1" style="color:#666666; text-decoration:none">hello.kesari@awayddings.com</span>
                     </a>
