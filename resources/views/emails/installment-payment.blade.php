@@ -146,7 +146,7 @@
                                         <br />
                                         <a href="https://www.awayddings.com/" target="_blank" class="link-1" style="color:#666666; text-decoration:none"><span class="link-1" style="color:#666666; text-decoration:none">www.awayddings.com</span></a>
                                         <span class="mobile-block"><span class="hide-for-mobile">|</span></span>
-                                        <a href="mailto:hello.kesari@wayddings.com" target="_blank" class="link-1" style="color:#666666; text-decoration:none"><span class="link-1" style="color:#666666; text-decoration:none">hello.kesari@wayddings.com</span></a>
+                                        <a href="mailto:hello.kesari@awayddings.com" target="_blank" class="link-1" style="color:#666666; text-decoration:none"><span class="link-1" style="color:#666666; text-decoration:none">hello.kesari@awayddings.com</span></a>
                                         <span class="mobile-block"><span class="hide-for-mobile">|</span></span>
                                         Phone: <a href="tel:+919921003303" target="_blank" class="link-1" style="color:#666666; text-decoration:none"><span class="link-1" style="color:#666666; text-decoration:none">+91 9921003303</span></a>
                                     </div>
