@@ -21,7 +21,7 @@ class EventResource extends JsonResource
             'artist_visible' => $this->is_artist_visible,
             'decor_visible' => $this->is_decor_visible,
             'description' => $this->description,
-            'artists' => ArtistResource::collection($this->artists),
+            'artists' =>ArtistResource::collection($this->artists)->isEmpty(),
             'decor' => DecorResource::collection($this->decorations)
         ];
     }
