@@ -18,8 +18,8 @@ class EventManagementResource extends JsonResource
         return [
             'event' => EventResource::collection($this['event']),
             'additional_facility' => AdditionalFacilityResource::collection($this['additional_facility']),
-            'additional_artist' => ArtistResource::collection($this['additional_artist']), 
+            'additional_artist' => ArtistResource::collection($this['additional_artist'])->isEmpty(),
             'prefilled_data' => new WeedingPrebookingResource($this['prefilled_data'])
         ];
-    }
+    } 
 }
