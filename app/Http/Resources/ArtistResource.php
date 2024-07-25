@@ -18,7 +18,7 @@ class ArtistResource extends JsonResource
              'id' =>  $this->id,
              'name' =>  $this->name,
              'image_url' =>$this->image->url,
-             'artistsPersion' => ArtistPersonResource::collection($this->artist_person)
+             'artistsPersion' => ArtistPersonResource::collection($this->artist_person)->isEmpty()
         ];
     }
 }
