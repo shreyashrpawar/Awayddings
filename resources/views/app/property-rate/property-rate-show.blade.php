@@ -53,7 +53,7 @@
                             <th>{{ $loop->index + 1 }}</th>
                             <td>   {{ $val['hotel_chargable_type_id']->name }}</td>
                             <td>
-                                {{ $val['date']->format('d-m-Y') }}
+                                {{ date('d-m-Y', strtotime($val['date'])) }}
                             </td>
                             <td>
                                 <input type="text" value="{{$val['amount']}}" class="form-control amountInput"  data="{{ $val }}">

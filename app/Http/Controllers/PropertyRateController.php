@@ -50,6 +50,8 @@ class PropertyRateController extends Controller
         $amount = $request->amount;
         $date = $request->date;
         $type = $request->type;
+
+
 //        $available =  $request->available;
 //        $occupancy = $request->occupancy;
 
@@ -72,7 +74,7 @@ class PropertyRateController extends Controller
                     'property_id' => $property_id,
                     'hotel_chargable_type_id' => $propertyDefaultRate->hotel_charagable_type_id,
                     'amount' => $amount,
-                    'date' => $date,
+                    'date' => date('Y-m-d', strtotime($date)),
                     'available' => $propertyDefaultRate->qty,
                     'occupancy_percentage' =>$propertyDefaultRate->chargable_percentage
                 ]);
@@ -160,7 +162,7 @@ class PropertyRateController extends Controller
         $property_default_rates = PropertyDefaultRate::where('property_id',$id)
                                     ->whereIn('hotel_charagable_type_id',[1,2])
                                     ->get();
-
+        
         $property_rates = [];
         foreach($dateRange as $key => $date)
         {
@@ -170,7 +172,6 @@ class PropertyRateController extends Controller
                                             ->where('hotel_chargable_type_id',$default_rate->hotel_charagable_type_id)
                                             ->whereDate('date',$date)
                                             ->first();
-
                 if($property_rate)
                 {
                     // push to the result array
@@ -179,7 +180,7 @@ class PropertyRateController extends Controller
                         'property_id' =>$id,
                         'hotel_chargable_type_id' => $property_rate->hotel_chargable_type,
                         'amount' => $property_rate->amount,
-                        'available' => $property_rate->available,
+                        'available' => $property_rate->available,                        
                         'date' => $property_rate->date,
                         'occupancy' => $property_rate->occupancy_percentage
                     ]);
