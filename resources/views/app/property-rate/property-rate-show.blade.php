@@ -7,8 +7,12 @@
                 <div class="col-md-6">
                     <h4 class="card-title">Property Rate</h4>
                 </div>
-                <div class="col-md-6 text-right">
-
+                <div class="col-md-6 text-center">
+                    <div class="toast mt-3">
+                        <div class="toast-body">
+                          Rate Successfully Saved!
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -28,7 +32,7 @@
                             </div>
                         </div>
                         <div class="col-md-1">
-                            <button class="btn  btn-primary mt-4">Search</button>
+                            <button class="btn  btn-primary mt-4" style="margin-top: 1.8rem !important;">Search</button>
                         </div>
                     </div>
                 </form>
@@ -97,6 +101,8 @@
                     console.log(resp);
                     if(resp.success){
                         //alert(resp.message);
+                        // $('.toast').toast({delay: 5000});
+                        $('.toast').toast('show');
                         location.reload();
                     }
                 }
