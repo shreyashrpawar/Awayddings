@@ -96,7 +96,7 @@
                 success:function(resp){
                     console.log(resp);
                     if(resp.success){
-                        alert(resp.message);
+                        //alert(resp.message);
                         location.reload();
                     }
                 }
