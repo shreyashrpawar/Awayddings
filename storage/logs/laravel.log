@@ -1,0 +1,101 @@
+[2024-08-05 20:24:54] local.INFO: array (
+  'code' => 'PAYMENT_PENDING',
+  'merchantId' => 'PGTESTPAYUAT86',
+  'transactionId' => '66b134b3c535b',
+  'amount' => '180000',
+  'providerReferenceId' => 'T2408060153148330481076',
+  'param1' => 'na',
+  'param2' => 'na',
+  'param3' => 'na',
+  'param4' => 'na',
+  'param5' => 'na',
+  'param6' => 'na',
+  'param7' => 'na',
+  'param8' => 'na',
+  'param9' => 'na',
+  'param10' => 'na',
+  'param11' => 'na',
+  'param12' => 'na',
+  'param13' => 'na',
+  'param14' => 'na',
+  'param15' => 'na',
+  'param16' => 'na',
+  'param17' => 'na',
+  'param18' => 'na',
+  'param19' => 'na',
+  'param20' => 'na',
+  'checksum' => '2ec420101ce340d500564d384adb5625accf5354bedcfa4588a9a4d915c2dbd0###1',
+)  
+[2024-08-05 20:25:04] local.INFO: 08:25:04pm  
+[2024-08-05 20:45:11] local.INFO: 08:45:11pm  
+[2024-08-05 21:05:16] local.INFO: 09:05:16pm  
+[2024-08-05 21:25:20] local.INFO: 09:25:20pm  
+[2024-08-05 21:45:24] local.INFO: 09:45:24pm  
+[2024-08-05 22:40:04] local.ERROR: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo for awayddings.cbi6xmgej3rt.ap-south-1.rds.amazonaws.com failed: No such host is known.  {"exception":"[object] (PDOException(code: 2002): SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo for awayddings.cbi6xmgej3rt.ap-south-1.rds.amazonaws.com failed: No such host is known.  at D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\Connector.php:65)
+[stacktrace]
+#0 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\Connector.php(65): PDO->__construct()
+#1 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\Connector.php(83): Illuminate\\Database\\Connectors\\Connector->createPdoConnection()
+#2 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\Connector.php(48): Illuminate\\Database\\Connectors\\Connector->tryAgainIfCausedByLostConnection()
+#3 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\MySqlConnector.php(24): Illuminate\\Database\\Connectors\\Connector->createConnection()
+#4 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\ConnectionFactory.php(184): Illuminate\\Database\\Connectors\\MySqlConnector->connect()
+#5 [internal function]: Illuminate\\Database\\Connectors\\ConnectionFactory->Illuminate\\Database\\Connectors\\{closure}()
+#6 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(1339): call_user_func()
+#7 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Concerns\\ManagesTransactions.php(185): Illuminate\\Database\\Connection->getPdo()
+#8 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Concerns\\ManagesTransactions.php(151): Illuminate\\Database\\Connection->handleBeginTransactionException()
+#9 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Concerns\\ManagesTransactions.php(125): Illuminate\\Database\\Connection->createTransaction()
+#10 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Concerns\\ManagesTransactions.php(24): Illuminate\\Database\\Connection->beginTransaction()
+#11 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\DatabaseQueue.php(223): Illuminate\\Database\\Connection->transaction()
+#12 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\Worker.php(349): Illuminate\\Queue\\DatabaseQueue->pop()
+#13 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\Worker.php(363): Illuminate\\Queue\\Worker->Illuminate\\Queue\\{closure}()
+#14 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\Worker.php(162): Illuminate\\Queue\\Worker->getNextJob()
+#15 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\Console\\WorkCommand.php(137): Illuminate\\Queue\\Worker->daemon()
+#16 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\Console\\WorkCommand.php(120): Illuminate\\Queue\\Console\\WorkCommand->runWorker()
+#17 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Queue\\Console\\WorkCommand->handle()
+#18 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#19 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure()
+#20 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod()
+#21 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call()
+#22 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(211): Illuminate\\Container\\Container->call()
+#23 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\symfony\\console\\Command\\Command.php(326): Illuminate\\Console\\Command->execute()
+#24 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(180): Symfony\\Component\\Console\\Command\\Command->run()
+#25 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\symfony\\console\\Application.php(1096): Illuminate\\Console\\Command->run()
+#26 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\symfony\\console\\Application.php(324): Symfony\\Component\\Console\\Application->doRunCommand()
+#27 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\symfony\\console\\Application.php(175): Symfony\\Component\\Console\\Application->doRun()
+#28 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(201): Symfony\\Component\\Console\\Application->run()
+#29 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#30 {main}
+
+[previous exception] [object] (PDOException(code: 0): PDO::__construct(): php_network_getaddresses: getaddrinfo for awayddings.cbi6xmgej3rt.ap-south-1.rds.amazonaws.com failed: No such host is known.  at D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\Connector.php:65)
+[stacktrace]
+#0 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\Connector.php(65): PDO->__construct()
+#1 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\Connector.php(83): Illuminate\\Database\\Connectors\\Connector->createPdoConnection()
+#2 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\Connector.php(48): Illuminate\\Database\\Connectors\\Connector->tryAgainIfCausedByLostConnection()
+#3 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\MySqlConnector.php(24): Illuminate\\Database\\Connectors\\Connector->createConnection()
+#4 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\ConnectionFactory.php(184): Illuminate\\Database\\Connectors\\MySqlConnector->connect()
+#5 [internal function]: Illuminate\\Database\\Connectors\\ConnectionFactory->Illuminate\\Database\\Connectors\\{closure}()
+#6 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(1339): call_user_func()
+#7 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Concerns\\ManagesTransactions.php(185): Illuminate\\Database\\Connection->getPdo()
+#8 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Concerns\\ManagesTransactions.php(151): Illuminate\\Database\\Connection->handleBeginTransactionException()
+#9 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Concerns\\ManagesTransactions.php(125): Illuminate\\Database\\Connection->createTransaction()
+#10 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Concerns\\ManagesTransactions.php(24): Illuminate\\Database\\Connection->beginTransaction()
+#11 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\DatabaseQueue.php(223): Illuminate\\Database\\Connection->transaction()
+#12 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\Worker.php(349): Illuminate\\Queue\\DatabaseQueue->pop()
+#13 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\Worker.php(363): Illuminate\\Queue\\Worker->Illuminate\\Queue\\{closure}()
+#14 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\Worker.php(162): Illuminate\\Queue\\Worker->getNextJob()
+#15 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\Console\\WorkCommand.php(137): Illuminate\\Queue\\Worker->daemon()
+#16 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\Console\\WorkCommand.php(120): Illuminate\\Queue\\Console\\WorkCommand->runWorker()
+#17 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Queue\\Console\\WorkCommand->handle()
+#18 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#19 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure()
+#20 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod()
+#21 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call()
+#22 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(211): Illuminate\\Container\\Container->call()
+#23 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\symfony\\console\\Command\\Command.php(326): Illuminate\\Console\\Command->execute()
+#24 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(180): Symfony\\Component\\Console\\Command\\Command->run()
+#25 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\symfony\\console\\Application.php(1096): Illuminate\\Console\\Command->run()
+#26 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\symfony\\console\\Application.php(324): Symfony\\Component\\Console\\Application->doRunCommand()
+#27 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\symfony\\console\\Application.php(175): Symfony\\Component\\Console\\Application->doRun()
+#28 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(201): Symfony\\Component\\Console\\Application->run()
+#29 D:\\essentials\\Awayddings-Backend-App-Feature-payment-gateway-for-venue-updated\\Awayddings-Backend-App\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#30 {main}
+"} 

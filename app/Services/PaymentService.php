@@ -1,11 +1,22 @@
 <?php
 
 namespace App\Services;
+use App\Http\Controllers\Api\UserController;
 use App\Models\Transaction;
 use App\Models\BookingPaymentDetail;
+use App\Models\BookingPaymentSummary;
 use Illuminate\Support\Facades\Log;
 use GuzzleHttp\Client;
 use App\Services\Env;
+use Illuminate\Support\Facades\Storage;
+use App\Jobs\PendingPayment;
+use PhonePe\payments\v1\PhonePePaymentClient;
+use App\Jobs\SendGenericEmail;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+
+
+
 // use PhonePe\payments\v1\PhonePePaymentClient;
 // use PhonePe\payments\v1\models\request\builders\PgPayRequestBuilder;
 // use PhonePe\payments\v1\models\request\builders\InstrumentBuilder;
@@ -23,29 +34,29 @@ class PaymentService
 public function __construct()
   {
       // Initialize API key and salt index from configuration or environment variables
-
   }
 
 public function initiatePayment( $amount,$booking_payment_summaries_id,$installment_no)
     {  
-      $merchantId = 'PGTESTPAYUAT'; // sandbox or test merchantId
-$apiKey="099eb0cd-02cf-4e2a-8aca-3e6c6aff0399"; // sandbox or test APIKEY
-$redirectUrl = 'payment-success.php';
- 
+      $merchantId = 'PGTESTPAYUAT86'; // sandbox or test merchantId
+$apiKey="96434309-7796-489d-8924-ab56988a6076"; // sandbox or test APIKEY
+$redirectUrl = 'http://localhost:8000/api/v1/payment/callback';
+
 // Set transaction details
 $order_id = uniqid(); 
-$name="Tutorials Website";
-$email="info@tutorialswebsite.com";
+$name="testing";
+$email="testing@gmail.com";
 $mobile=9999999999;
-$amount = 10; // amount in INR
+$amount = $amount*100; // amount in INR
 $description = 'Payment for Product/Service';
- 
- 
+
+
 $paymentData = array(
     'merchantId' => $merchantId,
-    'merchantTransactionId' => "MT7850590068188104", // test transactionID
-    "merchantUserId"=>"MUID123",
-    'amount' => $amount*100,
+    'merchantTransactionId' => $order_id, // test transactionID
+    "merchantUserId"=>$order_id,
+    'amount' => $amount,
+    'param1'=>$email,
     'redirectUrl'=>$redirectUrl,
     'redirectMode'=>"POST",
     'callbackUrl'=>$redirectUrl,
@@ -58,14 +69,15 @@ $paymentData = array(
     "type"=> "PAY_PAGE",
   )
 );
- 
- 
+
+
  $jsonencode = json_encode($paymentData);
  $payloadMain = base64_encode($jsonencode);
  $salt_index = 1; //key index 1
  $payload = $payloadMain . "/pg/v1/pay" . $apiKey;
  $sha256 = hash("sha256", $payload);
  $final_x_header = $sha256 . '###' . $salt_index;
+ Log::info($final_x_header."jksdlf");
  $request = json_encode(array('request'=>$payloadMain));
                 
 $curl = curl_init();
@@ -84,170 +96,91 @@ curl_setopt_array($curl, [
      "accept: application/json"
   ],
 ]);
- 
+
 $response = curl_exec($curl);
 $err = curl_error($curl);
- 
+
 curl_close($curl);
- 
+
 if ($err) {
   echo "cURL Error #:" . $err;
 } else {
    $res = json_decode($response);
- 
-if(isset($res->success) && $res->success=='1'){
-$paymentCode=$res->code;
-$paymentMsg=$res->message;
-$payUrl=$res->data->instrumentResponse->redirectInfo->url;
- 
-header('Location:'.$payUrl) ;
-}
-}
-  // '500' is amount, 'test01' is merchantId
-
-      //  $MERCHANTID="PGTESTPAYUAT";
-      //  $SALTKEY="099eb0cd-02cf-4e2a-8aca-3e6c6aff0399";
-      //  $SALTINDEX="1";
-      //  $env=Env::UAT;
-      //  $SHOULDPUBLISHEVENTS=true;
-      
-      // $phonePePaymentsClient = new PhonePePaymentClient($MERCHANTID, $SALTKEY, $SALTINDEX, $env, $SHOULDPUBLISHEVENTS);
-      
-      // $merchantTransactionId = 'PHPSDK' . date("ymdHis") . "payPageTest";
-      // $request = PgPayRequestBuilder::builder()
-      //     ->mobileNumber("9717498133")
-      //     ->callbackUrl("https://webhook.in/test/status")
-      //     ->merchantId($MERCHANTID)
-      //     ->merchantUserId("MT78505900681881400")
-      //     ->amount($amount)
-      //     ->merchantTransactionId($merchantTransactionId)
-      //     ->redirectUrl("https://webhook.in/test/redirect")
-      //     ->redirectMode("REDIRECT")
-      //     ->paymentInstrument(InstrumentBuilder::buildPayPageInstrument())
-      //     ->build();
-      
-      // $response = $phonePePaymentsClient->pay($request);
-      // $url=$response->getInstrumentResponse()->getRedirectInfo()->getUrl();
-      
-
-//       $amount=$amount;
-//       $merchantId = 'M22IKYR5IOETV';
-//       $redirectUrl = route('payment.callback');
-//       $order_id = uniqid(); 
-//       $mobile_no='9717498133';
-
-//       $transaction_data = array(
-//           'merchantId' => $merchantId,
-//           'merchantTransactionId' => "MT78505900681881400",
-//           'merchantUserId'=>"MUID189923",
-//           'amount' =>  $amount,
-//           "instrumentType"=> "MOBILE",
-//         "instrumentReference"=> "8296412345",
-//         # "message":'Hi, this is Deepak',
-//         # "shortName": "sairamit",
-//         "storeId"> "store1",
-//         "terminalId"=> "terminal1",
-//         "expiresIn"=> 3600,
-//           'mobileNumber' => $mobile_no,
-//           'redirectUrl'=>"$redirectUrl",
-//           'redirectMode'=>"POST",
-//           'callbackUrl'=>"$redirectUrl",
-//          "paymentInstrument"=> array(    
-//           "type"=> "PAY_PAGE",
-//          )
-//       );
-    
-
-//       $encode = json_encode($transaction_data);
-//       $payloadMain = base64_encode($encode);
-     
-//       $salt_index = $this->getSaltIndex(); //key index 1
-      
-//       $payload = $payloadMain . "/pg/v1/pay" . $this->getApiKey();
-//       $sha256 = hash("sha256", $payload);
-
-//       $final_x_header = $sha256 . '###' . $salt_index ;
-//       $request = json_encode(array('request'=>$payloadMain));
-      
-//       $curl = curl_init();
-      
-//      curl_setopt_array($curl, [
-// CURLOPT_URL => "https://mercury-t2.phonepe.com/v3/payLink/init",
-// CURLOPT_RETURNTRANSFER => true,
-// CURLOPT_ENCODING => "",
-// CURLOPT_MAXREDIRS => 10,
-// CURLOPT_TIMEOUT => 90,
-// CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-// CURLOPT_CUSTOMREQUEST => "POST",
-//  CURLOPT_POSTFIELDS => $request,
-// CURLOPT_HTTPHEADER => [
-//   "Content-Type: application/json",
-//    "X-VERIFY: " . $final_x_header,
-//    "accept: application/json"
-// ],
-// ]);
-       
-//        $response = curl_exec($curl);
-//        Log::info("resopghjffxfycxfxvvf".$response);
-
-//        $err = curl_error($curl);
-//        curl_close($curl);
-//        if ($err) {
-//           echo "cURL Error #:" . $err;
-//           return response()->json(['error' => 'Invalid amount or payment details not found.'], 400);
-//         } else {
-//    $res = json_decode($response);
-   
-//    $data = [
-//     'amount' => $amount,
-//     'transaction_id' => $order_id,
-//     'payment_status' => 'PAYMENT_INITIATED',
-//     'meta'=>$response,
-//     'providerReferenceId'=>'',
-//     'merchantOrderId'=>'',
-//     'checksum'=>'',
-//     'booking_payment_summaries_id'=>$booking_payment_summaries_id,
-//     'installment_no'=>$installment_no,
-//     'payment_mode'=>'Online'
-//   ];
+   $data = [
+    'amount' => $amount,
+    'transaction_id' => $order_id,
+    'payment_status' => 'PAYMENT_INITIATED',
+    'meta'=>$response,
+    'providerReferenceId'=>'',
+    'merchantOrderId'=>'',
+    'checksum'=>'',
+    'booking_payment_summaries_id'=>$booking_payment_summaries_id,
+    'installment_no'=>$installment_no,
+    'payment_mode'=>'Online'
+  ];
   
-//   Transaction::create($data);
-
-//   if(isset($res->code) && ($res->code=='PAYMENT_INITIATED')){
-//     $bookingPaymentDetail = BookingPaymentDetail::where('booking_payment_summaries_id', $booking_payment_summaries_id)
-//     ->where('installment_no', $installment_no);
+  Transaction::create($data);
+if(isset($res->code) && ($res->code=='PAYMENT_INITIATED')){
+  $bookingPaymentDetail = BookingPaymentDetail::where('booking_payment_summaries_id', $booking_payment_summaries_id)
+    ->where('installment_no', $installment_no);
   
-//   if ($bookingPaymentDetail) {
-//        $bookingPaymentDetail->update([
-//            'transaction_id' => $order_id,
-//            'transaction_status' => 'PAYMENT_INITIATED',
-//            'payment_mode'=>'Online',
-//            'status'=>'3'
-//        ]);
-//    }
-//    $BookingPaymentDetail=BookingPaymentDetail::where('transaction_id', $order_id);
-//    $payUrl=$res->data->instrumentResponse->redirectInfo->url;
-//    return  $payUrl ;
-//    }else{
-//    //HANDLE YOUR ERROR MESSAGE HERE
-//    Transaction::where('transaction_id', $order_id)->update(['payment_status'=>'PAYMENT_FAILED']); 
-//    $BookingPaymentDetail=BookingPaymentDetail::where('transaction_id', $order_id)->update(['transaction_status'=>'PAYMENT_FAILED','payment_mode'=>'Online','status'=>'2']);
-//       dd('ERROR : ' . json_encode($res));
-//    }
+  if ($bookingPaymentDetail) {
+       $bookingPaymentDetail->update([
+           'transaction_id' => $order_id,
+           'transaction_status' => 'PAYMENT_INITIATED',
+           'payment_mode'=>'Online',
+           'status'=>'3'
+       ]);
+   }
+   $BookingPaymentDetail=BookingPaymentDetail::where('transaction_id', $order_id);
+   $payUrl=$res->data->instrumentResponse->redirectInfo->url;
+   return  $payUrl ;
+   }else{
+   //HANDLE YOUR ERROR MESSAGE HERE
+   Transaction::where('transaction_id', $order_id)->update(['payment_status'=>'PAYMENT_FAILED']); 
+   $BookingPaymentDetail=BookingPaymentDetail::where('transaction_id', $order_id)->update(['transaction_status'=>'PAYMENT_FAILED','payment_mode'=>'Online','status'=>'2']);
+      dd('ERROR : ' . json_encode($res));
+   }
 }
+
+}
+
+
 
 public function handlePaymentCallback($request)
     {
-    
-      if($request->code == 'PAYMENT_SUCCESS')
+      $transactionId = $request->transactionId;
+      $installment_no = $request->installment_no;
+      $amount = $request->amount;
+      $merchantId=$request->merchantId;
+      $providerReferenceId=$request->providerReferenceId;
+      $merchantOrderId=$request->merchantOrderId;
+      $checksum=$request->checksum;
+      Log::info($request->all());
+      $meta = json_encode($request->all());
+      $apiKey="96434309-7796-489d-8924-ab56988a6076"; // sandbox or test APIKEY
+        $merchantId='PGTESTPAYUAT86';
+        $transactionId=$transactionId;
+ $SHOULDPUBLISHEVENTS=true;
+$phonePePaymentsClient = new PhonePePaymentClient($merchantId, $apiKey, 1, Env::UAT,$SHOULDPUBLISHEVENTS);
+
+    $checkStatus = $phonePePaymentsClient->statusCheck($transactionId);
+    $bookingsummaryDetails = BookingPaymentDetail::where('transaction_id', $transactionId)->get();
+$bookingsummaryID= $bookingsummaryDetails->pluck('booking_payment_summaries_id');
+    $Totalamount = BookingPaymentSummary::whereIn('id', $bookingsummaryID)->get(['amount', 'paid','user_id']);
+$userID = $Totalamount->pluck('user_id');
+$userdetails=User::whereIn('id', $userID)->get(['email']);
+$useremail = $userdetails->pluck('email');
+
+      if($checkStatus->getState()=='COMPLETED')
   {
-   
-     $transactionId = $request->transactionId;
-     $merchantId=$request->merchantId;
-     $providerReferenceId=$request->providerReferenceId;
-     $merchantOrderId=$request->merchantOrderId;
-     $checksum=$request->checksum;
-     $meta = json_encode($request->all());
+
+    // $details = ['email' => $userEmail,'mailbtnLink' => '', 'mailBtnText' => '',
+    // 'mailTitle' => 'Congrats!', 'mailSubTitle' => 'Hooray! Your booking is confirmed.', 'mailBody' => 'We are happy to inform you that your payment has been successful! Get ready to create some unforgettable memories. All you need to do is show us this email on the day you arrive, and you’ll be good to go!'];
+    // SendCongratsEmail::dispatch($details);
+    $details = ['email' => $useremail,'mailbtnLink' => 'http://www.test.com', 'mailBtnText' => 'Click here',
+    'mailTitle' => 'Congrats!', 'mailSubTitle' => 'Hooray! Your booking is confirmed.', 'mailBody' => 'We are happy to inform you that your payment has been successful! Get ready to create some unforgettable memories. All you need to do is show us this email on the day you arrive, and you’ll be good to go!'];
+    SendGenericEmail::dispatch($details);
      $data = [
       'providerReferenceId' => $providerReferenceId,
       'checksum' => $checksum,
@@ -259,19 +192,49 @@ if($merchantOrderId !=''){
    $data['merchantOrderId']=$merchantOrderId;
 }
 Transaction::where('transaction_id', $transactionId)->update($data); 
-$BookingPaymentDetail=BookingPaymentDetail::where('transaction_id', $transactionId)->update(['transaction_status'=>'PAYMENT_SUCCESS','payment_mode'=>'Online','status'=>'1']);
+$BookingPaymentDetail=BookingPaymentDetail::where('transaction_id', $transactionId)->update(['transaction_status'=>'PAYMENT_SUCCESS','payment_mode'=>'Online','status'=>'2']);
+// $bookingsummaryDetails = BookingPaymentDetail::where('transaction_id', $transactionId)->get();
+// $bookingsummaryID= $bookingsummaryDetails->pluck('booking_payment_summaries_id');
+// Log::info($bookingsummaryID.'booking summart');
+// $Totalamount = BookingPaymentSummary::whereIn('id', $bookingsummaryID)->get(['amount', 'paid','user_id']);
+// $userID = $Totalamount->pluck('user_id');
+$Xamounts = $Totalamount->pluck('amount');
+$Xpaid = $Totalamount->pluck('paid');
+Log::info($Xamounts[0].'Xamounts');
+Log::info($Xpaid[0].'Xpaid');
+Log::info($Totalamount.'taolamount');
+$totalpaid=(float)$Xpaid[0]+$amount/100;
+$due=(float)$Xamounts[0]-(float)$totalpaid;
+$BookingPaymentSummaries=BookingPaymentSummary::whereIn('id', $bookingsummaryID)->update(['paid'=>$totalpaid,'due'=>$due,'status'=>'2']);
+
 $redirectUrl = 'http://localhost:3000/user/manage-bookings';    
 return $redirectUrl;
 
-  }else{
+  }else if($checkStatus->getState()=='FAILED'){
+    $details = ['email' =>$useremail,'mailbtnLink' => 'http://www.test.com', 'mailBtnText' => 'click here',
+    'mailTitle' => 'Naah!', 'mailSubTitle' => 'Your Payment is Failed.', 'mailBody' => 'We are sad to inform you that your payment has been failed! Get ready to create some unforgettable memories. All you need to do is show us this email on the day you arrive, and you’ll be good to go!'];
+    SendGenericEmail::dispatch($details);
     $transactionId = $request->transactionId;
-    Transaction::where('transaction_id', $transactionId)->update(['payment_status'=>'PAYMENT_FAILED']); 
-    $BookingPaymentDetail=BookingPaymentDetail::where('transaction_id', $transactionId)->update(['transaction_status'=>'PAYMENT_FAILED','payment_mode'=>'Online','status'=>'2']);
+    $request["code"]="PAYMENT_FAILED";
+    $meta = json_encode($request->all());
+    Transaction::where('transaction_id', $transactionId)->update(['payment_status'=>'PAYMENT_FAILED','meta'=>$meta]); 
+    $BookingPaymentDetail=BookingPaymentDetail::where('transaction_id', $transactionId)->update(['transaction_status'=>'PAYMENT_FAILED','payment_mode'=>'Online','status'=>'1']);
      $transactionId = $request->transactionId;
-     $paymnetFailUrl = 'http://localhost:3000/payment/payment-failed?transactionId=' . $transactionId; 
+     $paymnetFailUrl = 'http://localhost:3000/payment/payment-failed?transactionId=' . $transactionId.'&merchantId'.$merchantId; 
       //HANDLE YOUR ERROR MESSAGE HERE
       return  $paymnetFailUrl;
-  }   
+  }else if($checkStatus->getState()=='PENDING'){
+    // code for pending payment
+    $transactionId = $request->transactionId;
+    $request["code"]="PAYMENT_PENDING";
+    $meta = json_encode($request->all());
+    Transaction::where('transaction_id', $transactionId)->update(['payment_status'=>'PAYMENT_PENDING','meta'=>$meta]); 
+    $BookingPaymentDetail=BookingPaymentDetail::where('transaction_id', $transactionId)->update(['transaction_status'=>'PAYMENT_PENDING','payment_mode'=>'Online','status'=>'1']);
+    $pendingdetails=['transactionId' => $transactionId,'merchantId' => $merchantId];
+    PendingPayment::dispatch($pendingdetails,$useremail);
+     $paymnetFailUrl = 'http://localhost:3000/payment/payment-pending?transactionId=' . $transactionId;
+      return  $paymnetFailUrl;
+  }
   }
 
 private function getApiKey()

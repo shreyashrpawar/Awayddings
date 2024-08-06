@@ -16,7 +16,7 @@ class BookingPaymentSummary extends Model
         'amount',
         'payment_mode',
         'remarks',
-        'status',
+        'status'
     ];
     public function booking_payment_details(){
         return $this->hasMany('App\Models\BookingPaymentDetail','booking_payment_summaries_id','id');

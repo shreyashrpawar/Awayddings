@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "708ed0583ec1d1ba10d5d394f518e469",
+    "content-hash": "b390a4751936646230c97bf6bde88ba8",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3643,9 +3643,9 @@
             },
             "type": "library",
             "autoload": {
-                "psr-4": {
-                    "PhonePe\\": "src/phonepe/sdk/pg"
-                }
+                "classmap": [
+                    "/"
+                ]
             }
         },
         {

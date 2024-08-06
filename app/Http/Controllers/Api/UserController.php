@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Mail;
+use Illuminate\Support\Facades\Log;
 use App\Mail\EmailVerification;
 
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -55,6 +56,7 @@ class UserController extends Controller
        $password = $request->password;
       $field = filter_var($request->username, FILTER_VALIDATE_EMAIL) ? 'email': 'phone';
       $resp = User::role('user')->select('id','name','email','phone')->where($field,$username)->first();
+      session(['user_email' => $resp['email']]);
       if($token = JWTAuth::attempt([$field =>  $username, 'password' => $password]))
       {
           return response()->json([
