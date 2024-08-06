@@ -12,8 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('booking_payment_details', function (Blueprint $table) {
-            $table->string('transaction_id')->nullable();
-            $table->string('transaction_status')->default('pending');
+            $table->boolean('active_installment')->default(false)->after('installment_no');
         });
     }
 
@@ -23,8 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('booking_payment_details', function (Blueprint $table) {
-            $table->dropColumn('transaction_id');
-            $table->dropColumn('transaction_status');
+            $table->dropColumn('active_installment');
         });
     }
 };

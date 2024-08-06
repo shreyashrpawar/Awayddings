@@ -13,6 +13,7 @@ class BookingPaymentDetail extends Model
     protected $fillable = [
         'booking_payment_summaries_id',
         'installment_no',
+        'active_installment', 
         'amount',
         'payment_mode',
         'remarks',

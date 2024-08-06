@@ -44,12 +44,8 @@ class PendingPayment implements ShouldQueue
      */
     public function handle(): void
     {
-        if($this->attempt==1){
                     //mail
-$details = ['email' => $this->email,'mailbtnLink' => '', 'mailBtnText' => '',
-'mailTitle' => 'Sorry!', 'mailSubTitle' => 'Wait! Your payment is pending.', 'mailBody' => 'We are sorry to inform you that your payment is in pending right now! You need to wait until your payment becomes successful. We will shorly inform you the status of your payment!'];
-SendGenericEmail::dispatch($details);
-        }
+
 
         $apiKey="96434309-7796-489d-8924-ab56988a6076"; // sandbox or test APIKEY
         $merchantId=$this->details['merchantId'];
@@ -68,17 +64,26 @@ $details = ['email' => $this->email,'mailbtnLink' => 'http://www.test.com', 'mai
             SendGenericEmail::dispatch($details);
 
         Transaction::where('transaction_id', $transactionId)->update(['payment_status'=>'PAYMENT_SUCCESS','meta'=>$this->details]); 
-        $BookingPaymentDetail=BookingPaymentDetail::where('transaction_id', $transactionId)->update(['transaction_status'=>'PAYMENT_SUCCESS','payment_mode'=>'Online','status'=>'2']);
+        $BookingPaymentDetail=BookingPaymentDetail::where('transaction_id', $transactionId)->update(['transaction_status'=>'PAYMENT_SUCCESS','payment_mode'=>'Online','status'=>'1']);
         $bookingsummaryDetails = BookingPaymentDetail::where('transaction_id', $transactionId)->get();
         $bookingsummaryID= $bookingsummaryDetails->pluck('booking_payment_summaries_id');
+
+
+        $installmentno= $bookingsummaryDetails->pluck('installment_no');
+        $BookingPaymentDetail = BookingPaymentDetail::where('booking_payment_summaries_id', $bookingsummaryID)
+        ->where('installment_no', (int)$installmentno + 1)
+        ->update(['active_installment' => 1]);
         $Totalamount = BookingPaymentSummary::whereIn('id', $bookingsummaryID)->get(['amount', 'paid']);
+
+
         $Xamounts = $Totalamount->pluck('amount');
         $Xpaid = $Totalamount->pluck('paid');
         $totalpaid=(float)$Xpaid[0]+$amount/100;
         $due=(float)$Xamounts[0]-(float)$totalpaid;
-        $BookingPaymentSummaries=BookingPaymentSummary::whereIn('id', $bookingsummaryID)->update(['paid'=>$totalpaid,'due'=>$due,'status'=>'2']);        
+        $BookingPaymentSummaries=BookingPaymentSummary::whereIn('id', $bookingsummaryID)->update(['paid'=>$totalpaid,'due'=>$due,'status'=>'1']);        
    return;
-    }else if($checkStatus->getState()=='FAILED' || $this->attempt==2){
+    // }else if($checkStatus->getState()=='FAILED'){
+    }else{
         //mail
         $details = ['email' => $this->email,'mailbtnLink' => '', 'mailBtnText' => '',
             'mailTitle' => 'Naah!', 'mailSubTitle' => 'Your Payment is Failed.', 'mailBody' => 'We are sad to inform you that your payment has been failed! Get ready to create some unforgettable memories. All you need to do is show us this email on the day you arrive, and you’ll be good to go!'];
@@ -86,23 +91,22 @@ $details = ['email' => $this->email,'mailbtnLink' => 'http://www.test.com', 'mai
 
 
         Transaction::where('transaction_id', $transactionId)->update(['payment_status'=>'PAYMENT_FAILED','meta'=>$this->details]); 
-        $BookingPaymentDetail=BookingPaymentDetail::where('transaction_id', $transactionId)->update(['transaction_status'=>'PAYMENT_FAILED','payment_mode'=>'Online','status'=>'1']);
-    return;
+        $BookingPaymentDetail=BookingPaymentDetail::where('transaction_id', $transactionId)->update(['transaction_status'=>'PAYMENT_FAILED','payment_mode'=>'Online','status'=>'2']);
+    
     }
 
-    $nextAttempt = $this->attempt + 1;
-    $delay = match (true) {
-        $nextAttempt == 1 => rand(20, 25),
-        $nextAttempt <= 11 => 3,
-        $nextAttempt <= 21 => 6,
-        $nextAttempt <= 27 => 10,
-        $nextAttempt <= 31 => 30,
-        default => 60,
-    };
-    $pendingdetails=['transactionId' => $transactionId,'merchantId' => $merchantId];
-    if($this->nextAttempt==2){
-        PendingPayment::dispatch($pendingdetails, $this->email,$nextAttempt, $this->startTime)->delay(now()->addSeconds(1200));
-    }
+    // $nextAttempt = $this->attempt + 1;
+    // $delay = match (true) {
+    //     $nextAttempt == 1 => rand(20, 25),
+    //     $nextAttempt <= 11 => 3,
+    //     $nextAttempt <= 21 => 6,
+    //     $nextAttempt <= 27 => 10,
+    //     $nextAttempt <= 31 => 30,
+    //     default => 60,
+    // };
+    // $pendingdetails=['transactionId' => $transactionId,'merchantId' => $merchantId];
+        // PendingPayment::dispatch($pendingdetails, $this->email,$nextAttempt, $this->startTime)->delay(now()->addSeconds(1200));
+    
     // $transactionId = $request->transactionId;
     // $request["code"]="PAYMENT_PENDING";
     // $meta = json_encode($request->all());
