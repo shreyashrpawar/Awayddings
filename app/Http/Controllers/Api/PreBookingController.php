@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api;
+use Illuminate\Support\Facades\Log;
 
 use App\DataTransferObjects\Booking\PreBookingSummaryDto;
 use App\Http\Controllers\Controller;

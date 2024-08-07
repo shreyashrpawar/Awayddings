@@ -15,9 +15,13 @@ class AppServiceProvider extends ServiceProvider
      * @return void
      */
     public function register()
+
     {
-        //
+        $this->app->bind(PaymentService::class, function ($app) {
+            return new PaymentService();
+        });
     }
+   
 
     /**
      * Bootstrap any application services.

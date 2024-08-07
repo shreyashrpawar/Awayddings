@@ -244,6 +244,5 @@ class EventBookingSummaryController extends Controller
             'groupedPdfData' => $groupedPdfData
         ]);
     
-        // return $pdf->download('itsolutionstuff.pdf');
     }
 }

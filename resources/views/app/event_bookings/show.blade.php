@@ -367,7 +367,6 @@
     <div class="modal" id="installmentStatusModal">
         <div class="modal-dialog">
             <div class="modal-content">
-                <!-- Modal Header -->
                 <div class="modal-header">
                     <h4 class="modal-title">Installment Status</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -408,7 +407,6 @@
                             <label for="remark">Remarks</label>
                             <textarea name="remarks" id="remarks"  class="form-control"  cols="30" rows="5"></textarea>
                         </div>
-
                         <button type="submit" class="btn btn-sm btn-success btn-block">Save Changes</button>
                     </form>
                 </div>
@@ -427,7 +425,7 @@
             let installment_no = $(this).data('installment_no');
             let next_installment_no = installment_no + 1;
             
-            let next_installment_date = $('#installment_date'+next_installment_no).data('installment_date');
+            let next_installment_date = $('#installment_date'+ next_installment_no).data('installment_date');
             let payment_mode = $(this).data('payment_mode');
             let remarks = $(this).data('remarks');
             let status = $(this).data('status');

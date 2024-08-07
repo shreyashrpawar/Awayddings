@@ -210,7 +210,7 @@ class PreBookingSummaryController extends Controller
                     'date' => Carbon::parse($date),
                     'amount' => $installment_amount,
                     'installment_no' => $i+1,
-                    'status' => 1
+                    'status' => 0
                 ];
 
                 $booking_payment_details = BookingPaymentDetail::create($booking_temp);

@@ -33,5 +33,9 @@ return [
     '2factor' => [
         'api_key' => env('2FACTOR_API_KEY'),
     ],
+    'phonepe'=> [
+        'api_key' => env('PHONEPE_API_KEY'),
+        'salt_index' => env('PHONEPE_SALT_INDEX'),
+    ]
 
 ];
