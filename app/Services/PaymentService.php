@@ -40,7 +40,7 @@ public function initiatePayment( $amount,$booking_payment_summaries_id,$installm
     {  
       $merchantId = env('PHONEPE_MERCHANT_ID'); // sandbox or test merchantId
 $apiKey=env("PHONEPE_SECRET_KEY"); // sandbox or test APIKEY
-$redirectUrl = 'http://localhost:8000/api/v1/payment/callback';
+$redirectUrl = env('REDIRECT_URL').'/api/v1/payment/callback';
 
 // Set transaction details
 $order_id = uniqid(); 
@@ -170,9 +170,6 @@ $useremail = $userdetails->pluck('email');
     $BookingPaymentDetail = BookingPaymentDetail::where('booking_payment_summaries_id', $bookingsummaryID)
     ->where('installment_no', $in)
     ->update(['active_installment' => 1]);
-    // $details = ['email' => $userEmail,'mailbtnLink' => '', 'mailBtnText' => '',
-    // 'mailTitle' => 'Congrats!', 'mailSubTitle' => 'Hooray! Your booking is confirmed.', 'mailBody' => 'We are happy to inform you that your payment has been successful! Get ready to create some unforgettable memories. All you need to do is show us this email on the day you arrive, and you’ll be good to go!'];
-    // SendCongratsEmail::dispatch($details);
     $details = ['email' => $useremail,'mailbtnLink' => 'http://www.test.com', 'mailBtnText' => 'Click here',
     'mailTitle' => 'Congrats!', 'mailSubTitle' => 'Hooray! Your booking is confirmed.', 'mailBody' => 'We are happy to inform you that your payment has been successful! Get ready to create some unforgettable memories. All you need to do is show us this email on the day you arrive, and you’ll be good to go!'];
     SendGenericEmail::dispatch($details);
@@ -188,11 +185,6 @@ if($merchantOrderId !=''){
 }
 Transaction::where('transaction_id', $transactionId)->update($data); 
 $BookingPaymentDetail=BookingPaymentDetail::where('transaction_id', $transactionId)->update(['transaction_status'=>'PAYMENT_SUCCESS','payment_mode'=>'Online','status'=>'1']);
-// $bookingsummaryDetails = BookingPaymentDetail::where('transaction_id', $transactionId)->get();
-// $bookingsummaryID= $bookingsummaryDetails->pluck('booking_payment_summaries_id');
-// Log::info($bookingsummaryID.'booking summart');
-// $Totalamount = BookingPaymentSummary::whereIn('id', $bookingsummaryID)->get(['amount', 'paid','user_id']);
-// $userID = $Totalamount->pluck('user_id');
 $Xamounts = $Totalamount->pluck('amount');
 $Xpaid = $Totalamount->pluck('paid');
 Log::info($Xamounts[0].'Xamounts');
@@ -202,7 +194,7 @@ $totalpaid=(float)$Xpaid[0]+$amount/100;
 $due=(float)$Xamounts[0]-(float)$totalpaid;
 $BookingPaymentSummaries=BookingPaymentSummary::whereIn('id', $bookingsummaryID)->update(['paid'=>$totalpaid,'due'=>$due,'status'=>'1']);
 
-$redirectUrl = 'http://localhost:3000/user/manage-bookings';    
+$redirectUrl = env('FRONTEND_REDIRECT').'/user/manage-bookings';    
 return $redirectUrl;
 
   }else if($checkStatus->getState()=='FAILED'){
@@ -215,7 +207,7 @@ return $redirectUrl;
     Transaction::where('transaction_id', $transactionId)->update(['payment_status'=>'PAYMENT_FAILED','meta'=>$meta]); 
     $BookingPaymentDetail=BookingPaymentDetail::where('transaction_id', $transactionId)->update(['transaction_status'=>'PAYMENT_FAILED','payment_mode'=>'Online','status'=>'2']);
      $transactionId = $request->transactionId;
-     $paymnetFailUrl = 'http://localhost:3000/payment/payment-failed?transactionId=' . $transactionId.'&merchantId'.$merchantId; 
+     $paymnetFailUrl = env('FRONTEND_REDIRECT').'/payment/payment-failed?transactionId=' . $transactionId.'&merchantId'.$merchantId; 
       //HANDLE YOUR ERROR MESSAGE HERE
       return  $paymnetFailUrl;
   }else if($checkStatus->getState()=='PENDING'){
@@ -230,7 +222,7 @@ return $redirectUrl;
 'mailTitle' => 'Sorry!', 'mailSubTitle' => 'Wait! Your payment is pending.', 'mailBody' => 'We are sorry to inform you that your payment is in pending right now! You need to wait until your payment becomes successful. We will shorly inform you the status of your payment!'];
 SendGenericEmail::dispatch($details);
     PendingPayment::dispatch($pendingdetails,$useremail)->delay(now()->addMinutes(20));
-     $paymnetFailUrl = 'http://localhost:3000/payment/payment-pending?transactionId=' . $transactionId;
+     $paymnetFailUrl = env('FRONTEND_REDIRECT').'/payment/payment-pending?transactionId=' . $transactionId;
       return  $paymnetFailUrl;
   }
   }

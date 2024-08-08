@@ -17,9 +17,6 @@ use App\Jobs\SendGenericEmail;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
-
-
-
 class PendingPayment implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -47,12 +44,12 @@ class PendingPayment implements ShouldQueue
                     //mail
 
 
-        $apiKey="96434309-7796-489d-8924-ab56988a6076"; // sandbox or test APIKEY
+        $apiKey=env('PHONEPE_SECRET_KEY'); // sandbox or test APIKEY
         $merchantId=$this->details['merchantId'];
         $transactionId=$this->details['transactionId'];
  $SHOULDPUBLISHEVENTS=true;
 $phonePePaymentsClient = new PhonePePaymentClient($merchantId, $apiKey, 1, Env::UAT,$SHOULDPUBLISHEVENTS);
-Log::info(date("h:i:sa"));
+
     $checkStatus = $phonePePaymentsClient->statusCheck($transactionId);
     $amount=$checkStatus->getAmount();
 
@@ -82,7 +79,6 @@ $details = ['email' => $this->email,'mailbtnLink' => 'http://www.test.com', 'mai
         $due=(float)$Xamounts[0]-(float)$totalpaid;
         $BookingPaymentSummaries=BookingPaymentSummary::whereIn('id', $bookingsummaryID)->update(['paid'=>$totalpaid,'due'=>$due,'status'=>'1']);        
    return;
-    // }else if($checkStatus->getState()=='FAILED'){
     }else{
         //mail
         $details = ['email' => $this->email,'mailbtnLink' => '', 'mailBtnText' => '',
@@ -94,24 +90,5 @@ $details = ['email' => $this->email,'mailbtnLink' => 'http://www.test.com', 'mai
         $BookingPaymentDetail=BookingPaymentDetail::where('transaction_id', $transactionId)->update(['transaction_status'=>'PAYMENT_FAILED','payment_mode'=>'Online','status'=>'2']);
     
     }
-
-    // $nextAttempt = $this->attempt + 1;
-    // $delay = match (true) {
-    //     $nextAttempt == 1 => rand(20, 25),
-    //     $nextAttempt <= 11 => 3,
-    //     $nextAttempt <= 21 => 6,
-    //     $nextAttempt <= 27 => 10,
-    //     $nextAttempt <= 31 => 30,
-    //     default => 60,
-    // };
-    // $pendingdetails=['transactionId' => $transactionId,'merchantId' => $merchantId];
-        // PendingPayment::dispatch($pendingdetails, $this->email,$nextAttempt, $this->startTime)->delay(now()->addSeconds(1200));
-    
-    // $transactionId = $request->transactionId;
-    // $request["code"]="PAYMENT_PENDING";
-    // $meta = json_encode($request->all());
-    // Transaction::where('transaction_id', $transactionId)->update(['payment_status'=>'PAYMENT_PENDING','meta'=>$meta]); 
-    // $BookingPaymentDetail=BookingPaymentDetail::where('transaction_id', $transactionId)->update(['transaction_status'=>'PAYMENT_FAILED','payment_mode'=>'Online','status'=>'3']);
-    
 }
 }

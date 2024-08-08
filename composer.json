@@ -16,7 +16,7 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "^4.2.3",
         "league/flysystem-aws-s3-v3": "^3.22.0",
-        "phonepe/phonepe-pg-php-sdk": "^1.0",
+        "phonepe/payment_repository-1.0.0": "^1.0",
         "spatie/laravel-permission": "^5.5",
         "tymon/jwt-auth": "^2.0"
     },
@@ -72,9 +72,9 @@
                 {
                     "dist": {
                         "type": "zip",
-                        "url": "https://phonepe.mycloudrepo.io/public/repositories/phonepe-pg-php-sdk/phonepe-pg-php-sdk.zip"
+                        "url": "https://github.com/shreyashrpawar/payment_repository/archive/refs/tags/v1.0.0.zip"
                     },
-                    "name": "phonepe/phonepe-pg-php-sdk",
+                    "name": "phonepe/payment_repository-1.0.0",
                     "version": "1.0.0",
                     "autoload": {
                         "classmap": ["/"]

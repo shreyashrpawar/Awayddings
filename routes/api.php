@@ -20,7 +20,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('v1')->group(function () {
     Route::post('/send-otp', [\App\Http\Controllers\Api\TwoFactorController::class, 'sendOTP']);
     Route::post('/verify-otp', [\App\Http\Controllers\Api\TwoFactorController::class, 'verifyOTP']);
-    // Route::get('/payment', [\App\Http\Controllers\Api\PaymentController::class, 'makePayment']);
     Route::post('/payment/callback', [\App\Http\Controllers\Api\PaymentController::class, 'paymentCallback'])->name('payment.callback');
     Route::post('register',[\App\Http\Controllers\Api\UserController::class,'register']);
     Route::get('/email/verify/{user}', [\App\Http\Controllers\Api\EmailVerificationController::class, 'verify'])
@@ -41,7 +40,6 @@ Route::prefix('v1')->group(function () {
     Route::get('properties/{id}/budget-calculator',[\App\Http\Controllers\Api\PropertyController::class,'getPropertyDetails']);
     Route::group(['middleware' => ['jwt.verify']], function() {
         Route::get('/payment', [\App\Http\Controllers\Api\PaymentController::class, 'makePayment']);
-        // Route::post('/payment/callback', [\App\Http\Controllers\Api\PaymentController::class, 'paymentCallback'])->name('payment.callback');
         Route::post('pre-booking',[\App\Http\Controllers\Api\PreBookingController::class,'submit']);
         Route::post('change-password',[\App\Http\Controllers\Api\ChangePasswordController::class,'changePassword']);
         Route::get('pre-booking',[\App\Http\Controllers\Api\PreBookingController::class,'index']);
