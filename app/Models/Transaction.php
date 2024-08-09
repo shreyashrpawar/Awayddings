@@ -19,12 +19,12 @@ class Transaction extends Model
         'merchantOrderId',
         'checksum',
         'booking_payment_summaries_id',
-        'installment_no',
         'payment_mode',
     ];
 
     public function bookingPaymentDetail()
     {
-        return $this->belongsTo(BookingPaymentDetail::class, 'booking_payment_summaries_id', 'booking_payment_summaries_id');
+        return $this->hasMany(BookingPaymentDetail::class, 'transaction_id', 'transaction_id');
+
     }
 }

@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('booking_payment_summaries', function (Blueprint $table) {
-            $table->unsignedBigInteger('user_id')->after('status')->nullable();
+        Schema::table('transactions', function (Blueprint $table) {
+            $table->dropColumn('installment_no');
         });
     }
 
@@ -21,8 +21,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('booking_payment_summaries', function (Blueprint $table) {
-            $table->dropColumn('user_id');
+        Schema::table('transactions', function (Blueprint $table) {
+            $table->integer('installment_no'); // Restores the column in case of rollback
         });
+
     }
 };

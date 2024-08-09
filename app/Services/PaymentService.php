@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Models\Transaction;
 use App\Models\BookingPaymentDetail;
 use App\Models\BookingPaymentSummary;
+use App\Models\BookingSummary;
 use Illuminate\Support\Facades\Log;
 use GuzzleHttp\Client;
 use App\Services\Env;
@@ -15,11 +16,6 @@ use App\Jobs\SendGenericEmail;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
-
-
-// use PhonePe\payments\v1\PhonePePaymentClient;
-// use PhonePe\payments\v1\models\request\builders\PgPayRequestBuilder;
-// use PhonePe\payments\v1\models\request\builders\InstrumentBuilder;
 
 
 class PaymentService
@@ -158,8 +154,9 @@ $phonePePaymentsClient = new PhonePePaymentClient($merchantId, $apiKey, 1, Env::
     $checkStatus = $phonePePaymentsClient->statusCheck($transactionId);
     $bookingsummaryDetails = BookingPaymentDetail::where('transaction_id', $transactionId)->get();
 $bookingsummaryID= $bookingsummaryDetails->pluck('booking_payment_summaries_id');
-    $Totalamount = BookingPaymentSummary::whereIn('id', $bookingsummaryID)->get(['amount', 'paid','user_id']);
-$userID = $Totalamount->pluck('user_id');
+    $Totalamount = BookingPaymentSummary::whereIn('id', $bookingsummaryID)->get(['amount', 'paid']);
+    $getuserID = BookingSummary::whereIn('id', $bookingsummaryID)->get(['user_id']);
+$userID = $getuserID->pluck('user_id');
 $userdetails=User::whereIn('id', $userID)->get(['email']);
 $useremail = $userdetails->pluck('email');
 

@@ -25,7 +25,6 @@ class PaymentController extends Controller
     {   
         $user = auth()->user();
         $user_id = $user->id;
-        Log::info($user_id);
         $amount_response= $request->input('amount');
         
         $amount_formatd = number_format($request->input('amount'),2);
@@ -41,7 +40,7 @@ class PaymentController extends Controller
                
         $booking_payment_summaries_id=$request->input('booking_payment_summaries_id');
         $installment_no=$request->input('installment_no');
-        $BookingPaymentSummaries=BookingPaymentSummary::where('id', $booking_payment_summaries_id)->update(['user_id'=>$user_id]);
+
         $bookingdetails = BookingPaymentDetail::where('booking_payment_summaries_id',$booking_payment_summaries_id)
         ->where('installment_no', $installment_no)
         ->first();

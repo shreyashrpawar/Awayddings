@@ -27,7 +27,7 @@ class BookingPaymentDetail extends Model
     ];
     public function transactions()
     {
-        return $this->hasMany(Transaction::class, 'booking_payment_summaries_id', 'id');
+        return $this->belongsTo(Transaction::class, 'transaction_id');
     }
 
 }
