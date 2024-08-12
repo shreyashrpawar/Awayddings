@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::table('booking_payment_details', function (Blueprint $table) {
             $table->string('transaction_id')->nullable();
-            $table->foreign('transaction_id')->references('transaction_id')->on('transactions')->onDelete('set null');
             $table->string('transaction_status')->default('pending');
         });
     }
@@ -24,7 +23,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('booking_payment_details', function (Blueprint $table) {
-            $table->dropForeign(['transaction_id']); // Drop the foreign key constraint
             $table->dropColumn('transaction_id');
             $table->dropColumn('transaction_status');
         });
