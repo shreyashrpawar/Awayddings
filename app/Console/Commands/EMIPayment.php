@@ -8,6 +8,8 @@ use App\Models\BookingPaymentSummary;
 use App\Models\BookingSummary;
 use App\Models\User;
 use App\Jobs\SendEmailEmiPayments;
+use Illuminate\Support\Facades\Log;
+
 
 class EMIPayment extends Command
 {
@@ -42,6 +44,7 @@ class EMIPayment extends Command
      */
     public function handle()
     {
+        Log::info("cron started");
         $emis = BookingPaymentDetail::where('status', 1)->where('date', '<=', now()->addDay()) // Retrieve EMIs due within 24 hours
                ->where('email_sent', 0) // Add a flag to avoid sending duplicate emails
                ->orderBy('created_at', 'desc')

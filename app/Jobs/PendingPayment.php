@@ -16,6 +16,8 @@ use App\Models\BookingPaymentSummary;
 use App\Jobs\SendGenericEmail;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 
 class PendingPayment implements ShouldQueue
 {
@@ -43,11 +45,13 @@ class PendingPayment implements ShouldQueue
     {
                     //mail
 
-
+DB::transaction(function () {
         $apiKey=env('PHONEPE_SECRET_KEY'); // sandbox or test APIKEY
         $merchantId=$this->details['merchantId'];
         $transactionId=$this->details['transactionId'];
  $SHOULDPUBLISHEVENTS=true;
+ 
+
 $phonePePaymentsClient = new PhonePePaymentClient($merchantId, $apiKey, 1, Env::UAT,$SHOULDPUBLISHEVENTS);
 
     $checkStatus = $phonePePaymentsClient->statusCheck($transactionId);
@@ -89,6 +93,6 @@ $details = ['email' => $this->email,'mailbtnLink' => 'http://www.test.com', 'mai
         Transaction::where('transaction_id', $transactionId)->update(['payment_status'=>'PAYMENT_FAILED','meta'=>$this->details]); 
         $BookingPaymentDetail=BookingPaymentDetail::where('transaction_id', $transactionId)->update(['transaction_status'=>'PAYMENT_FAILED','payment_mode'=>'Online','status'=>'2']);
     
-    }
+    }});
 }
 }

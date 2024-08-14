@@ -300,7 +300,7 @@
                                 <thead class="thead-dark">
                                 <tr>
                                     <th>#</th>
-                                    <th>Date</th>
+                                    <th>ddddd</th>
                                     <th>Installment No</th>
                                     <th>Amount</th>
                                     <th>Status</th>
