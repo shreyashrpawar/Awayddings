@@ -11,7 +11,6 @@ class Kernel extends ConsoleKernel
         'App\Console\Commands\EMIPayment',
         Commands\ApprovalExpirationCron::class,
         Commands\EventEMIPaymentCron::class,
-        // Commands\EMIPayment::class,
         Commands\EventCancelBookingCron::class,
     ];
     /**
@@ -22,13 +21,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('bookings:cancel')->everyMinute();
-        // $schedule->command('EMIPayment:cron')->everyMinute();
-                 
-        // $schedule->command('inspire')->hourly();
 
         $schedule->command('bookings:cancel')->dailyAt('12:00');
-        $schedule->command('EMIPayment:cron')->dailyAt('11:40');
+        $schedule->command('EMIPayment:cron')->dailyAt('12:00');
         $schedule->command('eventEMIPayment:cron')->dailyAt('12:00');
         $schedule->command('eventCancelBooking:cron')->dailyAt('12:00');
     }

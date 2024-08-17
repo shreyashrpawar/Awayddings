@@ -10,13 +10,13 @@ use Illuminate\Support\Facades\Log;
 use GuzzleHttp\Client;
 use App\Services\Env;
 use Illuminate\Support\Facades\Storage;
+
+use Illuminate\Support\Facades\DB;
 use App\Jobs\PendingPayment;
 use PhonePe\payments\v1\PhonePePaymentClient;
 use App\Jobs\SendGenericEmail;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-
-use Illuminate\Support\Facades\DB;
 
 
 
@@ -94,8 +94,8 @@ curl_close($curl);
 if ($err) {
   echo "cURL Error #:" . $err;
 } else {
-
-
+  DB::beginTransaction();
+try{
    $res = json_decode($response);
    $data = [
     'amount' => $amount,
@@ -111,9 +111,6 @@ if ($err) {
   ];
   
   Transaction::create($data);
-if(isset($res->code) && ($res->code=='PAYMENT_INITIATED')){
-  DB::transaction(function () use ($amount,$booking_payment_summaries_id,$installment_no,$order_id) {
-
   $bookingPaymentDetail = BookingPaymentDetail::where('booking_payment_summaries_id', $booking_payment_summaries_id)
     ->where('installment_no', $installment_no);
   
@@ -125,25 +122,21 @@ if(isset($res->code) && ($res->code=='PAYMENT_INITIATED')){
            'status'=>'3'
        ]);
    }
-   $BookingPaymentDetail=BookingPaymentDetail::where('transaction_id', $order_id);});
+   $BookingPaymentDetail=BookingPaymentDetail::where('transaction_id', $order_id);
+   DB::commit();
    $payUrl=$res->data->instrumentResponse->redirectInfo->url;
    return  $payUrl ;
-   }else{
-   //HANDLE YOUR ERROR MESSAGE HERE
-   Transaction::where('transaction_id', $order_id)->update(['payment_status'=>'PAYMENT_FAILED']); 
-   $BookingPaymentDetail=BookingPaymentDetail::where('transaction_id', $order_id)->update(['transaction_status'=>'PAYMENT_FAILED','payment_mode'=>'Online','status'=>'2']);
-      dd('ERROR : ' . json_encode($res));
+  }
+  catch(\Exception $e){
+    DB::rollback();
+  }
+}
    }
-  
-}
-
-}
 
 
 
 public function handlePaymentCallback($request)
     {
-      
       $transactionId = $request->transactionId;
       $installment_no = $request->installment_no;
       $amount = $request->amount;
@@ -157,8 +150,6 @@ public function handlePaymentCallback($request)
         $merchantId=env('PHONEPE_MERCHANT_ID');
         $transactionId=$transactionId;
  $SHOULDPUBLISHEVENTS=true;
- 
-
 $phonePePaymentsClient = new PhonePePaymentClient($merchantId, $apiKey, 1, Env::UAT,$SHOULDPUBLISHEVENTS);
 
     $checkStatus = $phonePePaymentsClient->statusCheck($transactionId);
@@ -171,8 +162,8 @@ $userdetails=User::whereIn('id', $userID)->get(['email']);
 $useremail = $userdetails->pluck('email');
 
       if($checkStatus->getState()=='COMPLETED')
-  {
-    DB::transaction(function () use($useremail,$bookingsummaryDetails,$bookingsummaryID,$providerReferenceId,$checksum,$transactionId,$meta,$merchantOrderId,$Totalamount,$amount) {
+  {DB::beginTransaction();
+    try{
     $installmentno= $bookingsummaryDetails->pluck('installment_no');
     $in = $installmentno[0]+1;
     $BookingPaymentDetail = BookingPaymentDetail::where('booking_payment_summaries_id', $bookingsummaryID)
@@ -195,19 +186,18 @@ Transaction::where('transaction_id', $transactionId)->update($data);
 $BookingPaymentDetail=BookingPaymentDetail::where('transaction_id', $transactionId)->update(['transaction_status'=>'PAYMENT_SUCCESS','payment_mode'=>'Online','status'=>'1']);
 $Xamounts = $Totalamount->pluck('amount');
 $Xpaid = $Totalamount->pluck('paid');
-Log::info($Xamounts[0].'Xamounts');
-Log::info($Xpaid[0].'Xpaid');
-Log::info($Totalamount.'taolamount');
 $totalpaid=(float)$Xpaid[0]+$amount/100;
 $due=(float)$Xamounts[0]-(float)$totalpaid;
 $BookingPaymentSummaries=BookingPaymentSummary::whereIn('id', $bookingsummaryID)->update(['paid'=>$totalpaid,'due'=>$due,'status'=>'1']);
-    });
+DB::commit();
 $redirectUrl = env('FRONTEND_REDIRECT').'/user/manage-bookings';    
 return $redirectUrl;
-
+    }catch(\Exception $e){
+      DB::rollback();
+    }
   }else if($checkStatus->getState()=='FAILED'){
-    DB::transaction(function () use($request,$useremail) {
-
+    DB::beginTransaction();
+    try{
     $details = ['email' =>$useremail,'mailbtnLink' => 'http://www.test.com', 'mailBtnText' => 'click here',
     'mailTitle' => 'Naah!', 'mailSubTitle' => 'Your Payment is Failed.', 'mailBody' => 'We are sad to inform you that your payment has been failed! Get ready to create some unforgettable memories. All you need to do is show us this email on the day you arrive, and you’ll be good to go!'];
     SendGenericEmail::dispatch($details);
@@ -216,30 +206,41 @@ return $redirectUrl;
     $meta = json_encode($request->all());
     Transaction::where('transaction_id', $transactionId)->update(['payment_status'=>'PAYMENT_FAILED','meta'=>$meta]); 
     $BookingPaymentDetail=BookingPaymentDetail::where('transaction_id', $transactionId)->update(['transaction_status'=>'PAYMENT_FAILED','payment_mode'=>'Online','status'=>'2']);
-    });
      $transactionId = $request->transactionId;
+     DB::commit();
      $paymnetFailUrl = env('FRONTEND_REDIRECT').'/payment/payment-failed?transactionId=' . $transactionId.'&merchantId'.$merchantId; 
       //HANDLE YOUR ERROR MESSAGE HERE
       return  $paymnetFailUrl;
+    }catch(\Exception $e){
+      DB::rollback();
+       $transactionId = $request->transactionId;
+       $paymnetFailUrl = env('FRONTEND_REDIRECT').'/payment/payment-failed?transactionId=' . $transactionId.'&merchantId'.$merchantId; 
+        //HANDLE YOUR ERROR MESSAGE HERE
+        return  $paymnetFailUrl;
+      }
   }else if($checkStatus->getState()=='PENDING'){
     // code for pending payment
-    DB::transaction(function () use($request,$useremail) {
-
+    DB::beginTransaction();
+    try{
     $transactionId = $request->transactionId;
     $request["code"]="pending";
     $meta = json_encode($request->all());
     Transaction::where('transaction_id', $transactionId)->update(['payment_status'=>'pending','meta'=>$meta]); 
     $BookingPaymentDetail=BookingPaymentDetail::where('transaction_id', $transactionId)->update(['transaction_status'=>'pending','payment_mode'=>'Online','status'=>'0']);
     $pendingdetails=['transactionId' => $transactionId,'merchantId' => $merchantId];
-  });
     $details = ['email' => $useremail,'mailbtnLink' => '', 'mailBtnText' => '',
 'mailTitle' => 'Sorry!', 'mailSubTitle' => 'Wait! Your payment is pending.', 'mailBody' => 'We are sorry to inform you that your payment is in pending right now! You need to wait until your payment becomes successful. We will shorly inform you the status of your payment!'];
 SendGenericEmail::dispatch($details);
     PendingPayment::dispatch($pendingdetails,$useremail)->delay(now()->addMinutes(20));
+    DB::commit();
      $paymnetFailUrl = env('FRONTEND_REDIRECT').'/payment/payment-pending?transactionId=' . $transactionId;
       return  $paymnetFailUrl;
+    }catch(\Exception $e){
+      DB::rollback();
+      $pendingdetails=['transactionId' => $transactionId,'merchantId' => $merchantId];
+      PendingPayment::dispatch($pendingdetails,$useremail)->delay(now()->addMinutes(20));
+    }
   }
-
   }
 
 private function getApiKey()
@@ -251,4 +252,3 @@ private function getSaltIndex()
       return config('services.phonepe.salt_index');
   }
 }
-

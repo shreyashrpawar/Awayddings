@@ -147,7 +147,9 @@
                                 <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Payment Details</a>
                             </li>
                         @endcan
-
+                        <li class="nav-item">
+                            <a class="nav-link" id="pills-history-tab" data-toggle="pill" href="#pills-history" role="tab" aria-controls="pills-history" aria-selected="false">History</a>
+                        </li>
                         @if ($bookings->booking_invoice)
                             <li>
                                 <a class="nav-link btn btn-success bg-success" href="{{ $bookings->booking_invoice->invoice_url ?? '' }}" style="color: #FFFFFF;">Invoice Download</a>
@@ -233,6 +235,60 @@
 
                             </table>
                         </div>
+
+
+                        
+                        <div class="tab-pane fade show" id="pills-history" role="tabpanel" aria-labelledby="pills-history-tab">
+                            <table class="table table-sm">
+                                <thead class="thead-dark">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Date</th>
+                                    <th>Transaction ID</th>
+                                    <th>Status</th>
+                                    <th>Amount</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                @php
+                                    $total = 0;
+                                    $old_date = '';
+                                @endphp
+                                @foreach($transaction as $key => $val)
+                                    @php
+
+                                        Log::info($val)
+                                    @endphp
+
+                                    <tr>
+                                        <th>{{ $key }}</th>
+                                        <td> 
+
+                                                {{ $val['created_at']}}
+  
+                                        </td>
+                                        <td>{{ $val['transaction_id'] }}</td>
+                                        <td>
+
+                                        {{ $val['payment_status']}}
+                                        </td>
+                                        <td>{{ $val['amount']/100}}</td>
+
+
+                                    </tr>
+                                @endforeach
+                                <tr>
+                                    <th colspan="5" class="text-right" >Total</th>
+                                    <th >{{ $total }}</th>
+                                </tr>
+                                </tbody>
+
+
+                            </table>
+                        </div>
+
+
                         <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
                             <table class="table table-sm">
                                 <thead class="thead-dark">

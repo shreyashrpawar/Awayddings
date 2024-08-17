@@ -16,8 +16,6 @@ use App\Models\BookingPaymentSummary;
 use App\Jobs\SendGenericEmail;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-
 
 class PendingPayment implements ShouldQueue
 {
@@ -44,21 +42,18 @@ class PendingPayment implements ShouldQueue
     public function handle(): void
     {
                     //mail
-
-DB::transaction(function () {
         $apiKey=env('PHONEPE_SECRET_KEY'); // sandbox or test APIKEY
         $merchantId=$this->details['merchantId'];
         $transactionId=$this->details['transactionId'];
  $SHOULDPUBLISHEVENTS=true;
- 
-
 $phonePePaymentsClient = new PhonePePaymentClient($merchantId, $apiKey, 1, Env::UAT,$SHOULDPUBLISHEVENTS);
 
     $checkStatus = $phonePePaymentsClient->statusCheck($transactionId);
     $amount=$checkStatus->getAmount();
 
     if ($checkStatus->getState()=='COMPLETED'){
-
+        DB::beginTransaction();
+try{
         //mail
 $details = ['email' => $this->email,'mailbtnLink' => 'http://www.test.com', 'mailBtnText' => 'check text',
             'mailTitle' => 'Congrats!', 'mailSubTitle' => 'Hooray! Your booking is confirmed.', 'mailBody' => 'We are happy to inform you that your payment has been successful! Get ready to create some unforgettable memories. All you need to do is show us this email on the day you arrive, and you’ll be good to go!'];
@@ -81,10 +76,16 @@ $details = ['email' => $this->email,'mailbtnLink' => 'http://www.test.com', 'mai
         $Xpaid = $Totalamount->pluck('paid');
         $totalpaid=(float)$Xpaid[0]+$amount/100;
         $due=(float)$Xamounts[0]-(float)$totalpaid;
-        $BookingPaymentSummaries=BookingPaymentSummary::whereIn('id', $bookingsummaryID)->update(['paid'=>$totalpaid,'due'=>$due,'status'=>'1']);        
+        $BookingPaymentSummaries=BookingPaymentSummary::whereIn('id', $bookingsummaryID)->update(['paid'=>$totalpaid,'due'=>$due,'status'=>'1']);   
+        DB::commit();
+    }catch(\Exception $e){
+        DB::rollback();
+    }
    return;
     }else{
+        DB::beginTransaction();
         //mail
+        try{
         $details = ['email' => $this->email,'mailbtnLink' => '', 'mailBtnText' => '',
             'mailTitle' => 'Naah!', 'mailSubTitle' => 'Your Payment is Failed.', 'mailBody' => 'We are sad to inform you that your payment has been failed! Get ready to create some unforgettable memories. All you need to do is show us this email on the day you arrive, and you’ll be good to go!'];
             SendGenericEmail::dispatch($details);
@@ -92,7 +93,10 @@ $details = ['email' => $this->email,'mailbtnLink' => 'http://www.test.com', 'mai
 
         Transaction::where('transaction_id', $transactionId)->update(['payment_status'=>'PAYMENT_FAILED','meta'=>$this->details]); 
         $BookingPaymentDetail=BookingPaymentDetail::where('transaction_id', $transactionId)->update(['transaction_status'=>'PAYMENT_FAILED','payment_mode'=>'Online','status'=>'2']);
-    
-    }});
+            DB::commit();
+    }catch(\Exception $e){
+        DB::rollback();
+    }
+    }
 }
 }

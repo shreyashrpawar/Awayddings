@@ -8,6 +8,10 @@ use App\Jobs\SendEmailToHotel;
 use App\Models\BookingPaymentDetail;
 use App\Models\BookingPaymentSummary;
 use App\Models\BookingSummary;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use PDF;
 use Storage;
@@ -72,9 +76,12 @@ class BookingSummaryController extends Controller
     public function show($id)
     {
         $bookings = BookingSummary::find($id);
+        $transaction = Transaction::where('booking_payment_summaries_id', $id)->get();
         // dd($bookings);
+        // Log::info($bookings);
+        // Log::info($transaction);
 
-        return view('app.bookings.show', compact('bookings'));
+        return view('app.bookings.show', compact('bookings','transaction'));
     }
 
     /**

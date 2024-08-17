@@ -23,8 +23,7 @@ class PaymentController extends Controller
     public function makePayment(Request $request)
     
     {   
-        $user = auth()->user();
-        $user_id = $user->id;
+
         $amount_response= $request->input('amount');
         
         $amount_formatd = number_format($request->input('amount'),2);
